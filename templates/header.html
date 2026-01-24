@@ -7,7 +7,7 @@
             </a>
         </div>
 
-        <button class="mobile-menu-btn" onclick="document.querySelector('.main-nav').classList.toggle('active')">
+        <button class="mobile-menu-btn" onclick="toggleMenu()">
             <span></span>
             <span></span>
             <span></span>
@@ -19,6 +19,11 @@
                 <li><a href="/catalog">Կատալոգ</a></li>
                 <li><a href="/services">Ծառայություններ</a></li>
                 <li><a href="/about">Մեր Մասին</a></li>
+                <li class="mobile-only">
+                    <a href="tel:+37400000000" class="phone-box-mobile">
+                        📞 099 00 00 00
+                    </a>
+                </li>
             </ul>
         </nav>
 
@@ -29,3 +34,10 @@
         </div>
     </div>
 </header>
+
+<script>
+    function toggleMenu() {
+        document.querySelector('.main-nav').classList.toggle('active');
+        document.querySelector('.mobile-menu-btn').classList.toggle('active');
+    }
+</script>

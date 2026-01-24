@@ -6,6 +6,7 @@ class TemplateBase(BaseModel):
     name: str
     html_file: str
     price: float
+    image_url: str
     category_id: int
 
 

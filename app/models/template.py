@@ -10,7 +10,7 @@ class Template(Base):
     name = Column(String(100), nullable=False)
     html_file = Column(String(100), nullable=False)
     price = Column(Float, default=0.0)
-
+    image_url = Column(String(255), nullable=False)
     # Կապ կատեգորիայի հետ
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
 

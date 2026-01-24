@@ -21,16 +21,24 @@
         <div class="templates-grid">
             {% for template in templates %}
             <div class="template-card">
-                <div class="template-image">
-                    <img src="/static/templates_previews/{{ template.html_file.replace('.html', '.jpg') }}" alt="{{ template.name }}">
-                    <div class="template-overlay">
-                        <a href="/preview/{{ template.id }}" class="btn-secondary">Դիտել</a>
+                <a href="/preview/{{ template.id }}" class="template-image-link">
+                    <div class="template-image">
+                        <img src="{{ template.image_url }}" alt="{{ template.name }}">
+                        <div class="template-overlay">
+                            <span class="btn-secondary">Դիտել</span>
+                        </div>
                     </div>
-                </div>
+                </a>
+
                 <div class="template-info">
                     <h3>{{ template.name }}</h3>
                     <p class="price">{{ template.price }} ֏</p>
-                    <button class="btn-order">Պատվիրել</button>
+
+                    <div class="card-buttons">
+                        <button class="btn-order">Պատվիրել</button>
+
+                        <a href="/preview/{{ template.id }}" class="btn-view">Դիտել</a>
+                    </div>
                 </div>
             </div>
             {% else %}
