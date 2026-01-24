@@ -1,0 +1,492 @@
+/* --- ԳՈՒՅՆԵՐ ԵՎ ՓՈՓՈԽԱԿԱՆՆԵՐ --- */
+:root {
+    --bg-light: #FBF8F1;
+    --text-grey: #787878;
+    --nude-beige: #EAD9C9;
+    --gold-accent: #C3937C;
+    --header-dark: #333333;
+    --white: #ffffff;
+    --transition-smooth: 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+/* --- ԸՆԴՀԱՆՈՒՐ ԿԱՐԳԱՎՈՐՈՒՄՆԵՐ --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-light);
+    font-family: 'Noto Sans Armenian', sans-serif;
+    color: var(--text-grey);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* --- HEADER (Լողացող) --- */
+.floating-header {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 1200px;
+    background: var(--header-dark);
+    border-radius: 50px;
+    padding: 10px 25px;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.gold-text { color: var(--gold-accent); font-weight: bold; font-size: 20px; letter-spacing: 1px; }
+.logo small { font-size: 8px; letter-spacing: 2px; color: #ccc; text-transform: uppercase; }
+
+.main-nav { display: none; }
+
+.header-right .phone-box {
+    display: flex;
+    align-items: center;
+    background: var(--gold-accent);
+    padding: 6px 18px;
+    border-radius: 25px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.header-right .phone-box:hover { background: #a37a65; transform: scale(1.05); }
+
+/* --- HERO SECTION (PREMIUM ARCH DESIGN) --- */
+.hero-section {
+    padding: 180px 20px 100px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Նուրբ լույս ֆոնին */
+    background: radial-gradient(circle at top right, #fffaf6, transparent);
+}
+
+.hero-info h1 {
+    font-size: 40px;
+    font-weight: 300; /* Ավելի նուրբ */
+    color: var(--header-dark);
+    line-height: 1.3;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.hero-info h1 span {
+    color: var(--gold-accent);
+    display: block;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+/* Փոքր տեքստը կոճակից վերև */
+.hero-info p {
+    color: var(--text-grey);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 11px;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background: var(--gold-accent);
+    color: #fff;
+    padding: 16px 45px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.5s ease;
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 2px;
+    box-shadow: 0 10px 20px rgba(195, 147, 124, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(195, 147, 124, 0.4);
+    background: #b07d65;
+}
+
+.hero-image-box img {
+    width: 100%;
+    max-width: 550px;
+    /* Arch (Կամարաձև) դիզայն - Թրենդային է */
+    border-radius: 200px 200px 0 0;
+    box-shadow: 20px 20px 0 rgba(234, 217, 201, 0.6);
+    margin-top: 60px;
+    transition: 1s var(--transition-smooth);
+}
+
+.hero-image-box:hover img {
+    border-radius: 40px; /* Hover-ի ժամանակ վերադառնում է սովորական տեսքին */
+    transform: scale(1.02);
+}
+
+/* --- HOME PAGE CATEGORIES (LUXURY FLORAL EDITION) --- */
+.categories-section {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 30px;
+    font-weight: 300;
+    margin-bottom: 90px;
+    color: var(--text-grey);
+    position: relative;
+    display: inline-block;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--gold-accent);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 90px 40px; /* Ավելացված տեղ էֆեկտների համար */
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.circle-wrapper {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+}
+
+/* ✿ PREMIUM ԾԱՂԻԿՆԵՐ ✿ */
+.circle-wrapper::before,
+.circle-wrapper::after {
+    content: "✿";
+    position: absolute;
+    color: var(--gold-accent);
+    font-size: 19px;
+    opacity: 0.5;
+    z-index: 2;
+    /* Շատ սահուն շարժում */
+    transition: all 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.circle-wrapper::before { top: -30px; left: 50%; transform: translateX(-50%); }
+.circle-wrapper::after { bottom: -30apx; left: 50%; transform: translateX(-50%); }
+
+.image-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(195, 147, 124, 0.2);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    z-index: 5;
+    background: #fff;
+}
+
+.image-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s ease;
+}
+
+/* ՇՔԵՂ ՕՂԱԿԸ */
+.decorative-ring {
+    position: absolute;
+    top: -15px; left: -15px; right: -15px; bottom: -15px;
+    border: 1px solid var(--gold-accent);
+    border-radius: 50%;
+    opacity: 0.2;
+    transition: all 0.8s ease;
+    z-index: 1;
+}
+
+/* --- HOVER EFFECTS --- */
+.category-item:hover .image-circle img {
+    transform: scale(1.15) rotate(2deg); /* Նկարը թեթևակի թեքվում է */
+}
+
+.category-item:hover .decorative-ring {
+    top: -18px;   /* Նախկին -25px-ի փոխարեն */
+    left: -18px;
+    right: -18px;
+    bottom: -18px;
+    opacity: 0.4; /* Ավելի թույլ երևացող */
+}
+
+.category-item:hover .circle-wrapper::before {
+    top: -55px; /* Ծաղիկը թռնում է ավելի վերև */
+    opacity: 1;
+    transform: translateX(-50%) scale(1.3) rotate(180deg);
+}
+
+.category-item:hover .circle-wrapper::after {
+    bottom: -55px; /* Ծաղիկը թռնում է ավելի ներքև */
+    opacity: 1;
+    transform: translateX(-50%) scale(1.3) rotate(-180deg);
+}
+
+.category-item h3 {
+    margin-top: 50px;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: var(--text-grey);
+    text-transform: uppercase;
+    transition: 0.4s;
+}
+
+.category-item:hover h3 {
+    color: var(--gold-accent);
+    letter-spacing: 7px; /* Տառերը բացվում են */
+}
+
+
+/* --- CATALOG PAGE (Պահպանված դիզայն) --- */
+.catalog-page { padding: 160px 0 80px; }
+
+.catalog-page .page-title {
+    text-align: center;
+    font-size: 26px;
+    letter-spacing: 5px;
+    font-weight: 300;
+    color: var(--header-dark);
+    margin-bottom: 60px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.catalog-page .page-title::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 1px;
+    background: var(--gold-accent);
+}
+
+.filter-categories {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 70px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-item {
+    text-decoration: none;
+    color: var(--text-grey);
+    text-align: center;
+    width: 100px;
+    transition: var(--transition-smooth);
+}
+
+.filter-circle {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 12px;
+    border: 1px solid rgba(195, 147, 124, 0.2);
+    transition: var(--transition-smooth);
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+.filter-circle img {
+    width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) opacity(0.6);
+}
+
+.filter-item:hover .filter-circle,
+.filter-item.active .filter-circle {
+    border-color: var(--gold-accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(195, 147, 124, 0.15);
+}
+
+.filter-item:hover img,
+.filter-item.active img { filter: grayscale(0%) opacity(1); transform: scale(1.1); }
+
+/* Անվան փոփոխությունը նույն Hover-ի ժամանակ */
+.filter-item:hover span,
+.filter-item.active span {
+    color: var(--gold-accent); /* Դառնում է ոսկեգույն */
+    font-size: 12px;           /* Մեծանում է (10px-ից դառնում է 12px) */
+    font-weight: 500;          /* Մի քիչ ավելի հաստ */
+    letter-spacing: 2px;       /* Տառերը մի քիչ բացվում են */
+}
+
+/* Սկզբնական վիճակը */
+.filter-item span {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: block;
+    margin-top: 10px;
+    color: var(--text-grey);
+    /* Կարևոր է սահունության համար */
+    transition: all 0.4s ease;
+}
+
+.nude-divider {
+    border: 0; height: 1px; background: var(--gold-accent); opacity: 0.2; margin: 40px auto; width: 60%;
+}
+
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.template-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(234, 217, 201, 0.4);
+    transition: 0.4s;
+    padding: 10px;
+}
+
+.template-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+
+.template-image {
+    position: relative; height: 400px; overflow: hidden; border-radius: 15px;
+}
+
+.template-image img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+
+.template-info { padding: 20px; text-align: center; }
+
+.template-info h3 { font-size: 18px; margin-bottom: 8px; color: var(--header-dark); font-weight: 400; }
+
+.price { color: var(--gold-accent); font-weight: bold; margin-bottom: 15px; font-size: 16px; }
+
+.btn-order {
+    background: none;
+    border: 1px solid var(--nude-beige);
+    color: var(--gold-accent);
+    padding: 10px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.btn-order:hover { background: var(--gold-accent); color: #fff; border-color: var(--gold-accent); }
+
+/* --- FOOTER --- */
+.main-footer {
+    padding: 60px 20px;
+    text-align: center;
+    background: var(--nude-beige);
+    margin-top: 80px;
+}
+
+/* --- ADAPTIVITY --- */
+
+/* Մեծ էկրանների համար (Desktop) */
+@media (min-width: 992px) {
+    .main-nav { display: block; }
+    .main-nav ul { display: flex; list-style: none; gap: 30px; }
+    .main-nav a { color: #fff; text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .hero-section {
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: left;
+        padding: 200px 20px;
+    }
+    .hero-info { flex: 1; }
+    .hero-image-box { flex: 1; display: flex; justify-content: flex-end; }
+    .hero-info h1 { font-size: 56px; }
+}
+
+/* Միջին էկրանների համար (Tablets - մինչև 991px) */
+@media (max-width: 991px) {
+    .hero-section { padding: 150px 20px 60px; }
+    .hero-info h1 { font-size: 40px; }
+    .templates-grid { grid-template-columns: repeat(2, 1fr); } /* 2 սյունակ պլանշետի վրա */
+}
+
+/* Հեռախոսների համար (Mobile - մինչև 768px) */
+@media (max-width: 768px) {
+    .hero-info h1 { font-size: 28px; }
+    .hero-info p { letter-spacing: 2px; }
+
+    .circle-wrapper { width: 160px; height: 160px; } /* Ավելի փոքր՝ հեռախոսի համար */
+
+    .filter-categories {
+        gap: 10px;
+        display: flex;
+        flex-wrap: wrap; /* Որպեսզի կատեգորիաները չսեղմվեն */
+        justify-content: center;
+    }
+
+    .filter-circle { width: 65px; height: 65px; }
+    .filter-item span { font-size: 9px; }
+
+    .templates-grid { grid-template-columns: 1fr; } /* 1 սյունակ հեռախոսի վրա */
+
+    .hero-image-box img {
+        max-width: 100%;
+        border-radius: 120px 120px 0 0; /* Ավելի փոքր կամար */
+    }
+
+    .floating-header {
+        width: 95%;
+        padding: 8px 15px;
+    }
+    .gold-text { font-size: 16px; }
+}

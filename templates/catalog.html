@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="catalog-page">
+    <div class="container">
+        <h2 class="page-title">ԸՆՏՐԵՔ ԿԱՏԵԳՈՐԻԱՆ</h2>
+
+        <div class="filter-categories">
+            {% for category in categories %}
+            <a href="/catalog?category_id={{ category.id }}" class="filter-item {% if selected_category == category.id %}active{% endif %}">
+                <div class="filter-circle">
+                    <img src="{{ category.image_url or '/static/images/default-cat.jpg' }}" alt="{{ category.name }}">
+                </div>
+                <span>{{ category.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+
+        <hr class="nude-divider">
+
+        <div class="templates-grid">
+            {% for template in templates %}
+            <div class="template-card">
+                <div class="template-image">
+                    <img src="/static/templates_previews/{{ template.html_file.replace('.html', '.jpg') }}" alt="{{ template.name }}">
+                    <div class="template-overlay">
+                        <a href="/preview/{{ template.id }}" class="btn-secondary">Դիտել</a>
+                    </div>
+                </div>
+                <div class="template-info">
+                    <h3>{{ template.name }}</h3>
+                    <p class="price">{{ template.price }} ֏</p>
+                    <button class="btn-order">Պատվիրել</button>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-data">Այս բաժնում դեռևս նմուշներ չկան։ 🌸</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

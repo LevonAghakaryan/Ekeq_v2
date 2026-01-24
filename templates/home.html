@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-info">
+        <p style="letter-spacing: 2px; font-size: 12px;">PREMIUM QUALITY</p>
+        <h1>Ստեղծեք ձեր <span>անմոռանալի օրվա</span> թվային հրավիրատոմսը:</h1>
+
+        <div class="hero-buttons">
+            <a href="/catalog" class="btn-primary">Կատալոգ</a>
+        </div>
+    </div>
+    <div class="hero-image-box">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000" alt="Wedding Image">
+    </div>
+</section>
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title">Մեր Ծառայությունները</h2>
+        <div class="categories-grid">
+            {% for category in categories %}
+            <div class="category-item">
+                <div class="circle-wrapper">
+                    <div class="image-circle">
+                        <img src="{{ category.image_url or 'static/images/default-cat.jpg' }}" alt="{{ category.name }}">
+                    </div>
+                    <div class="decorative-ring"></div>
+                </div>
+                <h3>{{ category.name }}</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
