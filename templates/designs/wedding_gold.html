@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ invitation.event_title }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-gold: #b8860b;
+            --cream: #fffdf5;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: #f4f1ea;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-wrapper {
+            max-width: 700px;
+            width: 100%;
+            background-color: var(--white);
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.15);
+            border: 12px solid var(--gold);
+            outline: 2px solid var(--dark-gold);
+            outline-offset: -8px;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Անկյունային նախշեր */
+        .corner {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--dark-gold);
+        }
+        .top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
+        .top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 15px; left: 15px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
+
+        .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: var(--dark-gold);
+            margin: 20px 0;
+        }
+
+        /* Մեդիա Գալերեայի Ոճերը */
+        .media-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .media-item {
+            width: 100%;
+            border: 1px solid var(--gold);
+            padding: 8px;
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .media-item img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .media-item video {
+            width: 100%;
+            display: block;
+            outline: none;
+        }
+
+        /* RSVP Section */
+        .rsvp-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: #faf7f0;
+            border: 1px dashed var(--gold);
+        }
+
+        h2 { font-family: 'Playfair Display', serif; color: var(--dark-gold); }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background-color: var(--gold);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover { background-color: var(--dark-gold); }
+
+        .music-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gold);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+
+        <p style="letter-spacing: 4px; font-weight: 300;">ՍԻՐՈՎ ՀՐԱՎԻՐՈՒՄ ԵՆՔ</p>
+
+        <h1 class="title">{{ invitation.event_title }}</h1>
+
+        <p style="font-family: 'Playfair Display'; font-style: italic;">
+            Մենք սիրով սպասում ենք ձեզ մեր կյանքի ամենակարևոր օրը
+        </p>
+
+        <section class="video-section">
+            <h2>Մեր Պատմությունը</h2>
+
+            {% if invitation.media_files %}
+            <div class="media-gallery">
+                {% for media in invitation.media_files %}
+                    <div class="media-item">
+                        {% if media.file_type == 'image' %}
+                            <img src="{{ media.file_url }}" alt="Հրավիրատոմսի նկար">
+                        {% elif media.file_type == 'video' %}
+                            <video controls poster="/static/images/video_poster.jpg">
+                                <source src="{{ media.file_url }}" type="video/mp4">
+                                Ձեր բրաուզերը չի աջակցում վիդեոյին։
+                            </video>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p>Լուսանկարներն ու տեսանյութերը շուտով հասանելի կլինեն:</p>
+            {% endif %}
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--gold); margin: 40px 0;">
+
+        <section class="rsvp-section">
+            <h2>Հաստատել Ներկայությունը</h2>
+            <p>Խնդրում ենք պատասխանել մինչև 01.03.2026</p>
+
+            <form action="/invite/{{ invitation.slug }}/rsvp" method="POST">
+                <input type="text" name="guest_name" placeholder="Ձեր Անունը" required>
+
+                <select name="attending" required>
+                    <option value="">Կգա՞ք արդյոք</option>
+                    <option value="yes">Այո, սիրով</option>
+                    <option value="no">Ցավոք, չենք կարող</option>
+                </select>
+
+                <input type="number" name="guest_count" placeholder="Հյուրերի քանակը" min="1" max="10">
+                <button type="submit" class="btn-submit">Ուղարկել</button>
+            </form>
+        </section>
+    </div>
+
+    {% if invitation.music_url %}
+    <div class="music-toggle" onclick="toggleMusic()">🎵</div>
+    <audio id="bgMusic" loop>
+        <source src="{{ invitation.music_url }}" type="audio/mpeg">
+    </audio>
+    <script>
+        let music = document.getElementById("bgMusic");
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+    {% endif %}
+
+</body>
+</html>

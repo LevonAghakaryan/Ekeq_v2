@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ invitation.event_title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .invitation-container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Վերևի դեկորատիվ տարրը */
+        .header-decoration {
+            height: 8px;
+            background: linear-gradient(90deg, #d4af37, #f4e5c2, #d4af37);
+        }
+
+        /* Հիմնական բովանդակություն */
+        .invitation-content {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        /* Վերնագիր */
+        .event-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+        }
+
+        /* Մեդիա Գալերեա */
+        .media-gallery {
+            margin: 40px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .media-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .media-item:hover {
+            transform: scale(1.05);
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .media-item video {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Դիվիդեր */
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: #d4af37;
+            margin: 40px auto;
+        }
+
+        /* Երաժշտություն */
+        .music-player {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .music-player audio {
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+        }
+
+        /* RSVP Ֆորմա */
+        .rsvp-section {
+            margin-top: 50px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .rsvp-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #d4af37, #f4e5c2);
+            color: #2c3e50;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Հաջողության հաղորդագրություն */
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Ռեսպոնսիվ դիզայն */
+        @media (max-width: 768px) {
+            .invitation-content {
+                padding: 40px 25px;
+            }
+
+            .event-title {
+                font-size: 36px;
+            }
+
+            .media-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .media-item img,
+            .media-item video {
+                height: 250px;
+            }
+
+            .rsvp-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invitation-container">
+        <div class="header-decoration"></div>
+
+        <div class="invitation-content">
+            <!-- Վերնագիր -->
+            <h1 class="event-title">{{ invitation.event_title }}</h1>
+            <p class="subtitle">Հրավերում ենք ձեզ մեր հարսանիքին</p>
+
+            <div class="divider"></div>
+
+            <!-- Մեդիա Գալերեա -->
+            {% if invitation.media_files %}
+            <div class="media-gallery">
+                {% for media in invitation.media_files %}
+                    <div class="media-item">
+                        {% if media.file_type == 'image' %}
+                            <img src="{{ media.file_url }}" alt="Հրավիրատոմսի նկար">
+                        {% elif media.file_type == 'video' %}
+                            <video controls>
+                                <source src="{{ media.file_url }}" type="video/mp4">
+                                Ձեր բրաուզերը չի աջակցում վիդեոյին։
+                            </video>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Երաժշտություն -->
+            {% if invitation.music_url %}
+            <div class="music-player">
+                <audio controls autoplay loop>
+                    <source src="{{ invitation.music_url }}" type="audio/mpeg">
+                    Ձեր բրաուզերը չի աջակցում աուդիո նվագարկմանը։
+                </audio>
+            </div>
+            {% endif %}
+
+            <div class="divider"></div>
+
+            <!-- RSVP Ֆորմա -->
+            <div class="rsvp-section">
+                <h2 class="rsvp-title">Հաստատեք ձեր ներկայությունը</h2>
+
+                <form id="rsvpForm">
+                    <div class="form-group">
+                        <label for="guest_name">Ձեր անունը *</label>
+                        <input type="text" id="guest_name" name="guest_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="attending">Կներկայանաք? *</label>
+                        <select id="attending" name="attending" required>
+                            <option value="">Ընտրեք...</option>
+                            <option value="yes">Այո, կլինեմ</option>
+                            <option value="no">Ցավոք սրտի, չեմ կարող</option>
+                            <option value="maybe">Դեռ չեմ որոշել</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guest_count">Հյուրերի քանակ</label>
+                        <input type="number" id="guest_count" name="guest_count" min="1" value="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Ձեր հաղորդագրությունը (կամընտրական)</label>
+                        <textarea id="message" name="message" placeholder="Թողեք ձեր շնորհավորանքը..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Ուղարկել</button>
+                </form>
+
+                <div class="success-message" id="successMessage">
+                    ✅ Շնորհակալություն! Ձեր պատասխանը ստացվել է։
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                guest_name: document.getElementById('guest_name').value,
+                attending: document.getElementById('attending').value,
+                guest_count: parseInt(document.getElementById('guest_count').value),
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const response = await fetch('/invite/{{ invitation.slug }}/rsvp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    document.getElementById('successMessage').classList.add('show');
+                    document.getElementById('rsvpForm').reset();
+
+                    setTimeout(() => {
+                        document.getElementById('successMessage').classList.remove('show');
+                    }, 5000);
+                } else {
+                    alert('Սխալ է տեղի ունեցել։ Խնդրում ենք փորձել կրկին։');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Սխալ է տեղի ունեցել։ Խնդրում ենք ստուգել ինտերնետ կապը։');
+            }
+        });
+    </script>
+</body>
+</html>

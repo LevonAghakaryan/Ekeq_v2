@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Հյուրերի Ցուցակ - {{ invitation.event_title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-800">{{ invitation.event_title }} - Կառավարման վահանակ</h1>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700">
+                🖨️ Տպել ցուցակը
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 uppercase font-semibold">Ընդհանուր հյուրեր</p>
+                <p class="text-3xl font-bold text-blue-600">{{ stats.total_yes }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 uppercase font-semibold">Մերժել են</p>
+                <p class="text-3xl font-bold text-red-500">{{ stats.total_no }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 uppercase font-semibold">Չգիտեն</p>
+                <p class="text-3xl font-bold text-yellow-500">{{ stats.total_maybe }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 uppercase font-semibold">Ընդհանուր հայտեր</p>
+                <p class="text-3xl font-bold text-gray-700">{{ stats.total_responses }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-xl overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Հյուրի Անուն</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Քանակ</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Կարգավիճակ</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Հաղորդագրություն</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for r in responses %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ r.guest_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ r.guest_count }} հոգի</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if r.attending == 'yes' %}
+                                <span class="px-2 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700">Գալիս է</span>
+                            {% elif r.attending == 'no' %}
+                                <span class="px-2 py-1 text-xs font-bold rounded-full bg-red-100 text-red-700">Չի գալիս</span>
+                            {% else %}
+                                <span class="px-2 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700">Չգիտի</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 italic">"{{ r.message or '---' }}"</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

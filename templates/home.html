@@ -1,34 +1,76 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <section class="hero-section">
     <div class="hero-info">
         <p style="letter-spacing: 2px; font-size: 12px;">PREMIUM QUALITY</p>
-        <h1>Ստեղծեք ձեր <span>անմոռանալի օրվա</span> թվային հրավիրատոմսը:</h1>
+        <h1>Ստեղծեք ձեր <span>անմոռանալի օրվա</span> թվային հրավիրատոմսը: 💌</h1>
 
         <div class="hero-buttons">
-            <a href="/catalog" class="btn-primary">Կատալոգ</a>
+            <a href="/catalog" class="btn-primary">Պատվիրել</a>
         </div>
     </div>
     <div class="hero-image-box">
         <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000" alt="Wedding Image">
     </div>
 </section>
+
 <section class="categories-section">
     <div class="container">
         <h2 class="section-title">Մեր Ծառայությունները</h2>
         <div class="categories-grid">
             {% for category in categories %}
-            <div class="category-item">
-                <div class="circle-wrapper">
-                    <div class="image-circle">
-                        <img src="{{ category.image_url or 'static/images/default-cat.jpg' }}" alt="{{ category.name }}">
+            <a href="/catalog/?category_id={{ category.id }}" class="category-link">
+                <div class="category-item">
+                    <div class="circle-wrapper">
+                        <div class="image-circle">
+                            <img src="{{ category.image_url or 'static/images/default-cat.jpg' }}" alt="{{ category.name }}">
+                        </div>
+                        <div class="decorative-ring"></div>
                     </div>
-                    <div class="decorative-ring"></div>
+                    <h3>{{ category.name }}</h3>
                 </div>
-                <h3>{{ category.name }}</h3>
-            </div>
+            </a>
             {% endfor %}
+        </div>
+    </div>
+</section>
+<section id="how-to-order" class="how-to-order-section">
+    <div class="container">
+        <h2 class="section-title">ԻՆՉՊԵ՞Ս ՊԱՏՎԻՐԵԼ</h2>
+
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-icon">
+                    <i class="fa-regular fa-envelope-open"></i> </div>
+                <p>Ընտրեք Ձեր նախընտրած էլ. հրավիրատոմսը և գրեք մեզ կամ կատարեք պատվեր</p>
+            </div>
+
+            <div class="step-arrow">➜</div>
+
+            <div class="step-item">
+                <div class="step-icon">
+                    <i class="fa-solid fa-pen-nib"></i> </div>
+                <p>Անհրաժեշտ տվյալները ստանալուց հետո մենք անցնում ենք աշխատանքի</p>
+            </div>
+
+            <div class="step-arrow">➜</div>
+
+            <div class="step-item">
+                <div class="step-icon">
+                    <i class="fa-solid fa-check-double"></i> </div>
+                <p>Հաշված օրերի ընթացքում Ձեր էլ. հրավերը կլինի պատրաստ:</p>
+            </div>
+        </div>
+
+        <div class="order-buttons">
+            <a href="#" class="btn-messenger telegram">
+                <i class="fa-brands fa-telegram"></i> TELEGRAM
+            </a>
+            <a href="#" class="btn-messenger whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> WHATSAPP
+            </a>
         </div>
     </div>
 </section>

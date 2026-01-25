@@ -21,7 +21,7 @@
         <div class="templates-grid">
             {% for template in templates %}
             <div class="template-card">
-                <a href="/preview/{{ template.id }}" class="template-image-link">
+                <a href="/invite/{{ template.demo_slug }}" class="template-image-link">
                     <div class="template-image">
                         <img src="{{ template.image_url }}" alt="{{ template.name }}">
                         <div class="template-overlay">
@@ -37,7 +37,7 @@
                     <div class="card-buttons">
                         <button class="btn-order">Պատվիրել</button>
 
-                        <a href="/preview/{{ template.id }}" class="btn-view">Դիտել</a>
+                        <a href="/invite/{{ template.demo_slug }}" class="btn-view">Դիտել</a>
                     </div>
                 </div>
             </div>
