@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Արամ & Անի | Wedding Invitation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500&family=Noto+Sans+Armenian:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-gold: #c6a87c;
+            --dark-gold: #8e6d31;
+            --text-dark: #2c2c2c;
+            --bg-color: #fcfbf9;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Montserrat', 'Noto Sans Armenian', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            z-index: -2; opacity: 0.6;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; position: relative; }
+
+        /* --- HEADER --- */
+        header { text-align: center; padding: 60px 0 30px; }
+        .intro-text { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; color: var(--dark-gold); margin-bottom: 15px; }
+        h1 { font-family: 'Great Vibes', cursive; font-size: 4.5rem; color: var(--primary-gold); margin: 0; line-height: 1.1; }
+        .date-badge { display: inline-block; margin-top: 15px; padding: 8px 25px; border-top: 1px solid var(--primary-gold); border-bottom: 1px solid var(--primary-gold); font-size: 1.1rem; letter-spacing: 3px; }
+
+        /* --- HERO --- */
+        .hero-section { margin: 30px 0 50px; text-align: center; }
+        .hero-frame { width: 100%; max-width: 500px; border-radius: 150px 150px 0 0; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.15); border: 5px solid white; display: inline-block; }
+        .hero-img { width: 100%; height: auto; aspect-ratio: 3/4; object-fit: cover; display: block; }
+
+        /* --- INVITE TEXT --- */
+        .invite-box { text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.8); border-radius: 20px; margin-bottom: 50px; box-shadow: 0 10px 30px rgba(198, 168, 124, 0.1); border: 1px solid rgba(255,255,255,0.5); }
+        .invite-title { font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: var(--dark-gold); margin-bottom: 15px; }
+        .invite-p { line-height: 1.8; font-size: 1.05rem; color: #4a4a4a; }
+
+        /* --- COLLAGE SECTION (UPDATED) --- */
+        .collage-section { margin-bottom: 60px; }
+
+        /* Հիմնական Grid կարգավորումները */
+        .mobile-grid {
+            display: grid;
+            gap: 15px;
+            /* Ստեղծում ենք 3 հավասար սյունակ */
+            grid-template-columns: 1fr 1fr 1fr;
+            /* Առաջին տողը բարձր (մեծ նկարի համար), երկրորդը՝ ցածր */
+            grid-template-rows: 450px 200px;
+        }
+
+        /* Առաջին նկարը՝ ՄԻՇՏ ՄԵԾ (զբաղեցնում է բոլոր 3 սյունակները) */
+        .pic-1 {
+            grid-column: 1 / -1;
+            grid-row: 1 / 2;
+        }
+
+        /* Մյուս նկարները՝ ներքևում, կողք-կողքի */
+        .pic-2 { grid-column: 1 / 2; grid-row: 2 / 3; }
+        .pic-3 { grid-column: 2 / 3; grid-row: 2 / 3; }
+        .pic-4 { grid-column: 3 / 4; grid-row: 2 / 3; }
+
+        .grid-pic { border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .grid-pic img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Mobile-ի համար մի փոքր փոքրացնում ենք բարձրությունները */
+        @media (max-width: 768px) {
+            .mobile-grid {
+                gap: 10px;
+                grid-template-rows: 300px 120px; /* Ավելի կոմպակտ բջջայինի համար */
+            }
+        }
+
+        /* --- LOCATIONS (FIXED VERTICAL) --- */
+        .locations-wrapper {
+            margin: 60px 0 80px;
+            display: flex;
+            flex-direction: column; /* Պարտադիր իրար տակ */
+            align-items: center;
+            gap: 50px;
+        }
+
+        .loc-card-premium {
+            background: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(142, 109, 49, 0.12);
+            text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .loc-img-frame {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .loc-img-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.5s ease;
+        }
+        .loc-card-premium:hover .loc-img-frame img { transform: scale(1.1); }
+
+        .loc-details h3 { font-family: 'Great Vibes', cursive; font-size: 2.2rem; margin: 0 0 10px; color: var(--dark-gold); }
+        .loc-details p { color: #666; font-size: 0.95rem; margin-bottom: 25px; letter-spacing: 0.5px; }
+
+        .btn-gold-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 35px;
+            border: 1px solid var(--primary-gold);
+            color: var(--dark-gold);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+        .btn-gold-outline:hover { background: var(--dark-gold); color: white; border-color: var(--dark-gold); box-shadow: 0 5px 15px rgba(142, 109, 49, 0.3); }
+
+
+        /* --- CALENDAR --- */
+        .calendar-section { background: white; padding: 30px 15px; border-radius: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.05); margin-bottom: 60px; position: relative; }
+        .calendar-section::after { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid var(--primary-gold); border-radius: 15px; pointer-events: none; }
+        .cal-month { font-size: 1.5rem; color: var(--dark-gold); margin-bottom: 20px; text-transform: uppercase; }
+        table { margin: 0 auto; width: 100%; max-width: 350px; }
+        th { color: #999; font-weight: 300; font-size: 0.8rem; }
+        td { padding: 8px; font-weight: 500; }
+        .heart-date { background: var(--dark-gold); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; animation: pulse 2s infinite; }
+        .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .count-num { font-size: 1.4rem; font-weight: bold; color: var(--dark-gold); display: block;}
+        .count-label { font-size: 0.7rem; color: #777; text-transform: uppercase; }
+
+        /* --- TIMELINE --- */
+        .timeline-section { margin-bottom: 60px; }
+        .timeline-item { display: flex; margin-bottom: 35px; }
+        .t-time { width: 70px; text-align: right; padding-right: 15px; font-weight: bold; color: var(--dark-gold); }
+        .t-line { width: 2px; background: var(--primary-gold); position: relative; margin-right: 20px; }
+        .t-dot { position: absolute; top: 5px; left: -6px; width: 14px; height: 14px; background: white; border: 3px solid var(--dark-gold); border-radius: 50%; }
+        .t-content h3 { margin: 0; font-size: 1.2rem; }
+        .t-content p { margin: 5px 0 0; color: #666; font-size: 0.9rem; }
+
+        /* --- RSVP --- */
+        .rsvp-section { text-align: center; margin-bottom: 80px; }
+        .rsvp-card { background: white; padding: 40px 25px; border-radius: 25px; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border: 1px solid #f0e6d5; }
+        .rsvp-input, .rsvp-select { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #e0e0e0; border-radius: 12px; font-family: inherit; font-size: 1rem; }
+        .radio-group { display: flex; flex-direction: column; gap: 12px; text-align: left; margin-bottom: 25px; padding-left: 10px; }
+        .radio-item { display: flex; align-items: center; gap: 10px; font-size: 1rem; color: #444; cursor: pointer; }
+        .radio-item input { accent-color: var(--dark-gold); width: 18px; height: 18px; }
+        .rsvp-btn { background: linear-gradient(45deg, var(--dark-gold), #b88a44); color: white; border: none; padding: 18px 40px; border-radius: 50px; font-size: 1rem; letter-spacing: 2px; font-weight: 600; width: 100%; box-shadow: 0 10px 25px rgba(184, 138, 68, 0.4); cursor: pointer; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(142, 109, 49, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(142, 109, 49, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(142, 109, 49, 0); }
+        }
+
+        footer { text-align: center; font-size: 0.8rem; opacity: 0.5; padding-bottom: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <div class="container">
+
+        <header data-aos="fade-down">
+            <div class="intro-text">ՀՐԱՎԵՐ</div>
+            <h1>Aram & Ani</h1>
+            <div class="date-badge">10.10.2025</div>
+        </header>
+
+        <section class="hero-section" data-aos="zoom-in">
+            <div class="hero-frame">
+                <img src="https://i.pinimg.com/736x/b2/6a/fc/b26afc429907e106ecfaf4b7ed725c52.jpg" class="hero-img">
+            </div>
+        </section>
+
+        <section class="invite-box" data-aos="fade-up">
+            <h2 class="invite-title">Սիրելի Հյուրեր</h2>
+            <p class="invite-p">
+                Սիրով հրավիրում ենք Ձեզ՝ կիսելու մեզ հետ մեր կյանքի ամենակարևոր և լուսավոր օրը։
+                Ձեր ներկայությունը կդարձնի մեր տոնն ավելի ջերմ և անմոռանալի։
+            </p>
+        </section>
+
+        <section class="collage-section" data-aos="fade-up">
+            <div class="mobile-grid">
+                <div class="grid-pic pic-1"><img src="https://i.pinimg.com/736x/f5/cc/fa/f5ccfa9943f99299916365e3d67bd159.jpg"></div>
+                <div class="grid-pic pic-2"><img src="https://i.pinimg.com/1200x/43/15/df/4315df5c89eacfd12b8e60dde5579b8f.jpg"></div>
+                <div class="grid-pic pic-3"><img src="https://i.pinimg.com/736x/40/36/0a/40360a853cc834c44119839c565178da.jpg"></div>
+                <div class="grid-pic pic-4"><img src="https://i.pinimg.com/1200x/62/32/da/6232dacb5d12deb25bb583a0c106af23.jpg"></div>
+            </div>
+        </section>
+
+        <section class="calendar-section" data-aos="zoom-in">
+            <div class="cal-month">Հոկտեմբեր 2025</div>
+            <table>
+                <tr><th>ԵՐԿ</th><th>ԵՐՔ</th><th>ՉՈՐ</th><th>ՀՆԳ</th><th>ՈՒՐԲ</th><th>ՇԱԲ</th><th>ԿԻՐ</th></tr>
+                <tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                <tr><td>6</td><td>7</td><td>8</td><td>9</td><td><div class="heart-date">10</div></td><td>11</td><td>12</td></tr>
+                <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+                <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr>
+            </table>
+            <div class="countdown">
+                <div class="count-item"><span class="count-num" id="days">00</span><span class="count-label">Օր</span></div>
+                <div class="count-item"><span class="count-num" id="hours">00</span><span class="count-label">Ժամ</span></div>
+                <div class="count-item"><span class="count-num" id="minutes">00</span><span class="count-label">Րոպե</span></div>
+            </div>
+        </section>
+
+        <div class="locations-wrapper">
+            <h2 style="text-align:center; font-family:'Great Vibes'; font-size:3rem; color:var(--dark-gold); margin-bottom:20px;">Սիրով Սպասում Ենք</h2>
+
+            <div class="loc-card-premium" data-aos="fade-up">
+                <div class="loc-img-frame">
+                    <img src="https://i.pinimg.com/736x/d4/82/ed/d482ed0aed80ada8df66f8191989df61.jpg" alt="Harsi Tun">
+                </div>
+                <div class="loc-details">
+                    <h3>Հարսի Տուն</h3>
+                    <p>ք. Ստեփանավան, Անդրանիկի 46</p>
+                    <a href="https://goo.gl/maps/placeholder1" target="_blank" class="btn-gold-outline">
+                        <i class="fa-solid fa-location-dot"></i> Տեսնել Քարտեզում
+                    </a>
+                </div>
+            </div>
+
+            <div class="loc-card-premium" data-aos="fade-up" data-aos-delay="100">
+                <div class="loc-img-frame">
+                     <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwerDGZLS8URfAWoo1xpBEoBW5B84-0oMPJ3EKAEzQb2qdsgdroVO-_5UBW8Xg6Mh2dwFqU4tnaPhHbVt5G4fJa7aBZipkoD7zLDPgNU9RwbOJQyQ729JI0zdkPyYHBjKaqU_CKUefg=w270-h312-n-k-no" alt="Church">
+                </div>
+                <div class="loc-details">
+                    <h3>Պսակադրություն</h3>
+                    <p>Սուրբ Գայանե եկեղեցի</p>
+                    <a href="https://goo.gl/maps/placeholder2" target="_blank" class="btn-gold-outline">
+                        <i class="fa-solid fa-church"></i> Տեսնել Քարտեզում
+                    </a>
+                </div>
+            </div>
+
+            <div class="loc-card-premium" data-aos="fade-up" data-aos-delay="200">
+                <div class="loc-img-frame">
+                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGxjzQbKY6MQTrrXeYmxdkZwRAmjEf44R1QQ&s" alt="Restaurant">
+                </div>
+                <div class="loc-details">
+                    <h3>Հարսանյաց Հանդես</h3>
+                    <p>Ռեստորանային համալիր</p>
+                    <a href="https://goo.gl/maps/placeholder3" target="_blank" class="btn-gold-outline">
+                        <i class="fa-solid fa-champagne-glasses"></i> Տեսնել Քարտեզում
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="text-align:center; font-family:'Great Vibes'; font-size:2.5rem; color:var(--dark-gold); margin-bottom:30px;">Օրվա Ծրագիրը</h2>
+        <section class="timeline-section">
+            <div class="timeline-item" data-aos="fade-right">
+                <div class="t-time">10:30</div>
+                <div class="t-line"><div class="t-dot"></div></div>
+                <div class="t-content"><h3>Հարսի Տուն</h3><p>ք. Ստեփանավան, Անդրանիկի 46</p></div>
+            </div>
+            <div class="timeline-item" data-aos="fade-right" data-aos-delay="100">
+                <div class="t-time">11:30</div>
+                <div class="t-line"><div class="t-dot"></div></div>
+                <div class="t-content"><h3>Պսակադրություն</h3><p>Սուրբ Գայանե եկեղեցի</p></div>
+            </div>
+            <div class="timeline-item" data-aos="fade-right" data-aos-delay="200">
+                <div class="t-time">17:30</div>
+                <div class="t-line"><div class="t-dot"></div></div>
+                <div class="t-content"><h3>Հարսանյաց Հանդես</h3><p>Ռեստորանային համալիր</p></div>
+            </div>
+        </section>
+
+        <section class="rsvp-section" id="rsvp" data-aos="zoom-in-up">
+            <div class="rsvp-card">
+                <h2 style="font-family:'Great Vibes'; font-size:2.5rem; color:var(--dark-gold); margin-bottom:20px;">RSVP</h2>
+                <p style="font-size:0.9rem; margin-bottom:30px; color:#666;">Խնդրում ենք հաստատել ձեր մասնակցությունը</p>
+
+                <input type="text" id="guestName" class="rsvp-input" placeholder="Ձեր Անուն Ազգանունը">
+
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="attending" value="Սիրով կգամ" checked> Սիրով կգամ</label>
+                    <label class="radio-item"><input type="radio" name="attending" value="Ցավոք, չեմ կարող"> Ցավոք, չեմ կարող գալ</label>
+                    <label class="radio-item"><input type="radio" name="attending" value="Դեռ պարզ չէ"> Հնարավոր է կգամ</label>
+                </div>
+
+                <div style="text-align:left; margin-bottom:10px; font-size:0.8rem; color:#888; padding-left:5px;">ՀՅՈՒՐԵՐԻ ՔԱՆԱԿԸ</div>
+                <select id="guestCount" class="rsvp-select">
+                    <option value="1">1 հոգի</option>
+                    <option value="2">2 հոգի</option>
+                    <option value="3">3 հոգի</option>
+                    <option value="4">4 հոգի</option>
+                    <option value="5+">5 և ավելի</option>
+                </select>
+
+                <button class="rsvp-btn" onclick="sendRSVP()">ՀԱՍՏԱՏԵԼ</button>
+                <p style="margin-top:20px; font-size:0.7rem; color:#aaa;">ՄԻՆՉԵՎ 30.09.2025</p>
+            </div>
+        </section>
+
+        <footer>Created with Love for Aram & Ani</footer>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Countdown
+        const weddingDate = new Date("Oct 10, 2025 11:30:00").getTime();
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        }, 1000);
+
+        // RSVP WhatsApp function
+        function sendRSVP() {
+            const name = document.getElementById('guestName').value;
+            const status = document.querySelector('input[name="attending"]:checked').value;
+            const count = document.getElementById('guestCount').value;
+
+            if(!name) { alert("Խնդրում ենք լրացնել ձեր անունը"); return; }
+
+            // Փոխիր այս համարը քո համարով (առանց +)
+            const myNumber = "37494000000";
+
+            const message = `Հարսանիքի հաստատում:%0AԱնուն: ${name}%0AԿարգավիճակ: ${status}%0AՔանակ: ${count}`;
+            window.open(`https://wa.me/${myNumber}?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>

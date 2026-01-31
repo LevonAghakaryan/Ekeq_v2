@@ -11,6 +11,12 @@ class Invitation(Base):
     slug = Column(String(100), unique=True, index=True, nullable=False)
     event_title = Column(String(200), nullable=False)
 
+    # Անվտանգության տոկեններ (UUID-ների համար)
+    # guest_token-ը կարող է լինել nullable, եթե ուզում ես հանրային հրավիրատոմսեր ունենալ
+    guest_token = Column(String(100), unique=True, nullable=True, index=True)
+
+    # admin_token-ը պարտադիր է կառավարման էջի (Dashboard) համար
+    admin_token = Column(String(100), unique=True, nullable=False, index=True)
     # Անհատական երաժշտություն (կամընտրական)
     music_url = Column(String(255), nullable=True)
 

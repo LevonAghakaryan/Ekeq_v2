@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | YINVITE{% endblock %}
+
+{% block content %}
+<div class="container mx-auto pt-[120px] pb-[60px] px-4">
+    
+    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+        <h1 class="text-3xl font-bold text-headerDark tracking-wider uppercase">
+            🚀 Super <span class="text-goldAccent">Admin</span> Panel
+        </h1>
+        <div class="flex gap-4">
+            <div class="bg-whiteCustom p-4 rounded-2xl shadow-sm border-l-4 border-goldAccent min-w-[150px]">
+                <p class="text-[10px] uppercase tracking-widest text-textGrey">Պատվերներ</p>
+                <p class="text-2xl font-bold text-headerDark">{{ orders|length }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-whiteCustom rounded-[30px] shadow-sm overflow-hidden border border-gray-100 mb-10">
+        <div class="bg-headerDark p-6">
+            <h2 class="text-whiteCustom text-xl tracking-widest uppercase">📥 Վերջին Պատվերները</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50 border-bottom border-gray-100">
+                        <th class="p-5 text-goldAccent uppercase text-xs tracking-widest">ID</th>
+                        <th class="p-5 text-goldAccent uppercase text-xs tracking-widest">Հաճախորդ</th>
+                        <th class="p-5 text-goldAccent uppercase text-xs tracking-widest">Կապ</th>
+                        <th class="p-5 text-goldAccent uppercase text-xs tracking-widest">Դիզայն</th>
+                        <th class="p-5 text-goldAccent uppercase text-xs tracking-widest">Կարգավիճակ</th>
+                        <th class="p-5 text-goldAccent uppercase text-xs tracking-widest text-right">Գործողություն</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for order in orders %}
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="p-5 font-bold text-headerDark">#{{ order.id }}</td>
+                        <td class="p-5">
+                            <p class="text-headerDark font-medium">{{ order.customer_name }}</p>
+                            <small class="text-textGrey text-[10px]">{{ order.created_at.strftime('%Y-%m-%d') }}</small>
+                        </td>
+                        <td class="p-5 text-sm">
+                            <i class="fa-solid fa-phone text-goldAccent mr-1"></i> {{ order.phone_number }}<br>
+                            <span class="text-[10px] bg-bgLight px-2 py-1 rounded-full uppercase">{{ order.preferred_contact }}</span>
+                        </td>
+                        <td class="p-5">
+                            <span class="text-sm text-headerDark">{{ order.template.name if order.template else 'N/A' }}</span>
+                        </td>
+                        <td class="p-5 text-xs">
+                            <span class="px-3 py-1 rounded-full font-bold uppercase tracking-tighter
+                                {% if order.status == 'New' %} bg-orange-100 text-orange-600
+                                {% else %} bg-green-100 text-green-600 {% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="p-5 text-right relative">
+                            {% if not order.invitation %}
+                            <button onclick="openModal('{{ order.id }}', '{{ order.template_id }}', '{{ order.customer_name }}')"
+                                    class="bg-goldAccent hover:bg-nudeBeige text-white py-2 px-4 rounded-xl text-xs uppercase tracking-widest transition-all duration-300">
+                                ➕ Սարքել
+                            </button>
+                            {% else %}
+                            <div class="relative inline-block text-left">
+                                <button onclick="toggleDropdown(event, this)"
+                                        class="bg-green-100 text-green-600 py-2 px-4 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
+                                    ✅ Պատրաստ է <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </button>
+
+                                <div class="dropdown-menu absolute right-0 mt-2 w-64 origin-top-right bg-whiteCustom rounded-2xl shadow-2xl border border-gray-100 hidden z-[100] animate-in fade-in zoom-in duration-200">
+                                    <div class="p-2 space-y-1">
+                                        <a href="/invite/{{ order.invitation.slug }}?gt={{ order.invitation.guest_token }}" target="_blank"
+                                           class="flex items-center gap-3 px-4 py-3 text-[11px] text-headerDark hover:bg-bgLight rounded-xl transition-all font-bold text-left">
+                                            <i class="fa-solid fa-paper-plane text-goldAccent"></i> Հյուրի հղումը (Guest)
+                                        </a>
+                                        <div class="h-[1px] bg-gray-100 mx-2"></div>
+                                        <a href="/invite/{{ order.invitation.slug }}/manage?at={{ order.invitation.admin_token }}" target="_blank"
+                                           class="flex items-center gap-3 px-4 py-3 text-[11px] text-headerDark hover:bg-bgLight rounded-xl transition-all font-bold text-left">
+                                            <i class="fa-solid fa-user-shield text-goldAccent"></i> Տանտիրոջ Panel (Admin)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="bg-whiteCustom rounded-[30px] p-8 shadow-sm border border-gray-100 max-w-2xl">
+        <h2 class="text-xl text-headerDark tracking-widest uppercase mb-6 border-l-4 border-goldAccent pl-4">🖼️ Ավելացնել Մեդիա URL</h2>
+        <form action="/system-admin/media/add" method="post" class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="number" name="invitation_id" placeholder="Invitation ID" required
+                       class="bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark">
+                <select name="file_type" class="bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark appearance-none">
+                    <option value="image">Նկար (Image)</option>
+                    <option value="video">Վիդեո (Video)</option>
+                </select>
+            </div>
+            <input type="text" name="file_url" placeholder="Նկարի կամ վիդեոյի URL (Link)" required
+                   class="bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark">
+            <button type="submit" class="bg-headerDark text-whiteCustom py-4 rounded-2xl uppercase tracking-[2px] font-bold hover:bg-goldAccent transition-all">
+                Հաստատել Մեդիան
+            </button>
+        </form>
+    </div>
+</div>
+
+<div id="createModal" class="fixed inset-0 bg-headerDark/80 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4">
+    <div class="bg-whiteCustom w-full max-w-[450px] rounded-[40px] p-8 shadow-2xl scale-95 transition-transform duration-300" id="modalBody">
+        <h3 class="text-2xl text-headerDark font-bold mb-6 text-center uppercase tracking-widest">Նոր <span class="text-goldAccent">Հրավիրատոմս</span></h3>
+        <form action="/system-admin/invitations/create" method="post" class="space-y-4">
+            <input type="hidden" id="modal_order_id" name="order_id">
+            <input type="hidden" id="modal_template_id" name="template_id">
+
+            <div>
+                <label class="text-[10px] uppercase tracking-[2px] ml-4 text-textGrey">URL Slug</label>
+                <input type="text" name="slug" id="modal_slug" placeholder="օր. armen-anna-2026" required
+                       class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none mt-1">
+            </div>
+            <div>
+                <label class="text-[10px] uppercase tracking-[2px] ml-4 text-textGrey">Միջոցառման Անուն</label>
+                <input type="text" name="event_title" id="modal_title" required
+                       class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none mt-1">
+            </div>
+
+            <div class="flex gap-4 mt-8">
+                <button type="button" onclick="closeModal()" class="flex-1 py-4 text-textGrey uppercase tracking-widest text-xs font-bold">Չեղարկել</button>
+                <button type="submit" class="flex-1 bg-goldAccent text-whiteCustom py-4 rounded-2xl uppercase tracking-widest text-xs font-bold hover:shadow-lg transition-all">Ստեղծել ✅</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Ֆունկցիա Dropdown-ը բացելու/փակելու համար
+    function toggleDropdown(event, btn) {
+        event.stopPropagation();
+        const menu = btn.nextElementSibling;
+
+        // Փակում ենք բոլոր այլ բաց մենյուները
+        document.querySelectorAll('.dropdown-menu').forEach(m => {
+            if (m !== menu) m.classList.add('hidden');
+        });
+
+        // Toggle ընթացիկը
+        menu.classList.toggle('hidden');
+    }
+
+    // Փակել ամեն ինչ, երբ սեղմում ենք էջի այլ հատվածում
+    window.onclick = function(event) {
+        // Փակել Dropdown-ները
+        if (!event.target.closest('.dropdown-menu')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+        }
+
+        // Փակել Modal-ը
+        if (event.target == document.getElementById('createModal')) {
+            closeModal();
+        }
+    }
+
+    function openModal(orderId, templateId, customerName) {
+        document.getElementById('modal_order_id').value = orderId;
+        document.getElementById('modal_template_id').value = templateId;
+        document.getElementById('modal_title').value = customerName + "-ի Հարսանիքը";
+
+        const modal = document.getElementById('createModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            document.getElementById('modalBody').classList.remove('scale-95');
+            document.getElementById('modalBody').classList.add('scale-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('createModal');
+        document.getElementById('modalBody').classList.remove('scale-100');
+        document.getElementById('modalBody').classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 200);
+    }
+</script>
+{% endblock %}

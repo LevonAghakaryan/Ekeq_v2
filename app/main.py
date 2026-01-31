@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from core.database import engine, Base  # Ներմուծում ենք engine-ը և Base-ը
-from app.routers import home, catalog, invitation
+from app.routers import home, catalog, invitation, admin
 
 # IMPORT MODELS: Սա շատ կարևոր է։
 # Մենք պետք է ներմուծենք բոլոր մոդելները, որպեսզի SQLAlchemy-ն տեսնի դրանք։
@@ -23,3 +23,4 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(home.router)
 app.include_router(catalog.router)
 app.include_router(invitation.router)
+app.include_router(admin.router)

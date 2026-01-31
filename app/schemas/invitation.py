@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime
 
-# Այս հատվածը լուծում է "Unresolved reference" խնդիրը
 if TYPE_CHECKING:
     from .invitation_media import InvitationMediaSchema
     from .rsvp import RSVPResponseSchema
@@ -13,18 +12,24 @@ class InvitationBase(BaseModel):
     template_id: int
     music_url: Optional[str] = None
     order_id: Optional[int] = None
+    # Հյուրի տոկենը կարող է լինել բազային սխեմայում
+    guest_token: Optional[str] = None
 
 class InvitationCreate(InvitationBase):
-    pass
+    # Ստեղծելիս կարող ենք admin_token-ը չփոխանցել,
+    # քանի որ Service-ը այն կգեներացնի ավտոմատ
+    admin_token: Optional[str] = None
 
 class InvitationSchema(InvitationBase):
     id: int
     created_at: datetime
+    # Սա այն սխեման է, որը կպարունակի նաև ադմինի բանալին
+    admin_token: str
 
     class Config:
         from_attributes = True
 
 class InvitationFullSchema(InvitationSchema):
-    # Չակերտները թույլ են տալիս Pydantic-ին սպասել մինչև բոլոր ֆայլերը բեռնվեն
+    # Ներառում է նաև մեդիա ֆայլերը և RSVP պատասխանները
     media_files: List["InvitationMediaSchema"] = []
     responses: List["RSVPResponseSchema"] = []

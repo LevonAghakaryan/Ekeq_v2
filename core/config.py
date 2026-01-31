@@ -7,6 +7,11 @@ class Settings(BaseSettings):
     db_password: str
     db_host: str
     db_name: str
+
+    # Ավելացրու այս երկու տողը 👇
+    admin_user: str
+    admin_password: str
+
     class Config:
         env_file = ".env"
 

@@ -15,62 +15,48 @@ templates = Jinja2Templates(directory="templates")
 def get_invitation_page(
         slug: str,
         request: Request,
+        gt: str = None,  # Հյուրի տոկենը URL-ից (?gt=...)
         service: InvitationService = Depends(get_invitation_service)
 ):
-    """Բացում է կոնկրետ հրավիրատոմսի էջը"""
+    """Բացում է հրավիրատոմսի էջը՝ հանրային կամ մասնավոր ստուգումով"""
     invitation = service.get_invitation_data(slug)
-    if not invitation:
-        raise HTTPException(status_code=404, detail="Հրավիրատոմսը չի գտնվել")
+
+    # 🔐 Անվտանգության ճկուն ստուգում
+    # Եթե բազայում guest_token-ը լրացված է (NULL չէ), ապա ստուգում ենք URL-ի տոկենը
+    # Եթե slug-ը քո օրինակներից է (wedding-...) և բազայում NULL է, այն կբացվի ազատ
+    if invitation.guest_token:
+        if invitation.guest_token != gt:
+            raise HTTPException(
+                status_code=403,
+            )
 
     # Որոշում ենք որ HTML տեմպլեյթն օգտագործենք
     template_file = f"designs/{invitation.template.html_file}"
 
-    # Վերադարձնում ենք HTML-ը
     return templates.TemplateResponse(template_file, {
         "request": request,
         "invitation": invitation
     })
 
 
-@router.post("/{slug}/rsvp")
-def submit_rsvp_for_invitation(
-        slug: str,
-        rsvp_data: schemas.RSVPResponseBase,
-        invitation_service: InvitationService = Depends(get_invitation_service),
-        rsvp_service: RSVPService = Depends(get_rsvp_service)
-):
-    """Գրանցում է հյուրի պատասխանը տվյալ հրավիրատոմսի համար"""
-    invitation = invitation_service.get_invitation_data(slug)
-    if not invitation:
-        raise HTTPException(status_code=404, detail="Հրավիրատոմսը չի գտնվել")
-
-    full_rsvp_data = schemas.RSVPResponseCreate(
-        invitation_id=invitation.id,
-        **rsvp_data.model_dump()
-    )
-
-    return rsvp_service.submit_response(full_rsvp_data)
-
-
-# ... քո եղած ներմուծումները (imports) ...
-
 @router.get("/{slug}/manage")
 def get_admin_dashboard(
         slug: str,
-        token: str,  # Ստանում ենք URL-ից՝ ?token=...
+        at: str,  # Ադմինի տոկենը URL-ից (?at=...)
         request: Request,
         invitation_service: InvitationService = Depends(get_invitation_service),
         rsvp_service: RSVPService = Depends(get_rsvp_service)
 ):
-    """Բացում է տվյալ հրավիրատոմսի կառավարման էջը (RSVP ցուցակը)"""
+    """Բացում է տվյալ հրավիրատոմսի կառավարման էջը (Dashboard)"""
     invitation = invitation_service.get_invitation_data(slug)
 
-    # Անվտանգության ստուգում (երբ հետագայում կավելացնես admin_token դաշտը)
-    # if not invitation or invitation.admin_token != token:
-    #     raise HTTPException(status_code=403, detail="Մուտքն արգելված է")
-
-    if not invitation:
-        raise HTTPException(status_code=404, detail="Հրավիրատոմսը չի գտնվել")
+    # 🔐 Պարտադիր անվտանգության ստուգում ադմինի համար
+    # Առանց ճիշտ ADMIN_TOKEN-ի ոչ ոք չի կարող տեսնել հյուրերի ցանկը
+    if not invitation or invitation.admin_token != at:
+        raise HTTPException(
+            status_code=403,
+            detail="Մուտքն արգելված է: Սխալ կառավարման կոդ:"
+        )
 
     # Ստանում ենք պատասխանները և վիճակագրությունը
     responses = rsvp_service.get_invitation_responses(invitation.id)
@@ -82,3 +68,34 @@ def get_admin_dashboard(
         "responses": responses,
         "stats": stats
     })
+
+
+@router.post("/{slug}/rsvp")
+def submit_rsvp_for_invitation(
+        slug: str,
+        rsvp_data: schemas.RSVPResponseBase,
+        invitation_service: InvitationService = Depends(get_invitation_service),
+        rsvp_service: RSVPService = Depends(get_rsvp_service)
+):
+    """Գրանցում է հյուրի պատասխանը"""
+    invitation = invitation_service.get_invitation_data(slug)
+
+    if not invitation:
+        raise HTTPException(status_code=404, detail="Հրավիրատոմսը չի գտնվել")
+
+    # Ստեղծում ենք լիարժեք RSVP օբյեկտ՝ կապելով հրավիրատոմսի ID-ի հետ
+    full_rsvp_data = schemas.RSVPResponseCreate(
+        invitation_id=invitation.id,
+        **rsvp_data.model_dump()
+    )
+
+    return rsvp_service.submit_response(full_rsvp_data)
+
+@router.post("/create", response_model=schemas.InvitationSchema)
+def create_new_invitation(
+    invitation_data: schemas.InvitationCreate,
+    service: InvitationService = Depends(get_invitation_service)
+):
+    # Այստեղ սերվիսը կգեներացնի տոկենները և կպահի բազայում
+    new_invitation = service.create_invitation(invitation_data)
+    return new_invitation

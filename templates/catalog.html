@@ -1,343 +1,165 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="bg-whiteCustom min-h-screen pt-[120px] pb-[80px] px-4">
+    <div class="container mx-auto">
+        <h2 class="text-center text-2xl md:text-3xl tracking-[5px] font-light text-headerDark uppercase mb-14 relative after:content-[''] after:absolute after:bottom-[-15px] after:left-1/2 after:-translate-x-1/2 after:w-[50px] after:h-[1px] after:bg-goldAccent">
+            Ընտրեք Կատեգորիան
+        </h2>
 
-<style>
-/* --- CATALOG PAGE CSS --- */
-
-.catalog-page {
-    padding: 160px 0 80px;
-}
-
-.catalog-page .page-title {
-    text-align: center;
-    font-size: 26px;
-    letter-spacing: 5px;
-    font-weight: 300;
-    color: var(--header-dark);
-    margin-bottom: 60px;
-    text-transform: uppercase;
-    position: relative;
-}
-
-.catalog-page .page-title::after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 1px;
-    background: var(--gold-accent);
-}
-
-.filter-categories {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-bottom: 70px;
-    max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.filter-item {
-    text-decoration: none;
-    color: var(--text-grey);
-    text-align: center;
-    width: 100px;
-    transition: var(--transition-smooth);
-}
-
-.filter-circle {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto 12px;
-    border: 1px solid rgba(195, 147, 124, 0.2);
-    transition: var(--transition-smooth);
-    background: #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
-}
-
-.filter-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%) opacity(0.6);
-    transition: var(--transition-smooth);
-}
-
-.filter-item:hover .filter-circle,
-.filter-item.active .filter-circle {
-    border-color: var(--gold-accent);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(195, 147, 124, 0.15);
-}
-
-.filter-item:hover img,
-.filter-item.active img {
-    filter: grayscale(0%) opacity(1);
-    transform: scale(1.1);
-}
-
-.filter-item span {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    display: block;
-    margin-top: 10px;
-    color: var(--text-grey);
-    transition: all 0.4s ease;
-}
-
-.filter-item:hover span,
-.filter-item.active span {
-    color: var(--gold-accent);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
-}
-
-.nude-divider {
-    border: 0;
-    height: 1px;
-    background: var(--gold-accent);
-    opacity: 0.2;
-    margin: 40px auto;
-    width: 60%;
-}
-
-.templates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 40px;
-    margin-top: 50px;
-}
-
-.template-card {
-    background: #fff;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid rgba(234, 217, 201, 0.4);
-    transition: 0.4s;
-    padding: 10px;
-}
-
-.template-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-}
-
-.template-image {
-    position: relative;
-    height: 400px;
-    overflow: hidden;
-    border-radius: 15px;
-}
-
-.template-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: 0.8s;
-}
-
-.template-info {
-    padding: 20px;
-    text-align: center;
-}
-
-.template-info h3 {
-    font-size: 18px;
-    margin-bottom: 8px;
-    color: var(--header-dark);
-    font-weight: 400;
-}
-
-.price {
-    color: var(--gold-accent);
-    font-weight: bold;
-    margin-bottom: 15px;
-    font-size: 16px;
-}
-
-.card-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.btn-order {
-    background: none;
-    border: 1px solid var(--nude-beige);
-    color: var(--gold-accent);
-    padding: 10px 25px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: 0.3s;
-    width: 100%;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 1px;
-}
-
-.btn-order:hover {
-    background: var(--gold-accent);
-    color: #fff;
-    border-color: var(--gold-accent);
-}
-
-.btn-view {
-    background-color: #445E3F;
-    color: var(--white) !important;
-    padding: 10px 25px;
-    border-radius: 30px;
-    text-decoration: none;
-    display: block;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 1px;
-    transition: 0.3s ease;
-    border: 1px solid #445E3F;
-    cursor: pointer;
-}
-
-.btn-view:hover {
-    background-color: #354a32;
-    border-color: #7d936c;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(68, 94, 63, 0.3);
-}
-
-.template-image-link {
-    display: block;
-    text-decoration: none;
-}
-
-.template-overlay .btn-secondary {
-    background: #7d936c !important;
-    border: none;
-    color: var(--white);
-}
-
-.no-data {
-    text-align: center;
-    color: var(--text-grey);
-    font-size: 18px;
-    padding: 40px;
-}
-
-/* --- MOBILE --- */
-@media (max-width: 768px) {
-    .templates-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 15px;
-        margin-top: 30px;
-    }
-
-    .template-card {
-        padding: 8px;
-        border-radius: 12px;
-    }
-
-    .template-image {
-        height: 160px;
-        border-radius: 8px;
-    }
-
-    .template-info {
-        padding: 12px 5px;
-    }
-
-    .template-info h3 {
-        font-size: clamp(12px, 4vw, 15px);
-        margin-bottom: 5px;
-        min-height: 3em;
-        line-height: 1.3;
-    }
-
-    .price {
-        font-size: clamp(13px, 4vw, 15px);
-        margin-bottom: 10px;
-    }
-
-    .card-buttons {
-        gap: 8px;
-    }
-
-    .btn-view, .btn-order {
-        padding: 8px 0;
-        font-size: 10px;
-        width: 100%;
-        letter-spacing: 0.5px;
-    }
-
-    .filter-categories {
-        gap: 15px 10px;
-    }
-
-    .filter-circle {
-        width: 60px;
-        height: 60px;
-    }
-}
-
-@media (max-width: 350px) {
-    .template-image {
-        height: 130px;
-    }
-}
-</style>
-
-<section class="catalog-page">
-    <div class="container">
-        <h2 class="page-title">ԸՆՏՐԵՔ ԿԱՏԵԳՈՐԻԱՆ</h2>
-
-        <div class="filter-categories">
+        <div class="flex justify-center gap-4 md:gap-8 flex-wrap mb-12 max-w-[1100px] mx-auto">
             {% for category in categories %}
-            <a href="/catalog?category_id={{ category.id }}" class="filter-item {% if selected_category == category.id %}active{% endif %}">
-                <div class="filter-circle">
-                    <img src="{{ category.image_url or '/static/images/default-cat.jpg' }}" alt="{{ category.name }}">
+            <a href="/catalog?category_id={{ category.id }}"
+               class="flex flex-col items-center w-[80px] md:w-[100px] no-underline group">
+                <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border transition-all duration-500 bg-white shadow-sm
+                            {% if selected_category == category.id %} border-goldAccent -translate-y-1 shadow-md {% else %} border-goldAccent/20 group-hover:border-goldAccent group-hover:-translate-y-1 {% endif %}">
+                    <img src="{{ category.image_url or '/static/images/default-cat.jpg' }}"
+                         alt="{{ category.name }}"
+                         class="w-full h-full object-cover transition-all duration-500
+                                {% if selected_category == category.id %} grayscale-0 scale-110 {% else %} grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 {% endif %}">
                 </div>
-                <span>{{ category.name }}</span>
+                <span class="text-[10px] uppercase tracking-widest mt-3 transition-all duration-300
+                             {% if selected_category == category.id %} text-goldAccent font-medium text-[11px] {% else %} text-textGrey group-hover:text-goldAccent {% endif %}">
+                    {{ category.name }}
+                </span>
             </a>
             {% endfor %}
         </div>
 
-        <hr class="nude-divider">
+        <hr class="border-0 h-[1px] bg-goldAccent opacity-20 w-3/5 mx-auto my-10">
 
-        <div class="templates-grid">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10">
             {% for template in templates %}
-            <div class="template-card">
-                <a href="/invite/{{ template.demo_slug }}" class="template-image-link">
-                    <div class="template-image">
-                        <img src="{{ template.image_url }}" alt="{{ template.name }}">
-                        <div class="template-overlay">
-                            <span class="btn-secondary">Դիտել</span>
-                        </div>
+            <div class="bg-white rounded-[20px] p-2 border border-nudeBeige/40 transition-all duration-400 hover:-translate-y-2 hover:shadow-xl group">
+                <a href="/invite/{{ template.demo_slug }}" class="block relative h-[160px] md:h-[400px] overflow-hidden rounded-[15px]">
+                    <img src="{{ template.image_url }}" alt="{{ template.name }}"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="bg-[#7d936c] text-white px-4 py-2 rounded-full text-xs uppercase tracking-widest">Դիտել</span>
                     </div>
                 </a>
 
-                <div class="template-info">
-                    <h3>{{ template.name }}</h3>
-                    <p class="price">{{ template.price }} ֏</p>
+                <div class="p-3 md:p-5 text-center">
+                    <h3 class="text-sm md:text-lg text-headerDark font-light mb-1 md:mb-2 min-h-[2.6em] md:min-h-0">{{ template.name }}</h3>
+                    <p class="text-goldAccent font-bold text-sm md:text-base mb-3 md:mb-4">{{ template.price }} ֏</p>
 
-                    <div class="card-buttons">
-                        <button class="btn-order">Պատվիրել</button>
-                        <a href="/invite/{{ template.demo_slug }}" class="btn-view">Դիտել</a>
+                    <div class="flex flex-col gap-2 md:gap-3">
+                        <button onclick="openOrderModal('{{ template.id }}', '{{ template.name }}')"
+                                class="border border-nudeBeige text-goldAccent py-2 rounded-full text-[10px] md:text-xs uppercase tracking-widest hover:bg-goldAccent hover:text-white transition-all">
+                            Պատվիրել
+                        </button>
+                        <a href="/invite/{{ template.demo_slug }}"
+                           class="bg-[#445E3F] text-white py-2 rounded-full text-[10px] md:text-xs uppercase tracking-widest hover:bg-[#354a32] hover:shadow-lg transition-all">
+                            Դիտել
+                        </a>
                     </div>
                 </div>
             </div>
             {% else %}
-            <p class="no-data">Այս բաժնում դեռևս նմուշներ չկան։ 🌸</p>
+            <div class="col-span-full py-20 text-center">
+                <p class="text-textGrey text-lg">Այս բաժնում դեռևս նմուշներ չկան։ 🌸</p>
+            </div>
             {% endfor %}
         </div>
     </div>
-</section>
+</div>
+
+<div id="orderModal" class="fixed inset-0 bg-headerDark/80 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-whiteCustom w-full max-w-[450px] rounded-[30px] md:rounded-[40px] p-6 md:p-10 shadow-2xl relative">
+        <button onclick="closeOrderModal()" class="absolute top-5 right-5 text-textGrey hover:text-headerDark">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+
+        <h3 class="text-xl md:text-2xl text-headerDark font-bold mb-1 text-center uppercase tracking-widest">Պատվիրել</h3>
+        <p id="modal_template_name" class="text-goldAccent text-center text-xs md:text-sm mb-8 font-medium italic"></p>
+
+        <form id="orderForm" class="space-y-4 md:space-y-5">
+            <input type="hidden" name="template_id" id="form_template_id">
+
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-[2px] ml-4 text-textGrey">Ձեր Անունը</label>
+                <input type="text" name="customer_name" required
+                       class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark transition-all">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-[2px] ml-4 text-textGrey">Հեռախոսահամար</label>
+                <input type="tel" name="phone_number" required
+                       class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark transition-all"
+                       placeholder="+374 __ __ __ __">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-[2px] ml-4 text-textGrey">Կապի նախընտրելի տարբերակ</label>
+                <select name="preferred_contact"
+                        class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark appearance-none">
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Telegram">Telegram</option>
+                    <option value="Call">Զանգահարել</option>
+                </select>
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button type="button" onclick="closeOrderModal()"
+                        class="flex-1 py-4 text-textGrey uppercase tracking-widest text-[10px] font-bold">Չեղարկել</button>
+                <button type="submit"
+                        class="flex-1 bg-goldAccent text-white py-4 rounded-2xl uppercase tracking-widest text-[10px] font-bold hover:shadow-lg transition-all">
+                    Հաստատել ✅
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openOrderModal(id, name) {
+        document.getElementById('form_template_id').value = id;
+        document.getElementById('modal_template_name').textContent = name;
+        const modal = document.getElementById('orderModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden'; // Կանխում է էջի scroll-ը
+    }
+
+    function closeOrderModal() {
+        const modal = document.getElementById('orderModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Modal-ը փակել դրսում սեղմելիս
+    window.onclick = function(event) {
+        const modal = document.getElementById('orderModal');
+        if (event.target == modal) {
+            closeOrderModal();
+        }
+    }
+
+    // Ֆորմայի ուղարկումը AJAX-ով
+    document.getElementById('orderForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('/catalog/order', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('✨ Շնորհակալություն։ Ձեր պատվերն ընդունված է։ Մենք կկապնվենք Ձեզ հետ շատ շուտով։');
+                closeOrderModal();
+                e.target.reset();
+            } else {
+                alert('⚠️ Սխալ։ ' + (result.message || 'Խնդրում ենք փորձել նորից։'));
+            }
+        } catch (error) {
+            alert('⚠️ Կապի սխալ։ Ստուգեք ինտերնետ միացումը։');
+        }
+    };
+</script>
 
 {% endblock %}
