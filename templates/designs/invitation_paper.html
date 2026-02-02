@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium Luxury Invitation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            background-color: #e0e0e0;
+            font-family: 'Times New Roman', serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Անիմացիայի համար նախատեսված սկզբնական վիճակ */
+        .animate-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        /* Երբ տարրը դառնում է տեսանելի */
+        .animate-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .invitation-wrapper {
+            position: relative;
+            width: calc(100vw - 10px);
+            height: calc(100vh - 10px);
+            max-width: 480px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .base-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://i.pinimg.com/736x/80/f3/c0/80f3c09bdadd5bf96b927d3382ce6ccb.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .scroll-container {
+            position: absolute;
+            top: 18%; bottom: 16%; left: 12%; right: 12%;
+            z-index: 10;
+            overflow-y: auto;
+            scrollbar-width: none;
+            mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+        }
+
+        .scroll-container::-webkit-scrollbar { display: none; }
+
+        .content {
+            padding: 30px 5px;
+            text-align: center;
+            color: #2c2c2c;
+        }
+
+        .names {
+            font-size: clamp(1.3rem, 5.5vw, 1.7rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            max-width: 200px;
+            aspect-ratio: 3 / 4;
+            margin: 0 auto 30px auto;
+        }
+
+        .bg-paper {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ece4db;
+            transform: rotate(4deg);
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .main-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            filter: grayscale(100%);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 3px solid #fff;
+        }
+
+        .invite-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .locations-section {
+            margin: 60px 0;
+            padding: 0 10px;
+            position: relative;
+        }
+
+        .loc-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .loc-circle-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            object-fit: cover;
+            background-color: #fff;
+        }
+
+        .loc-title {
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            max-width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+
+        .loc-address {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .map-btn {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            border: 1px solid #1a1a1a;
+            padding: 10px 25px;
+            margin-top: 10px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .map-btn:hover {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        .loc-item:not(:last-child)::after {
+            content: '';
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ccc, transparent);
+            position: absolute;
+            bottom: -40px;
+        }
+
+        .calendar-box {
+            margin: 40px auto;
+            padding: 20px;
+            max-width: 320px;
+        }
+
+        .month-title {
+            font-size: 1.8rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .day-header { font-size: 0.65rem; color: #888; font-weight: bold; }
+        .day-num { font-size: 0.9rem; padding: 10px 0; color: #444; }
+
+        .selected-day {
+            border: 1px solid #2c2c2c;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .waiting-text {
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .modal-content {
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 330px;
+            margin: 0 auto;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+
+        .rsvp-form { display: flex; flex-direction: column; gap: 25px; margin-top: 20px; }
+        .rsvp-form input, .rsvp-form select {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 5px;
+            background: transparent;
+            outline: none;
+        }
+
+        .submit-btn {
+            background: none;
+            border: 1px solid #000;
+            padding: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .submit-btn:hover { background: #000; color: #fff; }
+
+        #timer {
+            display: flex;
+            justify-content: center;
+            margin: 40px auto;
+            max-width: 320px;
+        }
+
+        .timer-item { flex: 1; border-right: 1px solid rgba(0,0,0,0.1); }
+        .timer-item:last-child { border-right: none; }
+        .timer-num { font-size: clamp(1.2rem, 6vw, 1.8rem); display: block; }
+        .timer-label { font-size: clamp(0.45rem, 2.5vw, 0.6rem); color: #999; }
+
+        .spacer { height: 70px; }
+    </style>
+</head>
+<body>
+
+    <div class="invitation-wrapper">
+        <div class="base-layer"></div>
+
+        <div class="scroll-container" id="scrollContainer">
+            <div class="content">
+
+                <h1 class="names animate-item">Aram & Ani</h1>
+
+                <div class="photo-container animate-item">
+                    <div class="bg-paper"></div>
+                    <img src="https://i.pinimg.com/736x/1e/4a/ed/1e4aed57703315b9f31c9bb2dc928605.jpg" alt="Couple" class="main-img">
+                </div>
+
+                <p class="invite-text animate-item">
+                    Սիրով հրավիրում ենք Ձեզ <br>
+                    մասնակիցը դառնալու մեր <br>
+                    կյանքի կարևորագույն օրվան։
+                </p>
+
+                <section class="calendar-box animate-item">
+                    <div class="month-title">Հունիս</div>
+                    <div class="days-grid">
+                        <div class="day-header">ԵՐԿ</div><div class="day-header">ԵՐՔ</div><div class="day-header">ՉՐՔ</div><div class="day-header">ՀՆԳ</div><div class="day-header">ՈՒՐԲ</div><div class="day-header">ՇԲԹ</div><div class="day-header">ԿԻՐ</div>
+                        <div class="day-num">15</div><div class="day-num">16</div><div class="day-num">17</div><div class="day-num">18</div><div class="day-num">19</div>
+                        <div class="day-num"><div class="selected-day">20</div></div>
+                        <div class="day-num">21</div>
+                    </div>
+                    <div class="waiting-text">ՍԻՐՈՎ ՍՊԱՍՈՒՄ ԵՆՔ</div>
+                </section>
+
+                <div class="locations-oval">
+                    <div class="loc-item animate-item">
+                        <img src="https://i.pinimg.com/736x/3d/21/bc/3d21bc3f97f7253ffb4b0d71a927e3ac.jpg" class="loc-circle-img" alt="Church">
+                        <p class="loc-title">Սուրբ Գայանե եկեղեցի</p>
+                        <p class="loc-address">Ժամը՝ 15:00</p>
+                        <a href="#" class="map-btn">Քարտեզ</a>
+                    </div>
+
+                    <div class="loc-item animate-item">
+                        <img src="https://i.pinimg.com/736x/e1/f5/e7/e1f5e7270a4cc605233632a7e8403bfc.jpg" class="loc-circle-img" alt="Church">
+                        <p class="loc-title">Սուրբ Գայանե եկեղեցի</p>
+                        <p class="loc-address">Ժամը՝ 15:00</p>
+                        <a href="#" class="map-btn">Քարտեզ</a>
+                    </div>
+
+                    <div class="loc-item animate-item">
+                        <img src="https://i.pinimg.com/736x/2b/30/ef/2b30ef12db7c0072e0bf18ab45aa3ae0.jpg" class="loc-circle-img" alt="Restaurant">
+                        <p class="loc-title">Ֆլորանս Ռեստորան</p>
+                        <p class="loc-address">Ժամը՝ 18:00</p>
+                        <a href="#" class="map-btn">Քարտեզ</a>
+                    </div>
+                </div>
+
+                <div class="modal-content animate-item">
+                    <p style="font-style: italic; font-size: 0.9rem;">Խնդրում ենք հաստատել ներկայությունը մինչև 10.08.2026</p>
+                    <form class="rsvp-form">
+                        <input type="text" placeholder="Անուն Ազգանուն" required>
+                        <select required>
+                            <option value="" disabled selected>Կմասնակցե՞ք</option>
+                            <option value="yes">Սիրով կգանք</option>
+                            <option value="no">Ցավոք չենք կարող</option>
+                        </select>
+                        <input type="text" placeholder="Հյուրերի քանակ" required>
+                        <button type="submit" class="submit-btn">Հաստատել</button>
+                    </form>
+                </div>
+
+                <div id="timer" class="animate-item">
+                    <div class="timer-item"><span class="timer-num" id="days">00</span><span class="timer-label">օր</span></div>
+                    <div class="timer-item"><span class="timer-num" id="hours">00</span><span class="timer-label">ժամ</span></div>
+                    <div class="timer-item"><span class="timer-num" id="minutes">00</span><span class="timer-label">րոպե</span></div>
+                    <div class="timer-item"><span class="timer-num" id="seconds">00</span><span class="timer-label">վրկ</span></div>
+                </div>
+
+                <div class="spacer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Անիմացիայի տրամաբանությունը
+        const scrollContainer = document.getElementById('scrollContainer');
+        const animateItems = document.querySelectorAll('.animate-item');
+
+        const observerOptions = {
+            root: scrollContainer,
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, observerOptions);
+
+        animateItems.forEach(item => observer.observe(item));
+
+        // Թայմերի տրամաբանությունը
+        const targetDate = new Date("June 20, 2026 15:00:00").getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff > 0) {
+                document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <title>Correct Brush Mask</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f4f1ea; /* Էջի ֆոնը */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+        }
+
+        .masked-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Կպցնում ենք ստորև գրված մասկան */
+            mask: url(#brushMask);
+            -webkit-mask: url(#brushMask);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <svg width="0" height="0" style="position: absolute;">
+            <defs>
+                <mask id="brushMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+                    <image width="1" height="1"
+                        href="https://i.pinimg.com/736x/b9/b8/f2/b9b8f27af67137fad7329f7105d54ec8.jpg"
+                        style="filter: invert(1);" />
+                </mask>
+            </defs>
+        </svg>
+
+        <img class="masked-img" src="https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg">
+    </div>
+
+</body>
+</html>

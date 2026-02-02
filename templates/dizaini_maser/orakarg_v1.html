@@ -2,187 +2,236 @@
 <html lang="hy">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile-First Minimalist Timeline</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium Luxury Invitation</title>
     <style>
-        :root {
-            --line-color: #000;
-            --text-color: #333;
-            --bg-color: #fff;
-            --transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
+        body, html {
+            height: 100%;
+            background-color: #d1d1d1;
+            font-family: 'Times New Roman', serif;
+            overflow: hidden;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
-        .timeline-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 600px; /* Համակարգչի համար */
-            padding: 40px 0;
-            overflow-x: hidden; /* Որպեսզի հեռախոսի վրա կողային սահում չլինի */
-        }
-
-        /* Կենտրոնական ուղղահայաց գիծը */
-        .main-line {
+        /* --- ՇԱՊԻԿԻ (COVER) ՈՃԵՐԸ --- */
+        .cover-overlay {
             position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background: var(--line-color);
-            transform: scaleY(0);
-            transform-origin: top;
-            animation: growVertical 1.5s forwards;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100;
+            display: flex;
+            cursor: pointer;
+            transition: visibility 0s 1.2s; /* Անհետանում է անիմացիայից հետո */
         }
 
-        @keyframes growVertical {
-            to { transform: scaleY(1); }
-        }
-
-        .step {
+        .flap {
+            width: 50%;
+            height: 100%;
+            background-color: #2c2c2c; /* Շքեղ մուգ գույն */
+            background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png'); /* Նուրբ տեքստուրա */
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
             position: relative;
-            width: 100%;
-            min-height: 100px;
             display: flex;
             align-items: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition);
-            margin-bottom: 20px;
         }
 
-        .step.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .left-flap {
+            justify-content: flex-end;
+            border-right: 1px solid rgba(255,215,0,0.3);
+        }
+        .right-flap {
+            justify-content: flex-start;
         }
 
-        /* Հորիզոնական ճյուղերը */
-        .branch {
-            position: absolute;
-            top: 50%;
-            width: 30px; /* Փոքրացրել ենք հեռախոսի համար */
-            height: 1px;
-            background: var(--line-color);
-            transform: scaleX(0);
-            transition: var(--transition);
-            transition-delay: 0.5s;
-        }
-
-        .step.visible .branch {
-            transform: scaleX(1);
-        }
-
-        .dot {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #000;
+        /* Ոսկեգույն կնիք կենտրոնում */
+        .seal {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #f1c40f, #d4ac0d);
             border-radius: 50%;
-            top: -4px;
-            transform: scale(0);
-            transition: var(--transition);
-            transition-delay: 0.8s;
+            position: absolute;
+            z-index: 101;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 1.5rem;
+            transition: all 0.5s ease;
+            border: 2px solid #b8860b;
         }
 
-        .step.visible .dot {
-            transform: scale(1);
+        /* Բացվելու անիմացիաներ */
+        .cover-overlay.opened .left-flap { transform: translateX(-100%); }
+        .cover-overlay.opened .right-flap { transform: translateX(100%); }
+        .cover-overlay.opened .seal { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        .cover-overlay.opened { visibility: hidden; }
+
+        /* --- ՄՆԱՑԱԾ ՈՃԵՐԸ (ՔՈ ԲՆՕՐԻՆԱԿԻՑ) --- */
+        .animate-item { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .animate-item.show { opacity: 1; transform: translateY(0); }
+
+        .invitation-wrapper {
+            position: relative;
+            width: calc(100vw - 10px);
+            height: calc(100vh - 10px);
+            max-width: 480px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            background: #fff;
         }
 
-        /* Ձախ կողմ */
-        .left { flex-direction: row-reverse; left: -50%; width: 100%; }
-        .left .branch { right: 0; transform-origin: right; }
-        .left .dot { left: -4px; }
-        .left .text { text-align: right; padding-right: 40px; }
-
-        /* Աջ կողմ */
-        .right { left: 50%; width: 100%; }
-        .right .branch { left: 0; transform-origin: left; }
-        .right .dot { right: -4px; }
-        .right .text { text-align: left; padding-left: 40px; }
-
-        .text {
-            font-size: 15px;
-            color: var(--text-color);
-            font-weight: 300;
-            line-height: 1.4;
-            max-width: 140px; /* Սա կարևոր է, որ տեքստը չկպնի էկրանի եզրին */
+        .base-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://i.pinimg.com/736x/80/f3/c0/80f3c09bdadd5bf96b927d3382ce6ccb.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
         }
 
-        /* Հեռախոսի համար հատուկ կարգավորում (Adaptive) */
-        @media (max-width: 480px) {
-            .text {
-                font-size: 14px;
-                max-width: 120px;
-            }
-            .branch {
-                width: 20px;
-            }
-            .left .text { padding-right: 30px; }
-            .right .text { padding-left: 30px; }
+        .scroll-container {
+            position: absolute;
+            top: 10%; bottom: 5%; left: 8%; right: 8%;
+            z-index: 10;
+            overflow-y: auto;
+            scrollbar-width: none;
         }
+        .scroll-container::-webkit-scrollbar { display: none; }
+
+        .content { padding: 30px 5px; text-align: center; color: #2c2c2c; }
+        .names { font-size: 1.6rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 25px; }
+
+        .photo-container { position: relative; width: 100%; max-width: 200px; aspect-ratio: 3/4; margin: 0 auto 30px; }
+        .bg-paper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ece4db; transform: rotate(4deg); z-index: 1; }
+        .main-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; border: 3px solid #fff; filter: grayscale(100%); }
+
+        .invite-text { font-size: 0.95rem; line-height: 1.7; font-style: italic; margin-bottom: 30px; }
+        .loc-circle-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 2px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .loc-item { margin-bottom: 40px; }
+        .map-btn { display: inline-block; padding: 8px 20px; border: 1px solid #1a1a1a; text-decoration: none; color: #1a1a1a; border-radius: 20px; font-size: 0.75rem; margin-top: 10px; }
+
+        .calendar-box { margin: 40px 0; }
+        .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
+        .selected-day { border: 1px solid #2c2c2c; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+
+        .rsvp-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .rsvp-form input, .rsvp-form select { border: none; border-bottom: 1px solid #ccc; padding: 8px; background: transparent; }
+        .submit-btn { background: #000; color: #fff; padding: 12px; border: none; letter-spacing: 2px; cursor: pointer; }
+
+        #timer { display: flex; justify-content: space-around; margin-top: 30px; padding-bottom: 50px; }
+        .timer-num { font-size: 1.5rem; display: block; }
+        .timer-label { font-size: 0.7rem; color: #777; }
     </style>
 </head>
 <body>
 
-    <div class="timeline-wrapper">
-        <div class="main-line"></div>
-
-        <div class="step left">
-            <div class="branch"><div class="dot"></div></div>
-            <div class="text">Ժամանում և հյուրասիրություն 🥂</div>
+    <div class="invitation-wrapper">
+        <div class="cover-overlay" id="cover" onclick="openInvitation()">
+            <div class="flap left-flap"></div>
+            <div class="seal">A & A</div>
+            <div class="flap right-flap"></div>
         </div>
 
-        <div class="step right">
-            <div class="branch"><div class="dot"></div></div>
-            <div class="text">Պսակադրության արարողություն 💍</div>
-        </div>
+        <div class="base-layer"></div>
 
-        <div class="step left">
-            <div class="branch"><div class="dot"></div></div>
-            <div class="text">Լուսանկարահանում 📸</div>
-        </div>
+        <div class="scroll-container" id="scrollContainer">
+            <div class="content">
+                <h1 class="names animate-item">Aram & Ani</h1>
 
-        <div class="step right">
-            <div class="branch"><div class="dot"></div></div>
-            <div class="text">Տոնական ընթրիք 🍽️</div>
-        </div>
+                <div class="photo-container animate-item">
+                    <div class="bg-paper"></div>
+                    <img src="https://i.pinimg.com/736x/1e/4a/ed/1e4aed57703315b9f31c9bb2dc928605.jpg" alt="Couple" class="main-img">
+                </div>
 
-        <div class="step left">
-            <div class="branch"><div class="dot"></div></div>
-            <div class="text">Տորթի արարողություն 🎂</div>
+                <p class="invite-text animate-item">
+                    Սիրով հրավիրում ենք Ձեզ <br>
+                    մասնակիցը դառնալու մեր <br>
+                    կյանքի կարևորագույն օրվան։
+                </p>
+
+                <section class="calendar-box animate-item">
+                    <div style="letter-spacing: 5px;">ՀՈՒՆԻՍ</div>
+                    <div class="days-grid">
+                        <div class="day-num">15</div><div class="day-num">16</div><div class="day-num">17</div><div class="day-num">18</div><div class="day-num">19</div>
+                        <div class="day-num"><div class="selected-day">20</div></div>
+                        <div class="day-num">21</div>
+                    </div>
+                </section>
+
+                <div class="loc-item animate-item">
+                    <img src="https://i.pinimg.com/736x/3d/21/bc/3d21bc3f97f7253ffb4b0d71a927e3ac.jpg" class="loc-circle-img">
+                    <p>ՍՈՒՐԲ ԳԱՅԱՆԵ ԵԿԵՂԵՑԻ</p>
+                    <p style="font-size: 0.8rem; color: #666;">Ժամը՝ 15:00</p>
+                    <a href="#" class="map-btn">ՔԱՐՏԵԶ</a>
+                </div>
+
+                <div class="loc-item animate-item">
+                    <img src="https://i.pinimg.com/736x/2b/30/ef/2b30ef12db7c0072e0bf18ab45aa3ae0.jpg" class="loc-circle-img">
+                    <p>ՖԼՈՐԱՆՍ ՌԵՍՏՈՐԱՆ</p>
+                    <p style="font-size: 0.8rem; color: #666;">Ժամը՝ 18:00</p>
+                    <a href="#" class="map-btn">ՔԱՐՏԵԶ</a>
+                </div>
+
+                <div class="animate-item" style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px;">
+                    <p>Խնդրում ենք հաստատել</p>
+                    <form class="rsvp-form">
+                        <input type="text" placeholder="Անուն Ազգանուն">
+                        <select>
+                            <option>Սիրով կգանք</option>
+                            <option>Ցավոք չենք կարող</option>
+                        </select>
+                        <button type="submit" class="submit-btn">ՀԱՍՏԱՏԵԼ</button>
+                    </form>
+                </div>
+
+                <div id="timer" class="animate-item">
+                    <div><span class="timer-num" id="days">00</span><span class="timer-label">օր</span></div>
+                    <div><span class="timer-num" id="hours">00</span><span class="timer-label">ժամ</span></div>
+                    <div><span class="timer-num" id="minutes">00</span><span class="timer-label">րոպե</span></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const observerOptions = {
-                threshold: 0.2
-            };
+        function openInvitation() {
+            document.getElementById('cover').classList.add('opened');
+            // Երբ բացվում է, սկսում ենք հետևել անիմացիաներին
+            startObserving();
+        }
 
+        function startObserving() {
+            const items = document.querySelectorAll('.animate-item');
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
+                entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+                        entry.target.classList.add('show');
                     }
                 });
-            }, observerOptions);
+            }, { root: document.getElementById('scrollContainer'), threshold: 0.1 });
 
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((step, index) => {
-                // Ավելացնում ենք փոքր ուշացում սկզբնական բեռնման ժամանակ
-                setTimeout(() => {
-                    observer.observe(step);
-                }, index * 100);
-            });
-        });
+            items.forEach(item => observer.observe(item));
+        }
+
+        // Թայմերի պարզեցված տրամաբանություն
+        const targetDate = new Date("June 20, 2026 15:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff > 0) {
+                document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            }
+        }, 1000);
     </script>
-
 </body>
 </html>

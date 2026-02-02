@@ -3,175 +3,430 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save Our Date</title>
+    <title>Հարսանյաց Հրավեր</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&family=Noto+Sans+Armenian:wght@100;200;300&family=Noto+Serif+Armenian:wght@100;200&family=Parisienne&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --bg-color: #f9f7f2;
+            --card-bg: #ffffff;
+            --accent-gold: #d4c4b0;
+            --text-primary: #4a4a4a;
+            --text-secondary: #8c8c8c;
+            --name-color: #a38d8d;
+            --accent-rose: #eec9c9;
+        }
+
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f2ed;
-            color: #8b0000;
-            text-align: center;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        .month {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .dates {
+            padding: 20px 0;
             display: flex;
             justify-content: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Noto Sans Armenian', sans-serif;
         }
 
-        .date-heart {
-            color: #ff0000;
-        }
-
-        .save-date {
-            font-style: italic;
-            font-size: 1.2rem;
-            margin-bottom: 50px;
-        }
-
-        .map-container {
-            position: relative;
-            margin-bottom: 100px;
-        }
-
-        .world-map {
+        .card {
+            background-color: var(--card-bg);
             width: 100%;
-            height: auto;
-            opacity: 0.5;
-        }
-
-        .heart {
-            position: absolute;
-            font-size: 2rem;
-            color: #ff0000;
-            left: 60%; /* Approximate position over Armenia */
-            top: 30%;
-            transition: transform 0.2s ease;
-        }
-
-        .path-container {
-            position: absolute;
-            top: 50%; /* Adjust to start from heart */
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 800px; /* Height covering the timeline */
-            z-index: 0;
-        }
-
-        .event {
-            margin: 100px 0;
+            max-width: 400px;
+            padding: 50px 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            text-align: center;
             position: relative;
+            border-radius: 8px;
+            animation: cardEntrance 1s ease-out;
+        }
+
+        /* ---- HEADER ---- */
+        .top-text {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 200;
+        }
+
+        .main-title {
+            font-size: 20px;
+            color: var(--text-primary);
+            font-weight: 100;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        /* ---- PHOTO SECTION ---- */
+        .photo-container {
+            position: relative;
+            width: 260px;
+            height: 380px;
+            margin: 0 auto 40px auto;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .bg-paper {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--accent-rose);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            transform: rotate(7deg);
             z-index: 1;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-radius: 2px;
         }
 
-        .time {
-            font-size: 1.8rem;
-            font-weight: bold;
+        .main-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        .title {
-            font-size: 1.2rem;
+        .date-overlay {
+            position: absolute;
+            bottom: 25px; width: 100%;
+            z-index: 3; color: white;
+            font-size: 18px; letter-spacing: 4px; font-weight: 200;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .location {
-            font-size: 1rem;
+        /* ---- NAMES ---- */
+        .names-svg { width: 100%; height: auto; margin-bottom: 30px; }
+        .name-text { font-family: 'Noto Sans Armenian', sans-serif; font-weight: 100; fill: var(--name-color); font-size: 36px; }
+        .and-char { font-family: 'Parisienne', cursive; font-size: 32px; fill: var(--accent-gold); }
+
+        /* ---- 4. INVITE TEXT (Գեղեցկացված) ---- */
+        .invite-text {
+            margin: 40px 0;
+            padding: 0 25px;
+            line-height: 1.8;
+            font-weight: 200;
+            font-size: 15px;
+            color: #7a7a7a;
         }
 
-        .box {
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
+        .invite-text b {
+            display: block;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: var(--name-color);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        /* ---- 5. CALENDAR SECTION (Գեղեցկացված) ---- */
+        .calendar-box {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #f2f2f2;
+        }
+
+        .month-title {
+            font-family: 'Noto Sans Armenian', sans-serif;
+            font-size: 22px;
+            font-weight: 100;
+            color: var(--name-color);
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            font-size: 12px;
+            max-width: 300px;
+            margin: 0 auto;
+            color: #b5b5b5;
+        }
+
+        .day-header {
+            font-weight: 400;
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .day-num {
+            padding: 8px 0;
+            position: relative;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+
+
+        /* ---- PLAYER ---- */
+        .player-container { margin: 30px 0; }
+        .play-btn {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid var(--accent-gold);
+            cursor: pointer;
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .icon-shape {
+            width: 0; height: 0;
+            border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+            border-left: 10px solid var(--accent-gold); margin-left: 3px;
+        }
+        /* Instagram Carousel Style */
+        .slider-section {
+            margin: 40px 0;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            display: flex;
+            overflow-x: auto;
+            /* Սա ապահովում է կտրուկ թերթելու էֆեկտը */
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 0; /* Հանում ենք արանքները, որ թերթելիս մաքուր լինի */
+            padding: 20px 0;
+        }
+
+        /* Թաքցնում ենք scrollbar-ը */
+        .slider-container::-webkit-scrollbar { display: none; }
+
+        .slider-item {
+            flex: 0 0 100%; /* Ամեն նկար զբաղեցնում է ամբողջ լայնությունը */
+            scroll-snap-align: center; /* Նկարը կպնում է կենտրոնին */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Յուրաքանչյուր նկարի տակի Ռամկան (ինչպես գլխավոր նկարինը) */
+        .slider-frame {
+            position: relative;
+            width: 260px;
+            height: 380px;
+        }
+
+        .slider-frame::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--accent-rose);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+            transform: rotate(5deg);
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 2px;
+        }
+
+        .slider-frame img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 2px;
+        }
+
+        .swipe-hint {
+            font-size: 10px;
+            color: var(--accent-gold);
+            letter-spacing: 3px;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        /* Location Section Styles */
+        .location-section {
+            margin-top: 50px;
+            padding: 30px 10px;
+            border-top: 1px solid #f2f2f2;
+        }
+
+        .location-item {
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .loc-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .loc-title {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: var(--name-color);
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+
+        .loc-time {
+            font-size: 18px;
+            color: var(--text-primary);
+            font-weight: 200;
+            margin-bottom: 8px;
+        }
+
+        .loc-address {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 200;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .map-btn {
             display: inline-block;
-            margin-top: 10px;
+            padding: 8px 20px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 1px;
+            transition: 0.3s;
         }
+
+        .map-btn:hover {
+            background-color: var(--accent-gold);
+            color: white;
+        }
+        /* ---- ANIMATIONS ---- */
+        @keyframes cardEntrance { from { transform: scale(0.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="month">Օգոստոս 2026</div>
-        <div class="dates">
-            <span>25</span>
-            <span>26</span>
-            <span class="date-heart">27 ♥</span>
-            <span>28</span>
-            <span>29</span>
-        </div>
-        <div class="save-date">save our date!</div>
 
-        <div class="map-container">
-            <img src="https://as2.ftcdn.net/jpg/03/50/89/11/1000_F_350891171_rTMHVToAJX3WlGgfuupD42SYSHkJCGVu.jpg" alt="World Map" class="world-map">
-            <div class="heart" id="moving-heart">♥</div>
+    <audio id="music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="card">
+        <div class="header">
+            <div class="top-text">ՀԱՐՍԱՆՅԱՑ ՀՐԱՎԵՐ</div>
+            <div class="main-title">Սիրով հրավիրում ենք</div>
         </div>
 
-        <svg class="path-container" id="path-svg" viewBox="0 0 600 800" preserveAspectRatio="none">
-            <path id="animation-path" d="M300 0 C 200 200, 400 400, 300 800" stroke="#8b0000" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
-        </svg>
-
-        <div class="event">
-            <div class="time">15:00</div>
-            <div class="title">Մեր հարսանիքը տեղի կունենա</div>
-            <div class="location">Երևանում (ք. Երևան)</div>
-            <div class="box">Ռեստորան</div>
+        <div class="photo-container">
+            <div class="bg-paper"></div>
+            <img src="https://i.pinimg.com/736x/1e/4a/ed/1e4aed57703315b9f31c9bb2dc928605.jpg" alt="Couple" class="main-img">
+            <div class="date-overlay">20.06.2026</div>
         </div>
 
-        <div class="event">
-            <div class="time">16:30</div>
-            <div class="title">Պսակադրություն</div>
-            <div class="location">Սուրբ Սարգիս եկեղեցի (ք. Երևան, Իսահակյան 104)</div>
-            <div class="box">Ռեստորան</div>
+        <div class="names-section">
+            <svg viewBox="0 0 300 120" class="names-svg">
+                <text x="20" y="50" class="name-text">Հարություն</text>
+                <text x="120" y="100" class="name-text">
+                    <tspan class="and-char">և</tspan> Նատալի
+                </text>
+            </svg>
         </div>
 
-        <div class="event">
-            <div class="time">17:00</div>
-            <div class="title">Հարսանյաց հանդես</div>
-            <div class="location">"eLLu" ռեստորանային համալիր</div>
-            <div class="box">Ռեստորան</div>
+        <div class="player-container">
+            <button class="play-btn" id="playBtn" onclick="toggleMusic()">
+                <div class="icon-shape"></div>
+            </button>
         </div>
+
+        <section class="invite-text">
+            <b>ՍԻՐԵԼԻ ԲԱՐԵԿԱՄՆԵՐ ԵՎ ԸՆԿԵՐՆԵՐ</b>
+            Սիրով հրավիրում ենք Ձեզ կիսելու մեզ հետ մեր կյանքի կարևոր և հիշարժան օրը։
+            Սպասում ենք Ձեզ մեր հարսանիքին։
+        </section>
+
+        <section class="calendar-box">
+            <div class="month-title">Հունիս</div>
+            <div class="days-grid">
+                <div class="day-header">Երկ</div><div class="day-header">Երք</div><div class="day-header">Չրք</div>
+                <div class="day-header">Հնգ</div><div class="day-header">Ուրբ</div><div class="day-header">Շբթ</div>
+                <div class="day-header">Կիր</div>
+                <div class="day-num">15</div><div class="day-num">16</div><div class="day-num">17</div>
+                <div class="day-num">18</div><div class="day-num">19</div>
+                <div class="day-num ">20</div><div class="day-num">21</div>
+            </div>
+        </section>
+
+        <section class="slider-section">
+            <div class="slider-container">
+                <div class="slider-item">
+                    <div class="slider-frame">
+                        <img src="https://i.pinimg.com/736x/43/cd/eb/43cdebb25b6a00a105887b4211ab473d.jpg" alt="Photo 1">
+                    </div>
+                </div>
+                <div class="slider-item">
+                    <div class="slider-frame">
+                        <img src="https://i.pinimg.com/736x/1e/4a/ed/1e4aed57703315b9f31c9bb2dc928605.jpg" alt="Photo 2">
+                    </div>
+                </div>
+                <div class="slider-item">
+                    <div class="slider-frame">
+                        <img src="https://i.pinimg.com/1200x/96/fc/39/96fc398809aeaadc5e439e8f763bc158.jpg" alt="Photo 3">
+                    </div>
+                </div>
+            </div>
+            <div class="swipe-hint">← Թերթեք նկարները →</div>
+        </section>
+
+        <section class="location-section">
+            <div class="location-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/619/619153.png" class="loc-icon" alt="Home">
+                <div class="loc-title">Հարսի տուն</div>
+                <div class="loc-time">Ժամը՝ 12:00</div>
+                <div class="loc-address">ք. Երևան, Աբովյան փողոց, 15 շենք</div>
+                <a href="https://maps.google.com" target="_blank" class="map-btn">Տեսնել քարտեզի վրա</a>
+            </div>
+
+            <div class="location-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/2906/2906232.png" class="loc-icon" alt="Church">
+                <div class="loc-title">Պսակադրություն</div>
+                <div class="loc-time">Ժամը՝ 14:00</div>
+                <div class="loc-address">Սուրբ Սարգիս Եկեղեցի, Մաշտոցի պողոտա</div>
+                <a href="https://maps.google.com" target="_blank" class="map-btn">Տեսնել քարտեզի վրա</a>
+            </div>
+
+            <div class="location-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/3168/3168673.png" class="loc-icon" alt="Restaurant">
+                <div class="loc-title">Հարսանյաց հանդիսություն</div>
+                <div class="loc-time">Ժամը՝ 17:00</div>
+                <div class="loc-address">«Ֆլորենս» ռեստորանային համալիր, Բարբյուսի 6</div>
+                <a href="https://maps.google.com" target="_blank" class="map-btn">Տեսնել քարտեզի վրա</a>
+            </div>
+        </section>
+
     </div>
 
     <script>
-        const heart = document.getElementById('moving-heart');
-        const path = document.getElementById('animation-path');
-        const mapContainer = document.querySelector('.map-container');
-        const timelineStart = document.querySelector('.event').offsetTop;
+        const music = document.getElementById('music');
+        const btn = document.getElementById('playBtn');
+        let isPlaying = false;
 
-        window.addEventListener('scroll', () => {
-            const scrollPos = window.scrollY;
-            const mapBottom = mapContainer.offsetTop + mapContainer.offsetHeight;
-
-            if (scrollPos < mapBottom) {
-                // Heart stays on map
-                heart.style.position = 'absolute';
-                heart.style.top = '30%';
-                heart.style.left = '60%';
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                btn.classList.remove('playing');
             } else {
-                // Move heart along path
-                heart.style.position = 'fixed';
-                const progress = (scrollPos - mapBottom) / (document.body.scrollHeight - mapBottom - window.innerHeight);
-                const length = path.getTotalLength();
-                const point = path.getPointAtLength(progress * length);
-
-                heart.style.left = `${(point.x / 600) * 100}%`;
-                heart.style.top = `${point.y}px`; // Since SVG is absolute, adjust
+                music.play().catch(e => console.log("Audio play blocked"));
+                btn.classList.add('playing');
             }
-        });
+            isPlaying = !isPlaying;
+        }
     </script>
 </body>
 </html>
