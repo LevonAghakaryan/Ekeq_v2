@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from core.database import Base
@@ -11,6 +11,12 @@ class Invitation(Base):
     slug = Column(String(100), unique=True, index=True, nullable=False)
     event_title = Column(String(200), nullable=False)
 
+    # --- ՆՈՐ ԴԱՇՏԵՐ ---
+    # Հարսանիքի հիմնական օրը (ֆիլտրման և օրացույցի համար)
+    event_date = Column(DateTime, nullable=True)
+    # Բոլոր դինամիկ տեքստերը (couple_names, welcome_text, locations, rsvp_settings)
+    content = Column(JSON, nullable=True)
+    # ------------------
     # Անվտանգության տոկեններ (UUID-ների համար)
     # guest_token-ը կարող է լինել nullable, եթե ուզում ես հանրային հրավիրատոմսեր ունենալ
     guest_token = Column(String(100), unique=True, nullable=True, index=True)

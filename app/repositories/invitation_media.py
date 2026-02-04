@@ -26,3 +26,10 @@ class InvitationMediaRepository:
         return self.db.query(InvitationMedia).filter(
             InvitationMedia.invitation_id == invitation_id
         ).all()
+
+    def get_media_by_label(self, invitation_id: int, label: str):
+        """Բերում է կոնկրետ լեյբլով մեդիան (օր. 'main_hero')"""
+        return self.db.query(InvitationMedia).filter(
+            InvitationMedia.invitation_id == invitation_id,
+            InvitationMedia.label == label
+        ).first()

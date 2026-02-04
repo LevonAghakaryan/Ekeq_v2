@@ -29,10 +29,10 @@
                         <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest">ID</th>
                         <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest">Հաճախորդ & Ժամ</th>
                         <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest">Կապ</th>
-                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-center">Դիզայն (T-ID)</th>
-                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-center">Invitation (I-ID)</th>
-                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-center">Կարգավիճակ</th>
-                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-right">Գործողություն</th>
+                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-center">Info (T-ID)</th>
+                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-center">Invitation</th>
+                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-center">Status</th>
+                        <th class="p-4 text-goldAccent uppercase text-[10px] tracking-widest text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -45,37 +45,35 @@
                                 <span class="text-[9px] bg-gray-100 text-textGrey px-1.5 py-0.5 rounded">
                                     <i class="fa-regular fa-calendar-days mr-1"></i>{{ order.created_at.strftime('%d.%m.%Y') }}
                                 </span>
-                                <span class="text-[9px] bg-goldAccent/10 text-goldAccent font-bold px-1.5 py-0.5 rounded">
-                                    <i class="fa-regular fa-clock mr-1"></i>{{ order.created_at.strftime('%H:%M') }}
-                                </span>
                             </div>
                         </td>
                         <td class="p-4 text-sm">
-                            <div class="flex flex-col gap-1">
-                                <a href="tel:{{ order.phone_number }}" class="text-headerDark hover:text-goldAccent transition-colors">
-                                    <i class="fa-solid fa-phone text-goldAccent text-[10px] mr-1"></i>{{ order.phone_number }}
-                                </a>
-                                <span class="text-[9px] bg-bgLight px-2 py-0.5 rounded-full uppercase self-start border border-gray-100">
-                                    {{ order.preferred_contact }}
-                                </span>
-                            </div>
+                            <a href="tel:{{ order.phone_number }}" class="text-headerDark hover:text-goldAccent transition-colors block">
+                                <i class="fa-solid fa-phone text-goldAccent text-[10px] mr-1"></i>{{ order.phone_number }}
+                            </a>
                         </td>
                         <td class="p-4 text-center">
-                            <p class="text-xs text-headerDark font-bold leading-tight">{{ order.template.name if order.template else 'N/A' }}</p>
-                            <span class="text-[9px] text-textGrey">T-ID: <span class="text-goldAccent font-mono">{{ order.template_id }}</span></span>
+                            <p class="text-xs text-headerDark font-bold">{{ order.template.name if order.template else 'N/A' }}</p>
+                            <span class="text-[9px] text-textGrey">ID: {{ order.template_id }}</span>
                         </td>
                         <td class="p-4 text-center">
                             {% if order.invitation %}
                                 <button onclick="copyToMedia('{{ order.invitation.id }}')"
-                                        class="bg-goldAccent/10 text-goldAccent px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:bg-goldAccent hover:text-white transition-all">
+                                        class="bg-goldAccent/10 text-goldAccent px-2 py-1 rounded-lg text-[10px] font-mono font-bold hover:bg-goldAccent hover:text-white transition-all"
+                                        title="Click to Add Media">
                                     INV: #{{ order.invitation.id }} 📋
                                 </button>
+                                {% if order.invitation.event_date %}
+                                <div class="text-[9px] text-textGrey mt-1">
+                                    {{ order.invitation.event_date.strftime('%d.%m.%Y') }}
+                                </div>
+                                {% endif %}
                             {% else %}
-                                <span class="text-gray-300 text-[10px] italic">Սպասում է...</span>
+                                <span class="text-gray-300 text-[10px] italic">---</span>
                             {% endif %}
                         </td>
                         <td class="p-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-tighter
+                             <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-tighter
                                 {% if order.status == 'New' %} bg-orange-100 text-orange-600
                                 {% else %} bg-green-100 text-green-600 {% endif %}">
                                 {{ order.status }}
@@ -84,28 +82,34 @@
                         <td class="p-4 text-right">
                             {% if not order.invitation %}
                             <button onclick="openModal('{{ order.id }}', '{{ order.template_id }}', '{{ order.customer_name }}')"
-                                    class="bg-goldAccent hover:bg-headerDark text-white py-2 px-3 md:px-4 rounded-xl text-[10px] uppercase tracking-widest transition-all shadow-sm">
+                                    class="bg-goldAccent hover:bg-headerDark text-white py-2 px-3 rounded-xl text-[10px] uppercase tracking-widest transition-all shadow-sm">
                                 ➕ Սարքել
                             </button>
                             {% else %}
                             <div class="relative inline-block text-left group">
                                 <button onclick="toggleDropdown(event, this)"
-                                        class="bg-green-100 text-green-600 py-2 px-3 md:px-4 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-all hover:bg-green-200">
-                                    ✅ Պատրաստ <i class="fa-solid fa-chevron-down text-[8px]"></i>
+                                        class="bg-green-100 text-green-600 py-2 px-3 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-all hover:bg-green-200">
+                                    Menu <i class="fa-solid fa-chevron-down text-[8px]"></i>
                                 </button>
 
-                                <div class="dropdown-menu absolute right-0 mt-2 w-56 md:w-64 origin-top-right bg-whiteCustom rounded-2xl shadow-2xl border border-gray-100 hidden z-[100] animate-in fade-in zoom-in duration-200">
-                                    <div class="p-2 space-y-1">
-                                        <a href="/invite/{{ order.invitation.slug }}?gt={{ order.invitation.guest_token }}" target="_blank"
-                                           class="flex items-center gap-3 px-4 py-3 text-[10px] md:text-[11px] text-headerDark hover:bg-bgLight rounded-xl transition-all font-bold">
-                                            <i class="fa-solid fa-paper-plane text-goldAccent"></i> Հյուրի հղում (Guest)
-                                        </a>
-                                        <div class="h-[1px] bg-gray-50 mx-2"></div>
-                                        <a href="/invite/{{ order.invitation.slug }}/manage?at={{ order.invitation.admin_token }}" target="_blank"
-                                           class="flex items-center gap-3 px-4 py-3 text-[10px] md:text-[11px] text-headerDark hover:bg-bgLight rounded-xl transition-all font-bold">
-                                            <i class="fa-solid fa-user-shield text-goldAccent"></i> Տանտիրոջ Panel
-                                        </a>
-                                    </div>
+                                <div class="dropdown-menu absolute right-0 mt-2 w-56 origin-top-right bg-whiteCustom rounded-2xl shadow-2xl border border-gray-100 hidden z-[100] p-2">
+                                    <a href="/invite/{{ order.invitation.slug }}?gt={{ order.invitation.guest_token }}" target="_blank"
+                                       class="flex items-center gap-3 px-4 py-2 text-[11px] text-headerDark hover:bg-bgLight rounded-xl">
+                                        🔗 Հյուրի հղում
+                                    </a>
+                                    <a href="/invite/{{ order.invitation.slug }}/manage?at={{ order.invitation.admin_token }}" target="_blank"
+                                       class="flex items-center gap-3 px-4 py-2 text-[11px] text-headerDark hover:bg-bgLight rounded-xl">
+                                        🛡️ Admin Panel
+                                    </a>
+                                    <div class="h-[1px] bg-gray-50 my-1"></div>
+                                    <button onclick="openEditModal(
+                                        '{{ order.invitation.admin_token }}',
+                                        '{{ order.invitation.content | tojson | forceescape }}',
+                                        '{{ order.invitation.event_date }}',
+                                        '{{ order.invitation.music_url }}')"
+                                        class="w-full flex items-center gap-3 px-4 py-2 text-[11px] text-headerDark hover:bg-bgLight rounded-xl text-left">
+                                        ✏️ Edit JSON
+                                    </button>
                                 </div>
                             </div>
                             {% endif %}
@@ -120,59 +124,154 @@
     <div id="media-section" class="bg-whiteCustom rounded-[20px] md:rounded-[30px] p-6 md:p-8 shadow-sm border border-gray-100 max-w-2xl mx-auto md:mx-0 transition-all">
         <h2 class="text-lg md:text-xl text-headerDark tracking-widest uppercase mb-6 border-l-4 border-goldAccent pl-4">🖼️ Ավելացնել Մեդիա URL</h2>
         <form action="/system-admin/media/add" method="post" class="flex flex-col gap-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="relative">
-                    <input type="number" id="media_invitation_id" name="invitation_id" placeholder="Invitation ID" required
-                           class="w-full bg-bgLight border-none p-4 rounded-xl md:rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark text-sm">
-                    <span class="absolute right-4 top-4 text-[9px] text-goldAccent font-bold">INV #</span>
+                    <input type="number" id="media_invitation_id" name="invitation_id" placeholder="Inv ID" required
+                           class="w-full bg-bgLight border-none p-4 rounded-xl outline-none text-sm">
+                    <span class="absolute right-4 top-4 text-[9px] text-goldAccent font-bold">#</span>
                 </div>
-                <select name="file_type" class="w-full bg-bgLight border-none p-4 rounded-xl md:rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark text-sm appearance-none">
-                    <option value="image">Նկար (Image)</option>
-                    <option value="video">Վիդեո (Video)</option>
+                <select name="file_type" class="w-full bg-bgLight border-none p-4 rounded-xl outline-none text-headerDark text-sm">
+                    <option value="image">Image (Նկար)</option>
+                    <option value="video">Video (Վիդեո)</option>
                 </select>
+                <input list="label-options"
+                       name="label"
+                       class="w-full bg-bgLight border-none p-4 rounded-xl outline-none text-headerDark text-sm"
+                       placeholder="Գրեք կամ ընտրեք պիտակը (օր. loc-home)">
+
+                <datalist id="label-options">
+                    <option value="main_hero">
+                    <option value="gallery">
+                    <option value="church">
+                    <option value="restaurant">
+                    <option value="music">
+                    <option value="loc-home">
+                    <option value="loc-ceremony">
+                </datalist>
             </div>
-            <input type="text" name="file_url" placeholder="Նկարի կամ վիդեոյի URL (Link)" required
-                   class="w-full bg-bgLight border-none p-4 rounded-xl md:rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark text-sm">
-            <button type="submit" class="bg-headerDark text-whiteCustom py-4 rounded-xl md:rounded-2xl uppercase tracking-[2px] text-xs font-bold hover:bg-goldAccent transition-all shadow-md">
-                Հաստատել Մեդիան
+            <input type="text" name="file_url" placeholder="Paste URL here..." required
+                   class="w-full bg-bgLight border-none p-4 rounded-xl focus:ring-2 focus:ring-goldAccent outline-none text-headerDark text-sm">
+            <button type="submit" class="bg-headerDark text-whiteCustom py-4 rounded-xl uppercase tracking-[2px] text-xs font-bold hover:bg-goldAccent transition-all shadow-md">
+                Ավելացնել Ֆայլը
             </button>
         </form>
     </div>
 </div>
 
 <div id="createModal" class="fixed inset-0 bg-headerDark/90 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4">
-    <div class="bg-whiteCustom w-full max-w-[450px] rounded-[30px] md:rounded-[40px] p-6 md:p-8 shadow-2xl scale-95 transition-transform duration-300" id="modalBody">
-        <h3 class="text-xl md:text-2xl text-headerDark font-bold mb-6 text-center uppercase tracking-widest">Նոր <span class="text-goldAccent">Հրավիրատոմս</span></h3>
+    <div class="bg-whiteCustom w-full max-w-[650px] rounded-[30px] p-6 md:p-8 shadow-2xl overflow-y-auto max-h-[90vh]" id="modalBody">
+        <h3 class="text-xl text-headerDark font-bold mb-6 text-center uppercase tracking-widest">Նոր <span class="text-goldAccent">Հրավիրատոմս</span></h3>
+
         <form action="/system-admin/invitations/create" method="post" class="space-y-4">
             <input type="hidden" id="modal_order_id" name="order_id">
             <input type="hidden" id="modal_template_id" name="template_id">
 
-            <div>
-                <label class="text-[9px] uppercase tracking-[2px] ml-4 text-textGrey">URL Slug (անգլերեն)</label>
-                <input type="text" name="slug" id="modal_slug" placeholder="օր. armen-lilit-wedding" required
-                       class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none mt-1 text-sm">
-            </div>
-            <div>
-                <label class="text-[9px] uppercase tracking-[2px] ml-4 text-textGrey">Միջոցառման Անուն (հայերեն)</label>
-                <input type="text" name="event_title" id="modal_title" required
-                       class="w-full bg-bgLight border-none p-4 rounded-2xl focus:ring-2 focus:ring-goldAccent outline-none mt-1 text-sm">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">URL Slug</label>
+                    <input type="text" name="slug" id="modal_slug" placeholder="armen-ani-wedding" required
+                           class="w-full bg-bgLight p-3 rounded-xl outline-none text-sm border focus:border-goldAccent">
+                </div>
+                <div>
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Event Date</label>
+                    <input type="datetime-local" name="event_date" required
+                           class="w-full bg-bgLight p-3 rounded-xl outline-none text-sm text-textGrey border focus:border-goldAccent">
+                </div>
             </div>
 
-            <div class="flex gap-4 mt-8">
-                <button type="button" onclick="closeModal()" class="flex-1 py-4 text-textGrey uppercase tracking-widest text-[10px] font-bold">Չեղարկել</button>
-                <button type="submit" class="flex-1 bg-goldAccent text-whiteCustom py-4 rounded-2xl uppercase tracking-widest text-[10px] font-bold hover:shadow-lg transition-all">Ստեղծել ✅</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">System Title</label>
+                    <input type="text" name="event_title" id="modal_title" required
+                           class="w-full bg-bgLight p-3 rounded-xl outline-none text-sm border focus:border-goldAccent">
+                </div>
+                <div>
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Music URL (mp3)</label>
+                    <input type="text" name="music_url" placeholder="https://.../song.mp3"
+                           class="w-full bg-bgLight p-3 rounded-xl outline-none text-sm border focus:border-goldAccent">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Content JSON</label>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="fillJson('wedding')" class="text-[8px] uppercase bg-gray-200 hover:bg-goldAccent hover:text-white px-2 py-1 rounded-md transition-all">
+                            Wedding Sample
+                        </button>
+                        <button type="button" onclick="fillJson('simple')" class="text-[8px] uppercase bg-gray-200 hover:bg-goldAccent hover:text-white px-2 py-1 rounded-md transition-all">
+                            Simple Sample
+                        </button>
+                    </div>
+                </div>
+
+                <textarea name="content_json" id="json_editor" rows="8" required
+                          class="w-full bg-headerDark text-green-400 p-4 rounded-xl font-mono text-[10px] md:text-xs outline-none border-2 border-goldAccent/30 focus:border-goldAccent leading-relaxed shadow-inner"
+                          placeholder='{ "couple_names": ... }'></textarea>
+                <p class="text-[9px] text-red-400 mt-1 italic text-right">* Համոզվեք, որ JSON-ը ճիշտ է (չակերտներ, ստորակետեր)</p>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+                <button type="button" onclick="closeModal('createModal')" class="flex-1 py-4 text-textGrey uppercase tracking-widest text-[10px] font-bold">Չեղարկել</button>
+                <button type="submit" class="flex-1 bg-goldAccent text-whiteCustom py-4 rounded-2xl uppercase tracking-widest text-[10px] font-bold hover:shadow-lg transition-all">Ստեղծել 🚀</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editModal" class="fixed inset-0 bg-headerDark/90 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4">
+    <div class="bg-whiteCustom w-full max-w-[650px] rounded-[30px] p-6 md:p-8 shadow-2xl overflow-y-auto max-h-[90vh]" id="editModalBody">
+        <h3 class="text-xl text-headerDark font-bold mb-6 text-center uppercase tracking-widest">Խմբագրել <span class="text-goldAccent">Տվյալները</span></h3>
+
+        <form action="/system-admin/invitations/update-by-token" method="post" class="space-y-4">
+            <input type="hidden" id="edit_admin_token" name="admin_token">
+
+            <div>
+                <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Միջոցառման Ամսաթիվ</label>
+                <input type="datetime-local" name="event_date" id="edit_event_date"
+                       class="w-full bg-white border-2 border-gray-100 p-3 rounded-xl text-xs outline-none focus:border-goldAccent transition-all">
+            </div>
+
+            <div>
+                <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Երաժշտության URL (MP3)</label>
+                <input type="text" name="music_url" id="edit_music_url"
+                       class="w-full bg-white border-2 border-gray-100 p-3 rounded-xl text-xs outline-none focus:border-goldAccent transition-all"
+                       placeholder="https://example.com/music.mp3">
+            </div>
+
+            <div>
+                <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Content JSON</label>
+                <textarea name="content_json" id="edit_json_editor" rows="10" required
+                          class="w-full bg-headerDark text-green-400 p-4 rounded-xl font-mono text-[10px] md:text-xs outline-none border-2 border-goldAccent/30 focus:border-goldAccent leading-relaxed shadow-inner"></textarea>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+                <button type="button" onclick="closeModal('editModal')" class="flex-1 py-4 text-textGrey uppercase tracking-widest text-[10px] font-bold">Չեղարկել</button>
+                <button type="submit" class="flex-1 bg-goldAccent text-whiteCustom py-4 rounded-2xl uppercase tracking-widest text-[10px] font-bold hover:shadow-lg transition-all">Պահպանել ✅</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
+    // --- Helper Functions ---
     function copyToMedia(invId) {
         const input = document.getElementById('media_invitation_id');
-        input.value = invId;
-        document.getElementById('media-section').scrollIntoView({ behavior: 'smooth' });
-        input.classList.add('ring-4', 'ring-goldAccent/30');
-        setTimeout(() => input.classList.remove('ring-4', 'ring-goldAccent/30'), 1500);
+
+        // Ստուգում ենք՝ արդյոք input-ը գոյություն ունի
+        if (input) {
+            input.value = invId;
+
+            const mediaSection = document.getElementById('media-section');
+            if (mediaSection) {
+                mediaSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            input.classList.add('ring-4', 'ring-goldAccent/30');
+            setTimeout(() => input.classList.remove('ring-4', 'ring-goldAccent/30'), 1500);
+        } else {
+            console.error("Չհաջողվեց գտնել media_invitation_id տարրը 🧐");
+        }
     }
 
     function toggleDropdown(event, btn) {
@@ -188,13 +287,18 @@
         if (!event.target.closest('.dropdown-menu')) {
             document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
         }
-        if (event.target == document.getElementById('createModal')) closeModal();
+        if (event.target == document.getElementById('createModal')) closeModal('createModal');
+        if (event.target == document.getElementById('editModal')) closeModal('editModal');
     }
 
+    // --- Modal Logic ---
     function openModal(orderId, templateId, customerName) {
         document.getElementById('modal_order_id').value = orderId;
         document.getElementById('modal_template_id').value = templateId;
         document.getElementById('modal_title').value = customerName + "-ի Հրավերքը";
+
+        fillJson('wedding');
+
         const modal = document.getElementById('createModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -204,14 +308,101 @@
         }, 10);
     }
 
-    function closeModal() {
-        const modal = document.getElementById('createModal');
-        document.getElementById('modalBody').classList.remove('scale-100');
-        document.getElementById('modalBody').classList.add('scale-95');
+    function openEditModal(token, content, eventDate, musicUrl) {
+        // 1. Լրացնում ենք թաքնված տոկենը
+        document.getElementById('edit_admin_token').value = token;
+
+        // 2. JSON-ի գեղեցիկ դասավորում (Pretty Print) 💎
+        const editor = document.getElementById('edit_json_editor');
+        try {
+            // Եթե content-ը տեքստ է, սարքում ենք օբյեկտ, հետո նորից տեքստ՝ 4 բացատով
+            let parsed = (typeof content === 'string') ? JSON.parse(content) : content;
+            editor.value = JSON.stringify(parsed, null, 4);
+        } catch (e) {
+            console.error("JSON parse error:", e);
+            editor.value = content; // Եթե սխալ լինի, ուղղակի անփոփոխ կդնի
+        }
+
+        // 3. Լրացնում ենք ամսաթիվը (HTML input-ի համար 'YYYY-MM-DDTHH:MM' ֆորմատով)
+        if (eventDate && eventDate !== 'None') {
+            // SQL-ից եկած "2025-10-10 15:00:00"-ը սարքում ենք "2025-10-10T15:00"
+            document.getElementById('edit_event_date').value = eventDate.replace(" ", "T").substring(0, 16);
+        } else {
+            document.getElementById('edit_event_date').value = '';
+        }
+
+        // 4. Լրացնում ենք երաժշտության հղումը
+        document.getElementById('edit_music_url').value = (musicUrl && musicUrl !== 'None') ? musicUrl : '';
+
+        // 5. Մոդալի բացում
+        const modal = document.getElementById('editModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        setTimeout(() => {
+            const body = document.getElementById('editModalBody');
+            body.classList.remove('scale-95', 'opacity-0');
+            body.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const bodyId = modalId === 'createModal' ? 'modalBody' : 'editModalBody';
+        const body = modal.querySelector('#' + bodyId);
+        body.classList.remove('scale-100');
+        body.classList.add('scale-95');
         setTimeout(() => {
             modal.classList.remove('flex');
             modal.classList.add('hidden');
         }, 200);
+    }
+
+    // --- JSON Sample Filler ---
+    function fillJson(type) {
+        let sample = {};
+
+        if (type === 'wedding') {
+            sample = {
+                "couple_names": {
+                    "groom": "Անուն",
+                    "bride": "Անուն",
+                    "separator": "&"
+                },
+                "welcome_text": {
+                    "title": "Սիրով Հրավիրում ենք",
+                    "description": "Սիրով հրավիրում ենք Ձեզ ներկա գտնվելու մեր հարսանյաց արարողությանը:"
+                },
+                "locations": [
+                    {
+                        "type": "church",
+                        "title": "Պսակադրություն",
+                        "address": "Սուրբ Գայանե եկեղեցի",
+                        "time": "14:00",
+                        "map_url": ""
+                    },
+                    {
+                        "type": "restaurant",
+                        "title": "Հարսանյաց հանդիսություն",
+                        "address": "«Դվին» Ռեստորանային համալիր",
+                        "time": "18:00",
+                        "map_url": ""
+                    }
+                ],
+                "rsvp_settings": {
+                    "deadline": "2025-10-10",
+                    "whatsapp_number": "37494000000"
+                }
+            };
+        } else {
+            sample = {
+                "couple_names": { "groom": "Name", "bride": "Name" },
+                "welcome_text": { "title": "Welcome", "description": "Please join us." },
+                "locations": [],
+                "rsvp_settings": { "deadline": null }
+            };
+        }
+        document.getElementById('json_editor').value = JSON.stringify(sample, null, 4);
     }
 </script>
 {% endblock %}

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ invitation.event_title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            background-color: #f4f1ea;
+            font-family: 'Times New Roman', serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .animate-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .animate-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .invitation-wrapper {
+            position: relative;
+            width: calc(100vw - 10px);
+            height: calc(100vh - 10px);
+            max-width: 480px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            border: 1px solid #d4c4a8;
+        }
+
+        .base-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://i.pinimg.com/736x/b6/50/8b/b6508b27d2c8555bff472e1c259cefab.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .scroll-container {
+            position: absolute;
+            top: 15%; bottom: 12%; left: 10%; right: 10%;
+            z-index: 10;
+            overflow-y: auto;
+            scrollbar-width: none;
+            mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+        }
+
+        .scroll-container::-webkit-scrollbar { display: none; }
+
+        .content {
+            padding: 30px 5px;
+            text-align: center;
+            color: #efe7da;
+        }
+
+        .names {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #b29079;
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto 35px auto;
+        }
+
+        .main-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(20%);
+            mask: url(#brushMask);
+            -webkit-mask: url(#brushMask);
+        }
+
+        .loc-brush-img {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 15px;
+            object-fit: cover;
+            mask: url(#brushMask);
+            -webkit-mask: url(#brushMask);
+            filter: sepia(10%);
+        }
+
+        .invite-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 40px;
+            color: #b29079;
+        }
+
+        .calendar-box {
+            margin: 40px auto;
+            padding: 20px;
+            border-top: 1px solid #d4c4a8;
+            border-bottom: 1px solid #d4c4a8;
+        }
+
+        .month-title {
+            font-size: 1.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #b29079;
+        }
+
+        .waiting-text {
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            margin-top: 30px;
+            text-transform: uppercase;
+            color: #b29079;
+        }
+
+        .day-header { font-size: 0.7rem; color: #a6937c; font-weight: bold; }
+        .day-num { font-size: 0.95rem; padding: 10px 0; color: #5d5448; }
+
+        .selected-day {
+            background-color: #b29079;
+            color: #fff;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(142, 115, 91, 0.3);
+        }
+
+        .loc-item { margin-bottom: 60px; }
+        .loc-title { font-size: 1.1rem; letter-spacing: 3px; color: #b29079; margin-bottom: 10px; }
+        .loc-address { color: #b29079; font-weight: bold; font-size: 0.9rem; margin-bottom: 12px; }
+
+        .map-btn {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-decoration: none;
+            color: #b29079;
+            border: 1px solid #b29079;
+            padding: 10px 30px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .modal-content {
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(212, 196, 168, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .rsvp-form input, .rsvp-form select, .rsvp-form textarea{
+            border: none;
+            border-bottom: 1px solid #d4c4a8;
+            padding: 12px 5px;
+            background: transparent;
+            color: #5d5448;
+            width: 100%;
+            outline: none;
+            margin-bottom: 25px;
+
+        }
+        /* Հատուկ նամակի դաշտի համար */
+        .rsvp-form textarea {
+            height: 60px;      /* բարձրությունը */
+            resize: none;      /* արգելում ենք ձեռքով չափսը փոխել, որ դիզայնը չփչանա */
+            display: block;
+        }
+
+        .submit-btn {
+            background: #b29079;
+            color: white;
+            border: none;
+            padding: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        #timer {
+            display: flex;
+            justify-content: center;
+            padding: 30px 0;
+            border-top: 1px dashed #b29079;
+        }
+
+        .timer-num { font-size: 1.8rem; color: #8e735b; font-weight: 300; }
+        .timer-label { font-size: 0.6rem; color: #a6937c; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <mask id="brushMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+                <image width="1" height="1" href="https://i.pinimg.com/736x/8b/f2/7c/8bf27ce96f002135afffc46fa69b954e.jpg" style="filter: invert(1);" />
+            </mask>
+        </defs>
+    </svg>
+
+    <div class="invitation-wrapper">
+        <div class="base-layer"></div>
+
+        <div class="scroll-container" id="scrollContainer">
+            <div class="content">
+
+                <h1 class="names animate-item">
+                    {{ invitation.content.couple_names.groom }}
+                    {{ invitation.content.couple_names.separator }}
+                    {{ invitation.content.couple_names.bride }}
+                </h1>
+
+                <div class="photo-container animate-item">
+                    {% set hero = invitation.media_files | selectattr("label", "equalto", "main_hero") | first %}
+                    <img src="{{ hero.file_url if hero else 'https://via.placeholder.com/400x400' }}" alt="Couple" class="main-img">
+                </div>
+
+                <p class="invite-text animate-item">
+                    {{ invitation.content.welcome_text.description | replace('\n', '<br>') | safe }}
+                </p>
+
+                <section class="calendar-box animate-item">
+                    <div class="month-title">
+                        {% set months = ["Հունվար", "Փետրվար", "Մարտ", "Ապրիլ", "Մայիս", "Հունիս", "Հուլիս", "Օգոստոս", "Սեպտեմբեր", "Հոկտեմբեր", "Նոյեմբեր", "Դեկտեմբեր"] %}
+                        {{ months[invitation.event_date.month - 1] }} {{ invitation.event_date.year }}
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;">
+                        <div class="day-header">ԵՐԿ</div><div class="day-header">ԵՐՔ</div><div class="day-header">ՉՐՔ</div><div class="day-header">ՀՆԳ</div><div class="day-header">ՈՒՐԲ</div><div class="day-header">ՇԲԹ</div><div class="day-header">ԿԻՐ</div>
+
+                        {# Հաշվարկում ենք դատարկ վանդակները մինչև ամսվա առաջին օրը #}
+                        {% set first_day_weekday = invitation.event_date.replace(day=1).weekday() %}
+                        {% for i in range(first_day_weekday) %} <div></div> {% endfor %}
+
+                        {# Ցուցադրում ենք օրը #}
+                        <div class="day-num">
+                            <div class="selected-day">{{ invitation.event_date.day }}</div>
+                        </div>
+                    </div>
+                    <div class="waiting-text">{{ invitation.content.welcome_text.title }}</div>
+                </section>
+
+                {% for loc in invitation.content.locations %}
+                <div class="loc-item animate-item">
+                    {# Ֆիլտրում ենք նկարը ըստ լեյբլի (օր. loc_church) #}
+                    {% set loc_label = "loc_" ~ loc.type %}
+                    {% set loc_img = invitation.media_files | selectattr("label", "equalto", loc_label) | first %}
+
+                    <img src="{{ loc_img.file_url if loc_img else 'https://via.placeholder.com/150' }}" class="loc-brush-img" alt="{{ loc.type }}">
+
+                    <p class="loc-title">{{ loc.title }}</p>
+                    <p class="loc-address">{{ loc.address }}</p>
+                    {% if loc.map_url %}
+                    <a href="{{ loc.map_url }}" target="_blank" class="map-btn">Քարտեզ</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="modal-content animate-item">
+                    <p style="font-style: italic; font-size: 0.9rem; text-align: center; margin-bottom: 20px; color: #8e735b;">
+                        {% if invitation.content.rsvp_settings.deadline %}
+                            Խնդրում ենք հաստատել ներկայությունը մինչև <br>
+                            <strong>{{ invitation.content.rsvp_settings.deadline }}</strong>
+                        {% endif %}
+                    </p>
+                    <form class="rsvp-form" id="rsvpForm">
+                        <input type="text" id="guest_name" name="guest_name" placeholder="Անուն Ազգանուն" required>
+
+                        <select id="attending" name="attending" required>
+                            <option value="" disabled selected>Կմասնակցե՞ք</option>
+                            <option value="yes">Սիրով կգանք</option>
+                            <option value="no">Ցավոք չենք կարող</option>
+                            <option value="maybe">Դեռ չեմ որոշել</option>
+                        </select>
+
+                        <input type="number" id="guest_count" name="guest_count" placeholder="Հյուրերի քանակ" min="1" value="1" required>
+
+                        <textarea id="message" placeholder="Հաղորդագրություն (կամընտրական)"></textarea>
+
+                        <button type="submit" id="submitBtn" class="submit-btn">Հաստատել</button>
+                    </form>
+                </div>
+
+                <div id="timer" class="animate-item">
+                    <div style="flex:1"><span class="timer-num" id="days">00</span><br><span class="timer-label">օր</span></div>
+                    <div style="flex:1"><span class="timer-num" id="hours">00</span><br><span class="timer-label">ժամ</span></div>
+                    <div style="flex:1"><span class="timer-num" id="minutes">00</span><br><span class="timer-label">րոպե</span></div>
+                    <div style="flex:1"><span class="timer-num" id="seconds">00</span><br><span class="timer-label">վրկ</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animations
+        const scrollContainer = document.getElementById('scrollContainer');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('show');
+            });
+        }, { root: scrollContainer, threshold: 0.1 });
+        document.querySelectorAll('.animate-item').forEach(item => observer.observe(item));
+
+        // Timer Logic
+        const targetDate = new Date("{{ invitation.event_date.strftime('%Y-%m-%dT%H:%M:%S') }}").getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff > 0) {
+                document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // RSVP Submit
+        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            const slug = "{{ invitation.slug }}";
+
+            const formData = {
+                guest_name: document.getElementById('guest_name').value,
+                attending: document.getElementById('attending').value, // yes/no/maybe
+                guest_count: parseInt(document.getElementById('guest_count').value),
+                message: document.getElementById('message').value
+            };
+
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Ուղարկվում է...";
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`/invite/${slug}/rsvp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    submitBtn.innerText = "✅ Հաստատված է";
+                    submitBtn.classList.add('success');
+                    // Եթե էջում ունես successModal, այն կբացվի
+                    const modal = document.getElementById('successModal');
+                    if (modal) modal.classList.add('show');
+
+                    document.querySelectorAll('#rsvpForm input, #rsvpForm select, #rsvpForm textarea').forEach(el => el.disabled = true);
+                } else {
+                    alert('Սխալ տեղի ունեցավ:');
+                    submitBtn.innerText = originalText;
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                alert('Կապի սխալ:');
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

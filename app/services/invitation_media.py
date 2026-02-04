@@ -5,12 +5,12 @@ class InvitationMediaService:
     def __init__(self, repo: InvitationMediaRepository):
         self.repo = repo
 
-    def add_media_to_invitation(self, invitation_id: int, file_url: str, file_type: str):
-        """Օգտագործիր սա, եթե ուզում ես մեկ հատիկ նկար կամ վիդեո ավելացնել"""
+    def add_media_to_invitation(self, invitation_id: int, file_url: str, file_type: str, label: str = None):
         media_data = schemas.InvitationMediaCreate(
             invitation_id=invitation_id,
             file_url=file_url,
-            file_type=file_type
+            file_type=file_type,
+            label=label  # Այս դաշտը շատ կարևոր է HTML-ի համար
         )
         return self.repo.create(media_data)
 

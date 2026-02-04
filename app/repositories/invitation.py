@@ -15,8 +15,14 @@ class InvitationRepository:
             joinedload(Invitation.media_files)
         ).filter(Invitation.slug == slug).first()
 
+
+    def get_by_admin_token(self, token: str):
+        """Ադմինիստրատորի համար՝ իր տոկենով"""
+        return self.db.query(Invitation).filter(Invitation.admin_token == token).first()
+
     def create(self, data: dict):
-        """Ստեղծում է նոր հրավիրատոմս"""
+        # Քանի որ մոդելում ունենք JSON և DateTime,
+        # SQLAlchemy-ն `data`-ի միջից կվերցնի դրանք ու ճիշտ կտեղադրի
         db_invitation = Invitation(**data)
         self.db.add(db_invitation)
         self.db.commit()
