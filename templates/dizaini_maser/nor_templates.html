@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation - Final</title>
+    <style>
+        /* --- Ընդհանուր ոճեր --- */
+        body { margin: 0; padding: 0; background-color: #f4f1ea; display: flex; justify-content: center; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #ffffff;
+            background-image: url('https://i.pinimg.com/736x/09/56/0a/09560a79b13b2ff393fa9d3b86b93423.jpg');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding-bottom: 0px;
+        }
+        @media (min-width: 768px) { .container { max-width: 650px; } }
+
+        .mask-wrapper {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            margin: 0;
+            position: relative;
+        }
+        .masked-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mask-size: 100% 100%;
+            -webkit-mask-size: 100% 100%;
+        }
+
+        .content { padding: 0 30px; text-align: center; }
+
+        .invite-text {
+            font-family: serif;
+            font-style: italic;
+            font-size: 1.3rem;
+            color: #5d5d5d;
+            line-height: 1.5;
+            margin: -90px 0 40px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .calendar-box {
+            padding: 20px;
+            margin: 0 30px;
+            border-top: 1px solid #e0d8c3;
+            border-bottom: 1px solid #e0d8c3;
+            text-align: center;
+        }
+        .month-title {
+            font-family: serif;
+            font-size: 1.6rem;
+            color: #333;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .day-header { font-weight: bold; color: #b3a37d; margin-bottom: 8px; font-size: 0.65rem; }
+        .day-num { padding: 5px 0; }
+
+        .selected-day {
+            background-color: #b3a37d;
+            color: white;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            margin: 0 auto;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .waiting-text {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: #b3a37d;
+            font-weight: bold;
+        }
+
+        #timer {
+            display: flex;
+            justify-content: space-around;
+            padding: 30px 20px;
+        }
+        .timer-item { text-align: center; flex: 1; }
+        .timer-num { font-size: 1.8rem; font-family: serif; color: #333; display: block; }
+        .timer-label { font-size: 0.65rem; text-transform: uppercase; color: #999; }
+
+        /* RSVP Section Styles */
+        .rsvp-section {
+            padding: 20px 30px 40px 30px; /* Ներքևի padding-ը 40px է, որ տարանջատվի վերջին նկարից */
+            text-align: center;
+        }
+
+        .rsvp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d8c3;
+            background-color: transparent;
+            font-family: serif;
+            color: #5d5d5d;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: #b3a37d;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 10px 0;
+            color: #5d5d5d;
+            font-size: 0.9rem;
+            font-family: serif;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .radio-label input {
+            margin-right: 8px;
+            accent-color: #b3a37d;
+        }
+
+        .submit-btn {
+            background-color: #b3a37d;
+            color: white;
+            border: none;
+            padding: 14px 0;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover { background-color: #9c8e6d; }
+        .submit-btn:active { transform: scale(0.98); }
+
+        /* --- Mask Classes --- */
+        .mask-1 { mask: url(#fruitMask); -webkit-mask: url(#fruitMask); }
+        .mask-3 { mask: url(#flowerMask1); -webkit-mask: url(#flowerMask1); }
+
+        /* Նոր դաս շրջված մասկայի համար */
+        .mask-flipped {
+            mask: url(#flowerMaskFlipped);
+            -webkit-mask: url(#flowerMaskFlipped);
+            /* Եթե ուզում եք, որ մասկայի "կտրվածքը" լինի վերևում, իսկ նկարը շարունակվի ներքև՝ սա ճիշտ է։
+               Նկարի դիրքը կարելի է փոխել object-position-ով, եթե դեմքերը կտրվում են */
+             object-position: center 20%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <svg width="0" height="0" style="position: absolute;">
+            <defs>
+                <mask id="flowerMask1" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+                    <image width="1" height="1" preserveAspectRatio="none"
+                           href="https://i.pinimg.com/736x/7a/50/af/7a50afb83ca379753284e04ae2b9c29f.jpg"
+                           style="filter: invert(1) contrast(50);" />
+                </mask>
+
+                <mask id="fruitMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+                    <image width="1" height="1" preserveAspectRatio="none"
+                           href="https://i.pinimg.com/1200x/61/09/88/610988357e96e0a0133d23f9e86b8e02.jpg"
+                           style="filter: invert(1) contrast(50);" />
+                </mask>
+
+                <mask id="flowerMaskFlipped" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+                    <image width="1" height="1" preserveAspectRatio="none"
+                           href="https://i.pinimg.com/736x/7a/50/af/7a50afb83ca379753284e04ae2b9c29f.jpg"
+                           style="filter: invert(1) contrast(50);"
+                           transform="rotate(180, 0.5, 0.5)" />
+                           </mask>
+            </defs>
+        </svg>
+
+        <div class="mask-section">
+            <div class="mask-wrapper">
+                <img class="masked-img mask-3" src="https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg">
+            </div>
+        </div>
+
+        <div class="content">
+            <p class="invite-text">
+                Սիրով հրավիրում ենք Ձեզ <br>
+                մասնակիցը դառնալու մեր <br>
+                կյանքի կարևորագույն օրվան:
+            </p>
+        </div>
+
+        <section class="calendar-box">
+            <div class="month-title">Հունիս</div>
+            <div class="days-grid">
+                <div class="day-header">ԵՐԿ</div><div class="day-header">ԵՐՔ</div><div class="day-header">ՉՐՔ</div><div class="day-header">ՀՆԳ</div><div class="day-header">ՈՒՐԲ</div><div class="day-header">ՇԲԹ</div><div class="day-header">ԿԻՐ</div>
+                <div class="day-num">15</div><div class="day-num">16</div><div class="day-num">17</div><div class="day-num">18</div><div class="day-num">19</div>
+                <div class="day-num"><div class="selected-day">20</div></div>
+                <div class="day-num">21</div>
+            </div>
+            <div class="waiting-text">ՍԻՐՈՎ ՍՊԱՍՈՒՄ ԵՆՔ</div>
+        </section>
+
+        <div id="timer">
+            <div class="timer-item"><span class="timer-num">12</span><span class="timer-label">օր</span></div>
+            <div class="timer-item"><span class="timer-num">05</span><span class="timer-label">ժամ</span></div>
+            <div class="timer-item"><span class="timer-num">40</span><span class="timer-label">րոպե</span></div>
+            <div class="timer-item"><span class="timer-num">22</span><span class="timer-label">վրկ</span></div>
+        </div>
+
+
+        <div class="mask-section">
+            <div class="mask-wrapper">
+                <img class="masked-img mask-1" src="https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg">
+            </div>
+        </div>
+
+        <section class="rsvp-section">
+            <div class="month-title" style="font-size: 1.4rem;">RSVP</div>
+            <form class="rsvp-form" onsubmit="event.preventDefault(); alert('Շնորհակալություն հաստատման համար:');">
+                <input type="text" class="form-input" placeholder="Անուն Ազգանուն" required>
+                <select class="form-select">
+                    <option value="1">1 Հյուր</option>
+                    <option value="2">2 Հյուր</option>
+                    <option value="3">3 Հյուր</option>
+                    <option value="4">4 Հյուր</option>
+                </select>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="attendance" value="yes" checked> Սիրով կմասնակցեմ</label>
+                    <label class="radio-label"><input type="radio" name="attendance" value="no"> Չեմ կարողանա</label>
+                </div>
+                <button type="submit" class="submit-btn">Հաստատել</button>
+            </form>
+        </section>
+
+        <div class="mask-section">
+            <div class="mask-wrapper" style="margin-bottom: -5px;"> <img class="masked-img mask-flipped" src="https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg">
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
