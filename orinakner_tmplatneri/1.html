@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Արամ & Անի | Wedding Invitation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500&family=Noto+Sans+Armenian:wght@200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#c6a87c',
+                        darkGold: '#8e6d31',
+                        textDark: '#2c2c2c',
+                        bgCream: '#fcfbf9',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'Noto Sans Armenian', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'], // Aram & Ani font
+                        script: ['Great Vibes', 'cursive'],
+                    },
+                    backgroundImage: {
+                        'paper-pattern': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+                    },
+                    animation: {
+                        'heart-pulse': 'pulse-custom 2s infinite',
+                    },
+                    keyframes: {
+                        'pulse-custom': {
+                            '0%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(142, 109, 49, 0.7)' },
+                            '70%': { transform: 'scale(1.1)', boxShadow: '0 0 0 10px rgba(142, 109, 49, 0)' },
+                            '100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(142, 109, 49, 0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for things Tailwind handles differently or simpler here */
+        body {
+            -webkit-font-smoothing: antialiased;
+        }
+        .bg-overlay {
+            background-color: rgba(252, 251, 249, 0.6);
+        }
+    </style>
+</head>
+<body class="text-textDark bg-bgCream overflow-x-hidden">
+
+    <div class="fixed inset-0 w-full h-full bg-paper-pattern -z-10 opacity-60 pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-5 py-5 relative">
+
+        <header class="text-center pt-12 pb-8" data-aos="fade-down">
+            <div class="text-xs md:text-sm tracking-[4px] uppercase text-darkGold mb-4 font-medium">ՀՐԱՎԵՐ</div>
+            <h1 class="font-serif italic text-[3.5rem] md:text-7xl text-gold leading-tight drop-shadow-sm">
+                Aram <span class="text-3xl md:text-5xl align-middle">&</span> Ani
+            </h1>
+            <div class="inline-block mt-4 py-2 px-8 border-t border-b border-gold text-lg md:text-xl tracking-[3px] font-light">
+                10.10.2025
+            </div>
+        </header>
+
+        <section class="my-8 text-center" data-aos="zoom-in">
+            <div class="inline-block w-full max-w-[320px] md:max-w-[500px] rounded-t-[150px] overflow-hidden shadow-2xl border-[5px] border-white">
+                <img src="https://i.pinimg.com/736x/b2/6a/fc/b26afc429907e106ecfaf4b7ed725c52.jpg" class="w-full h-auto aspect-[3/4] object-cover block">
+            </div>
+        </section>
+
+        <section class="text-center px-6 py-10 bg-white/80 backdrop-blur-sm rounded-3xl mb-12 shadow-[0_10px_30px_rgba(198,168,124,0.1)] border border-white/50" data-aos="fade-up">
+            <h2 class="font-serif italic text-4xl md:text-5xl text-darkGold mb-4">Սիրելի Հյուրեր</h2>
+            <p class="leading-relaxed text-base md:text-lg text-gray-700 max-w-2xl mx-auto font-sans">
+                Սիրով հրավիրում ենք Ձեզ՝ կիսելու մեզ հետ մեր կյանքի ամենակարևոր և լուսավոր օրը։
+                Ձեր ներկայությունը կդարձնի մեր տոնն ավելի ջերմ և անմոռանալի։
+            </p>
+        </section>
+
+        <section class="mb-16" data-aos="fade-up">
+            <div class="grid grid-cols-3 gap-3 md:gap-4">
+                <div class="col-span-3 h-[300px] md:h-[450px] rounded-lg overflow-hidden shadow-md">
+                    <img src="https://i.pinimg.com/736x/f5/cc/fa/f5ccfa9943f99299916365e3d67bd159.jpg" class="w-full h-full object-cover">
+                </div>
+                <div class="col-span-1 h-[120px] md:h-[200px] rounded-lg overflow-hidden shadow-md">
+                    <img src="https://i.pinimg.com/1200x/43/15/df/4315df5c89eacfd12b8e60dde5579b8f.jpg" class="w-full h-full object-cover">
+                </div>
+                <div class="col-span-1 h-[120px] md:h-[200px] rounded-lg overflow-hidden shadow-md">
+                    <img src="https://i.pinimg.com/736x/40/36/0a/40360a853cc834c44119839c565178da.jpg" class="w-full h-full object-cover">
+                </div>
+                <div class="col-span-1 h-[120px] md:h-[200px] rounded-lg overflow-hidden shadow-md">
+                    <img src="https://i.pinimg.com/1200x/62/32/da/6232dacb5d12deb25bb583a0c106af23.jpg" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white py-8 px-4 rounded-3xl text-center shadow-lg mb-16 relative border-8 border-transparent" data-aos="zoom-in">
+            <div class="absolute inset-2 border border-gold rounded-2xl pointer-events-none"></div>
+
+            <div class="text-2xl md:text-3xl font-serif italic text-darkGold mb-6 uppercase tracking-wider">Հոկտեմբեր 2025</div>
+
+            <div class="overflow-x-auto">
+                <table class="mx-auto w-full max-w-[350px]">
+                    <thead>
+                        <tr class="text-gray-400 font-light text-xs md:text-sm">
+                            <th>ԵՐԿ</th><th>ԵՐՔ</th><th>ՉՈՐ</th><th>ՀՆԳ</th><th>ՈՒՐԲ</th><th>ՇԱԲ</th><th>ԿԻՐ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm md:text-base font-medium">
+                        <tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                        <tr><td>6</td><td>7</td><td>8</td><td>9</td>
+                            <td><div class="w-8 h-8 md:w-9 md:h-9 bg-darkGold text-white rounded-full flex items-center justify-center mx-auto animate-heart-pulse shadow-lg">10</div></td>
+                            <td>11</td><td>12</td>
+                        </tr>
+                        <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+                        <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr>
+                        <tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-center gap-6 mt-8 pt-6 border-t border-gray-100">
+                <div class="flex flex-col"><span class="text-xl md:text-2xl font-bold text-darkGold" id="days">00</span><span class="text-[10px] md:text-xs text-gray-500 uppercase">Օր</span></div>
+                <div class="flex flex-col"><span class="text-xl md:text-2xl font-bold text-darkGold" id="hours">00</span><span class="text-[10px] md:text-xs text-gray-500 uppercase">Ժամ</span></div>
+                <div class="flex flex-col"><span class="text-xl md:text-2xl font-bold text-darkGold" id="minutes">00</span><span class="text-[10px] md:text-xs text-gray-500 uppercase">Րոպե</span></div>
+            </div>
+        </section>
+
+        <div class="flex flex-col items-center gap-12 mb-20">
+            <h2 class="font-serif italic text-4xl md:text-6xl text-darkGold mb-4 text-center">Սիրով Սպասում Ենք</h2>
+
+            <div class="bg-white p-4 rounded-3xl shadow-[0_20px_60px_rgba(142,109,49,0.12)] text-center w-full max-w-[450px] group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up">
+                <div class="w-full h-[250px] md:h-[300px] overflow-hidden rounded-xl mb-6 relative">
+                    <img src="https://i.pinimg.com/736x/d4/82/ed/d482ed0aed80ada8df66f8191989df61.jpg" alt="Harsi Tun" class="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110">
+                </div>
+                <div class="px-2 pb-4">
+                    <h3 class="font-serif italic text-3xl text-darkGold mb-2">Հարսի Տուն</h3>
+                    <p class="text-gray-500 text-sm mb-6 font-sans">ք. Ստեփանավան, Անդրանիկի 46</p>
+                    <a href="https://goo.gl/maps/placeholder1" target="_blank" class="inline-flex items-center gap-2 py-3 px-8 border border-gold text-darkGold rounded-full text-xs uppercase tracking-widest hover:bg-darkGold hover:text-white hover:border-darkGold hover:shadow-lg transition-all duration-300">
+                        <i class="fa-solid fa-location-dot"></i> Տեսնել Քարտեզում
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-3xl shadow-[0_20px_60px_rgba(142,109,49,0.12)] text-center w-full max-w-[450px] group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-full h-[250px] md:h-[300px] overflow-hidden rounded-xl mb-6 relative">
+                     <img src="https://i.pinimg.com/736x/4c/16/65/4c1665e35a859491c97fa7afa55b25e6.jpg" alt="Church" class="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110">
+                </div>
+                <div class="px-2 pb-4">
+                    <h3 class="font-serif italic text-3xl text-darkGold mb-2">Պսակադրություն</h3>
+                    <p class="text-gray-500 text-sm mb-6 font-sans">Սուրբ Գայանե եկեղեցի</p>
+                    <a href="https://goo.gl/maps/placeholder2" target="_blank" class="inline-flex items-center gap-2 py-3 px-8 border border-gold text-darkGold rounded-full text-xs uppercase tracking-widest hover:bg-darkGold hover:text-white hover:border-darkGold hover:shadow-lg transition-all duration-300">
+                        <i class="fa-solid fa-church"></i> Տեսնել Քարտեզում
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-3xl shadow-[0_20px_60px_rgba(142,109,49,0.12)] text-center w-full max-w-[450px] group hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-full h-[250px] md:h-[300px] overflow-hidden rounded-xl mb-6 relative">
+                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGxjzQbKY6MQTrrXeYmxdkZwRAmjEf44R1QQ&s" alt="Restaurant" class="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110">
+                </div>
+                <div class="px-2 pb-4">
+                    <h3 class="font-serif italic text-3xl text-darkGold mb-2">Հարսանյաց Հանդես</h3>
+                    <p class="text-gray-500 text-sm mb-6 font-sans">Ռեստորանային համալիր</p>
+                    <a href="https://goo.gl/maps/placeholder3" target="_blank" class="inline-flex items-center gap-2 py-3 px-8 border border-gold text-darkGold rounded-full text-xs uppercase tracking-widest hover:bg-darkGold hover:text-white hover:border-darkGold hover:shadow-lg transition-all duration-300">
+                        <i class="fa-solid fa-champagne-glasses"></i> Տեսնել Քարտեզում
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="font-serif italic text-4xl md:text-5xl text-darkGold mb-8 text-center">Օրվա Ծրագիրը</h2>
+        <section class="mb-16 pl-4 md:pl-0">
+            <div class="max-w-md mx-auto">
+                <div class="flex mb-8" data-aos="fade-right">
+                    <div class="w-16 md:w-20 text-right pr-4 font-bold text-darkGold text-lg shrink-0 pt-1">10:30</div>
+                    <div class="w-0.5 bg-gold relative mr-6 shrink-0 h-auto min-h-[60px]">
+                        <div class="absolute top-2 -left-[7px] w-4 h-4 bg-white border-[3px] border-darkGold rounded-full"></div>
+                    </div>
+                    <div>
+                        <h3 class="font-serif italic text-2xl mb-1 text-textDark">Հարսի Տուն</h3>
+                        <p class="text-gray-500 text-sm">ք. Ստեփանավան, Անդրանիկի 46</p>
+                    </div>
+                </div>
+                <div class="flex mb-8" data-aos="fade-right" data-aos-delay="100">
+                    <div class="w-16 md:w-20 text-right pr-4 font-bold text-darkGold text-lg shrink-0 pt-1">11:30</div>
+                    <div class="w-0.5 bg-gold relative mr-6 shrink-0 h-auto min-h-[60px]">
+                        <div class="absolute top-2 -left-[7px] w-4 h-4 bg-white border-[3px] border-darkGold rounded-full"></div>
+                    </div>
+                    <div>
+                        <h3 class="font-serif italic text-2xl mb-1 text-textDark">Պսակադրություն</h3>
+                        <p class="text-gray-500 text-sm">Սուրբ Գայանե եկեղեցի</p>
+                    </div>
+                </div>
+                <div class="flex mb-8" data-aos="fade-right" data-aos-delay="200">
+                    <div class="w-16 md:w-20 text-right pr-4 font-bold text-darkGold text-lg shrink-0 pt-1">17:30</div>
+                    <div class="w-0.5 bg-gold relative mr-6 shrink-0 h-auto min-h-[60px]">
+                        <div class="absolute top-2 -left-[7px] w-4 h-4 bg-white border-[3px] border-darkGold rounded-full"></div>
+                    </div>
+                    <div>
+                        <h3 class="font-serif italic text-2xl mb-1 text-textDark">Հարսանյաց Հանդես</h3>
+                        <p class="text-gray-500 text-sm">Ռեստորանային համալիր</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="text-center mb-20" id="rsvp" data-aos="zoom-in-up">
+            <div class="bg-white p-8 md:p-12 rounded-[25px] shadow-xl border border-[#f0e6d5] max-w-lg mx-auto">
+                <h2 class="font-serif italic text-4xl md:text-5xl text-darkGold mb-4">RSVP</h2>
+                <p class="text-sm md:text-base text-gray-500 mb-8">Խնդրում ենք հաստատել ձեր մասնակցությունը</p>
+
+                <input type="text" id="guestName" class="w-full p-4 mb-5 border border-gray-200 rounded-xl focus:outline-none focus:border-darkGold focus:ring-1 focus:ring-darkGold transition-colors" placeholder="Ձեր Անուն Ազգանունը">
+
+                <div class="flex flex-col gap-3 text-left mb-6 pl-2">
+                    <label class="flex items-center gap-3 text-gray-700 cursor-pointer hover:text-darkGold transition-colors">
+                        <input type="radio" name="attending" value="Սիրով կգամ" checked class="w-5 h-5 accent-darkGold">
+                        <span>Սիրով կգամ</span>
+                    </label>
+                    <label class="flex items-center gap-3 text-gray-700 cursor-pointer hover:text-darkGold transition-colors">
+                        <input type="radio" name="attending" value="Ցավոք, չեմ կարող" class="w-5 h-5 accent-darkGold">
+                        <span>Ցավոք, չեմ կարող գալ</span>
+                    </label>
+                    <label class="flex items-center gap-3 text-gray-700 cursor-pointer hover:text-darkGold transition-colors">
+                        <input type="radio" name="attending" value="Դեռ պարզ չէ" class="w-5 h-5 accent-darkGold">
+                        <span>Հնարավոր է կգամ</span>
+                    </label>
+                </div>
+
+                <div class="text-left mb-2 text-xs font-bold text-gray-400 pl-2 tracking-wide uppercase">ՀՅՈՒՐԵՐԻ ՔԱՆԱԿԸ</div>
+                <select id="guestCount" class="w-full p-4 mb-6 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-darkGold">
+                    <option value="1">1 հոգի</option>
+                    <option value="2">2 հոգի</option>
+                    <option value="3">3 հոգի</option>
+                    <option value="4">4 հոգի</option>
+                    <option value="5+">5 և ավելի</option>
+                </select>
+
+                <button class="w-full bg-gradient-to-r from-darkGold to-[#b88a44] text-white py-4 rounded-full font-semibold tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300" onclick="sendRSVP()">ՀԱՍՏԱՏԵԼ</button>
+                <p class="mt-5 text-xs text-gray-400 tracking-wider">ՄԻՆՉԵՎ 30.09.2025</p>
+            </div>
+        </section>
+
+        <footer class="text-center text-xs text-darkGold/50 pb-10">
+            Created with Love for Aram & Ani
+        </footer>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Countdown Logic
+        const weddingDate = new Date("Oct 10, 2025 11:30:00").getTime();
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerHTML = "0";
+                document.getElementById("hours").innerHTML = "0";
+                document.getElementById("minutes").innerHTML = "0";
+                return;
+            }
+
+            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        }, 1000);
+
+        // RSVP WhatsApp Logic
+        function sendRSVP() {
+            const name = document.getElementById('guestName').value;
+            const status = document.querySelector('input[name="attending"]:checked').value;
+            const count = document.getElementById('guestCount').value;
+
+            if(!name) { alert("Խնդրում ենք լրացնել ձեր անունը"); return; }
+
+            // Փոխարինիր այս համարը քո իրական համարով (առանց +)
+            const myNumber = "37494000000";
+
+            const message = `Հարսանիքի հաստատում:%0AԱնուն: ${name}%0AԿարգավիճակ: ${status}%0AՔանակ: ${count}`;
+            window.open(`https://wa.me/${myNumber}?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>

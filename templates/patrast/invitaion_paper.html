@@ -141,63 +141,16 @@
         </div>
     </div>
 
-        <script>
-        // 1. Օրացույցի գեներացում (7-օրյա տեսք) 🗓️
-        function generateCalendar() {
-            // Ստանում ենք ամսաթիվը Python-ից
-            const eventDateStr = "{{ invitation.event_date.strftime('%Y-%m-%d') }}";
-            const eventDate = new Date(eventDateStr);
-
-            const months = ["Հունվար", "Փետրվար", "Մարտ", "Ապրիլ", "Մայիս", "Հունիս", "Հուլիս", "Օգոստոս", "Սեպտեմբեր", "Հոկտեմբեր", "Նոյեմբեր", "Դեկտեմբեր"];
-            const headers = ['ԵՐԿ', 'ԵՐՔ', 'ՉՐՔ', 'ՀՆԳ', 'ՈՒՐԲ', 'ՇԲԹ', 'ԿԻՐ'];
-
-            // Տեղադրում ենք ամսվա անվանումը
-            const monthTitleEl = document.querySelector('.month-title');
-            if (monthTitleEl) {
-                monthTitleEl.innerText = months[eventDate.getMonth()];
-            }
-
-            const grid = document.querySelector('.days-grid');
-            if (grid) {
-                // Մաքրում ենք հին բովանդակությունը և ավելացնում գլխամասերը (ԵՐԿ, ԵՐՔ...)
-                grid.innerHTML = headers.map(h => `<div class="day-header">${h}</div>`).join('');
-
-                // Գտնում ենք շաբաթվա սկիզբը (Երկուշաբթի)
-                const dayOfWeek = eventDate.getDay(); // 0 (Կիրակի) - 6 (Շաբաթ)
-                const diffToMonday = (dayOfWeek === 0 ? -6 : 1) - dayOfWeek;
-
-                const startOfWeek = new Date(eventDate);
-                startOfWeek.setDate(eventDate.getDate() + diffToMonday);
-
-                // Գեներացնում ենք 7 օր
-                for (let i = 0; i < 7; i++) {
-                    const currentDay = new Date(startOfWeek);
-                    currentDay.setDate(startOfWeek.getDate() + i);
-
-                    const isSelected = currentDay.toDateString() === eventDate.toDateString();
-
-                    const dayDiv = document.createElement('div');
-                    dayDiv.className = 'day-num';
-                    dayDiv.innerHTML = isSelected
-                        ? `<div class="selected-day">${currentDay.getDate()}</div>`
-                        : currentDay.getDate();
-
-                    grid.appendChild(dayDiv);
-                }
-            }
-        }
-
-        // 2. Անիմացիաների տրամաբանություն 🌟
+    <script>
+        // Անիմացիա
         const scrollContainer = document.getElementById('scrollContainer');
         const animateItems = document.querySelectorAll('.animate-item');
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('show');
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
         }, { root: scrollContainer, threshold: 0.1 });
         animateItems.forEach(item => observer.observe(item));
 
-        // 3. Թայմերի տրամաբանություն ⏳
+        // Թայմեր
         const targetDate = new Date("{{ invitation.event_date.strftime('%Y-%m-%dT%H:%M:%S') }}").getTime();
         function updateTimer() {
             const now = new Date().getTime();
@@ -212,7 +165,7 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 4. RSVP ձևի ուղարկում 📩
+        // RSVP Submit
         document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
@@ -253,15 +206,9 @@
             }
         });
 
-        // Մոդալ պատուհանի փակում
         function closeModal() {
             document.getElementById('successModal').classList.remove('show');
         }
-
-        // Ֆունկցիաների կանչ
-        window.onload = function() {
-            generateCalendar();
-        };
     </script>
 </body>
 </html>
