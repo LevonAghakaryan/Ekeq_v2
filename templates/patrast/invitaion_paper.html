@@ -141,16 +141,63 @@
         </div>
     </div>
 
-    <script>
-        // Անիմացիա
+        <script>
+        // 1. Օրացույցի գեներացում (7-օրյա տեսք) 🗓️
+        function generateCalendar() {
+            // Ստանում ենք ամսաթիվը Python-ից
+            const eventDateStr = "{{ invitation.event_date.strftime('%Y-%m-%d') }}";
+            const eventDate = new Date(eventDateStr);
+
+            const months = ["Հունվար", "Փետրվար", "Մարտ", "Ապրիլ", "Մայիս", "Հունիս", "Հուլիս", "Օգոստոս", "Սեպտեմբեր", "Հոկտեմբեր", "Նոյեմբեր", "Դեկտեմբեր"];
+            const headers = ['ԵՐԿ', 'ԵՐՔ', 'ՉՐՔ', 'ՀՆԳ', 'ՈՒՐԲ', 'ՇԲԹ', 'ԿԻՐ'];
+
+            // Տեղադրում ենք ամսվա անվանումը
+            const monthTitleEl = document.querySelector('.month-title');
+            if (monthTitleEl) {
+                monthTitleEl.innerText = months[eventDate.getMonth()];
+            }
+
+            const grid = document.querySelector('.days-grid');
+            if (grid) {
+                // Մաքրում ենք հին բովանդակությունը և ավելացնում գլխամասերը (ԵՐԿ, ԵՐՔ...)
+                grid.innerHTML = headers.map(h => `<div class="day-header">${h}</div>`).join('');
+
+                // Գտնում ենք շաբաթվա սկիզբը (Երկուշաբթի)
+                const dayOfWeek = eventDate.getDay(); // 0 (Կիրակի) - 6 (Շաբաթ)
+                const diffToMonday = (dayOfWeek === 0 ? -6 : 1) - dayOfWeek;
+
+                const startOfWeek = new Date(eventDate);
+                startOfWeek.setDate(eventDate.getDate() + diffToMonday);
+
+                // Գեներացնում ենք 7 օր
+                for (let i = 0; i < 7; i++) {
+                    const currentDay = new Date(startOfWeek);
+                    currentDay.setDate(startOfWeek.getDate() + i);
+
+                    const isSelected = currentDay.toDateString() === eventDate.toDateString();
+
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'day-num';
+                    dayDiv.innerHTML = isSelected
+                        ? `<div class="selected-day">${currentDay.getDate()}</div>`
+                        : currentDay.getDate();
+
+                    grid.appendChild(dayDiv);
+                }
+            }
+        }
+
+        // 2. Անիմացիաների տրամաբանություն 🌟
         const scrollContainer = document.getElementById('scrollContainer');
         const animateItems = document.querySelectorAll('.animate-item');
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('show');
+            });
         }, { root: scrollContainer, threshold: 0.1 });
         animateItems.forEach(item => observer.observe(item));
 
-        // Թայմեր
+        // 3. Թայմերի տրամաբանություն ⏳
         const targetDate = new Date("{{ invitation.event_date.strftime('%Y-%m-%dT%H:%M:%S') }}").getTime();
         function updateTimer() {
             const now = new Date().getTime();
@@ -165,50 +212,45 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // RSVP Submit
-        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            const slug = "{{ invitation.slug }}";
+// --- RSVP Form Submission (STRICTLY VISUAL - NO SERVER FETCH) ---
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Կանգնեցնում ենք ֆորմայի իրական ուղարկումը
 
-            const formData = {
-                guest_name: document.getElementById('guest_name').value,
-                attending: document.getElementById('attending').value,
-                guest_count: parseInt(document.getElementById('guest_count').value),
-                message: document.getElementById('message').value
-            };
+        const submitBtn = document.getElementById('submitBtn');
+        const form = e.target;
 
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = "Ուղարկվում է...";
-            submitBtn.disabled = true;
+        // 1. Վիզուալ փոփոխություն կոճակի վրա
+        submitBtn.innerText = "Ուղարկվում է...";
+        submitBtn.disabled = true;
 
-            try {
-                const response = await fetch(`/invite/${slug}/rsvp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
+        // 2. Սիմուլյացիա (1.2 վայրկյան սպասում, որ հյուրը զգա «պրոցեսը») ⏳
+        setTimeout(() => {
+            // Փոխում ենք կոճակի տեսքը
+            submitBtn.innerText = "✅ Հաստատված է";
+            submitBtn.style.backgroundColor = "#4CAF50";
+            submitBtn.style.cursor = "default";
 
-                if (response.ok) {
-                    submitBtn.innerText = "✅ Հաստատված է";
-                    submitBtn.classList.add('success');
-                    document.getElementById('successModal').classList.add('show');
-                    document.querySelectorAll('#rsvpForm input, #rsvpForm select, #rsvpForm textarea').forEach(el => el.disabled = true);
-                } else {
-                    alert('Սխալ տեղի ունեցավ:');
-                    submitBtn.innerText = originalText;
-                    submitBtn.disabled = false;
-                }
-            } catch (error) {
-                alert('Կապի սխալ:');
-                submitBtn.innerText = originalText;
-                submitBtn.disabled = false;
+            // 3. Ցուցադրում ենք շնորհակալական պատուհանը (Modal)
+            const modal = document.getElementById('successModal');
+            if (modal) {
+                modal.classList.add('show');
             }
-        });
 
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('show');
+            // 4. Անջատում ենք ֆորմայի բոլոր դաշտերը
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => el.disabled = true);
+
+            console.log("Demo Mode Active: Ոչ մի տվյալ չի ուղարկվել սերվերին։");
+        }, 1200);
+    });
+
+    // Մոդալը փակելու ֆունկցիան
+    function closeModal() {
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.classList.remove('show');
         }
+    }
     </script>
 </body>
 </html>

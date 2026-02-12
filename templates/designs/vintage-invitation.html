@@ -87,7 +87,7 @@
         </svg>
 
         <div class="photo-container" data-aos="zoom-in" data-aos-duration="2000">
-            {% set hero = invitation.media_files | selectattr('file_type', 'equalto', 'main_hero') | first %}
+            {% set hero = invitation.media_files | selectattr('label', 'equalto', 'main_hero') | first %}
             <img class="masked-photo" src="{{ hero.file_url if hero else 'https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg' }}" alt="Couple">
         </div>
 
@@ -102,7 +102,7 @@
         {% for loc in invitation.content.locations %}
         <div class="loc-item" data-aos="fade-up" data-aos-duration="1200">
             <div class="loc-photo-container">
-                {% set loc_img = invitation.media_files | selectattr('file_type', 'equalto', loc.type) | first %}
+                {% set loc_img = invitation.media_files | selectattr('label', 'equalto', loc.type) | first %}
                 <img src="{{ loc_img.file_url if loc_img else 'https://via.placeholder.com/300' }}" class="masked-photo" alt="{{ loc.title }}">
             </div>
             <p class="loc-title">{{ loc.title }}</p>
@@ -195,34 +195,25 @@
         document.getElementById('calendar-container').innerHTML = calHtml + `</div>`;
     }
 
-    // RSVP ձևի ուղարկում 📩
-    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // RSVP ձևի մշակում առանց բազա ուղարկելու 📩
+    document.getElementById('rsvpForm').addEventListener('submit', (e) => {
+        e.preventDefault(); // Կանգնեցնում ենք էջի թարմացումը
+
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerText = "Ուղարկվում է...";
 
-        const data = Object.fromEntries(new FormData(e.target).entries());
-        data.guest_count = parseInt(data.guest_count);
-
-        try {
-            const res = await fetch('/invite/{{ invitation.slug }}/rsvp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            if (res.ok) {
-                document.getElementById('rsvp').innerHTML = "<div class='animate-item' style='animation: pulse 1s ease;'><p style='color: #8b7355; font-style: italic; padding: 20px; font-size: 1.1rem;'>Շնորհակալություն, Ձեր պատասխանը գրանցվեց: ✨</p></div>";
-            } else {
-                alert("Սխալ տեղի ունեցավ:");
-                btn.disabled = false;
-                btn.innerText = "Հաստատել";
-            }
-        } catch {
-            alert("Կապի սխալ:");
-            btn.disabled = false;
-            btn.innerText = "Հաստատել";
-        }
+        // Սիմուլյացիա ենք անում փոքրիկ դադար (օրինակ 800մվ), որպեսզի բնական երևա
+        setTimeout(() => {
+            // Միանգամից փոխում ենք բլոկի պարունակությունը հաջողության էֆեկտով
+            document.getElementById('rsvp').innerHTML = `
+                <div class='animate-item' style='animation: pulse 1s ease; text-align: center;'>
+                    <p style='color: #8b7355; font-style: italic; padding: 20px; font-size: 1.1rem;'>
+                        Շնորհակալություն, Ձեր պատասխանը հաստատվեց: ✨
+                    </p>
+                </div>
+            `;
+        }, 800);
     });
 </script>
 </body>

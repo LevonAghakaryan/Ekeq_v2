@@ -1,0 +1,35 @@
+{
+    "couple_names": {
+        "bride": "Անի",
+        "groom": "Արամ"
+    },
+    "locations": [
+        {
+            "address": "Երևան, Տերյան 10",
+            "map_url": "https://maps.google.com/?q=Yerevan+Teryan+10",
+            "time": "11:00",
+            "title": "Հարսի տուն",
+            "type": "home"
+        },
+        {
+            "address": "Էջմիածին",
+            "map_url": "https://maps.google.com/?q=Saint+Gayane+Church",
+            "time": "15:00",
+            "title": "Սուրբ Գայանե եկեղեցի",
+            "type": "church"
+        },
+        {
+            "address": "Երևան, Բարբյուսի 64",
+            "map_url": "https://maps.google.com/?q=Florence+Restaurant+Yerevan",
+            "time": "18:00",
+            "title": "Ֆլորանս Ռեստորան",
+            "type": "restaurant"
+        }
+    ],
+    "rsvp_settings": {
+        "deadline": "10.08.2026"
+    },
+    "welcome_text": {
+        "description": "Սիրով հրավիրում ենք Ձեզ մասնակիցը դառնալու մեր կյանքի կարևորագույն օրվան։"
+    }
+}

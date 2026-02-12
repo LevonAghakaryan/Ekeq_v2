@@ -188,41 +188,31 @@
     setInterval(updateTimer, 1000);
     updateTimer();
 
-    // 3. RSVP ուղարկում 📩
-    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // 3. RSVP ուղարկում (STRICTLY VISUAL DEMO) 📩
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Կանգնեցնում է իրական հարցումը
+
         const btn = document.getElementById('submitBtn');
+        const rsvpContainer = document.getElementById('rsvp');
+
+        // Վիզուալ էֆեկտ կոճակի վրա
         btn.disabled = true;
         btn.innerText = "Ուղարկվում է...";
 
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-        // Ձևափոխում ենք guest_count-ը թիվ դարձնելով
-        data.guest_count = parseInt(data.guest_count);
+        // Սիմուլյացիա՝ 1.2 վայրկյան սպասում ⏳
+        setTimeout(() => {
+            // Ամբողջ RSVP բլոկը փոխարինում ենք շնորհակալական տեքստով
+            rsvpContainer.innerHTML = `
+                <div class="py-10 text-center" style="animation: fadeIn 1s ease;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🌸</div>
+                    <p style="color: #b29079; font-style: italic; font-size: 1.2rem; line-height: 1.6;">
+                        Շնորհակալություն, <br> Ձեր պատասխանը հաջողությամբ հաստատվեց: ✨
+                    </p>
+                </div>
+            `;
 
-        try {
-            const response = await fetch('/invite/{{ invitation.slug }}/rsvp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                document.getElementById('rsvp').innerHTML = `
-                    <div class="py-10 text-center" style="animation: fadeIn 1s ease;">
-                        <p style="color: #b29079; font-style: italic; font-size: 1.2rem;">Շնորհակալություն, Ձեր պատասխանը գրանցվեց: ✨</p>
-                    </div>
-                `;
-            } else {
-                alert("Սխալ տեղի ունեցավ: Փորձեք կրկին:");
-                btn.disabled = false;
-                btn.innerText = "ՀԱՍՏԱՏԵԼ";
-            }
-        } catch (err) {
-            alert("Կապի սխալ:");
-            btn.disabled = false;
-            btn.innerText = "ՀԱՍՏԱՏԵԼ";
-        }
+            console.log("Flowers Demo Mode: Տվյալները չեն ուղարկվել սերվերին:");
+        }, 1200);
     });
 </script>
 </body>

@@ -254,45 +254,37 @@
             }, 1000);
         }
 
-        // --- 3. RSVP Form Submission ---
-        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const form = e.target;
-            btn.disabled = true;
-            btn.innerText = "Ուղարկվում է...";
+    // --- 3. RSVP Form Submission (DEMO VERSION - No Database) ---
+    document.getElementById('rsvpForm').addEventListener('submit', (e) => {
+        e.preventDefault(); // Կանգնեցնում ենք էջի թարմացումը
 
+        const btn = document.getElementById('submitBtn');
+        const form = e.target;
+
+        // Վիզուալ էֆեկտ. կոճակը դարձնում ենք անակտիվ
+        btn.disabled = true;
+        btn.innerText = "Ուղարկվում է...";
+
+        // Սիմուլյացիա ենք անում սպասման գործընթաց (1 վայրկյան) ⏳
+        setTimeout(() => {
+            const container = document.getElementById('rsvp');
+
+            // Միանգամից փոխում ենք բլոկի պարունակությունը հաջողության էֆեկտով
+            container.innerHTML = `
+                <div class="py-10 animate-fade-in text-center">
+                    <i class="fa-solid fa-circle-check text-6xl text-gold mb-4"></i>
+                    <h2 class="font-serif italic text-3xl text-darkGold mb-2">Շնորհակալություն ✨</h2>
+                    <p class="text-gray-600">Ձեր պատասխանը հաջողությամբ հաստատվեց:</p>
+                </div>
+            `;
+
+            // Ցանկության դեպքում կարող ես նաև կոնսոլում տեսնել, թե ինչ տվյալներ կգնային բազա
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
+            console.log("Demo Mode: Տվյալները չեն ուղարկվել բազա, բայց ահա դրանք՝", data);
 
-            try {
-                const response = await fetch('/invite/{{ invitation.slug }}/rsvp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    const container = document.getElementById('rsvp');
-                    container.innerHTML = `
-                        <div class="py-10 animate-fade-in text-center">
-                            <i class="fa-solid fa-circle-check text-6xl text-gold mb-4"></i>
-                            <h2 class="font-serif italic text-3xl text-darkGold mb-2">Շնորհակալություն</h2>
-                            <p class="text-gray-600">Ձեր պատասխանը հաջողությամբ գրանցվեց։</p>
-                        </div>
-                    `;
-                } else {
-                    alert("Խնդիր առաջացավ։ Խնդրում ենք փորձել կրկին։");
-                    btn.disabled = false;
-                    btn.innerText = "ՀԱՍՏԱՏԵԼ";
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Կապի սխալ։");
-                btn.disabled = false;
-                btn.innerText = "ՀԱՍՏԱՏԵԼ";
-            }
-        });
+        }, 1000);
+    });
     </script>
 </body>
 </html>

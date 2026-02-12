@@ -212,46 +212,37 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 4. RSVP ձևի ուղարկում 📩
-        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            const slug = "{{ invitation.slug }}";
+// --- RSVP Form Submission (STRICTLY VISUAL - NO SERVER FETCH) ---
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Կանգնեցնում ենք ֆորմայի իրական ուղարկումը
 
-            const formData = {
-                guest_name: document.getElementById('guest_name').value,
-                attending: document.getElementById('attending').value,
-                guest_count: parseInt(document.getElementById('guest_count').value),
-                message: document.getElementById('message').value
-            };
+        const submitBtn = document.getElementById('submitBtn');
+        const form = e.target;
 
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = "Ուղարկվում է...";
-            submitBtn.disabled = true;
+        // 1. Վիզուալ փոփոխություն կոճակի վրա
+        submitBtn.innerText = "Ուղարկվում է...";
+        submitBtn.disabled = true;
 
-            try {
-                const response = await fetch(`/invite/${slug}/rsvp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
+        // 2. Սիմուլյացիա (1.2 վայրկյան սպասում, որ հյուրը զգա «պրոցեսը») ⏳
+        setTimeout(() => {
+            // Փոխում ենք կոճակի տեսքը
+            submitBtn.innerText = "✅ Հաստատված է";
+            submitBtn.style.backgroundColor = "#4CAF50";
+            submitBtn.style.cursor = "default";
 
-                if (response.ok) {
-                    submitBtn.innerText = "✅ Հաստատված է";
-                    submitBtn.classList.add('success');
-                    document.getElementById('successModal').classList.add('show');
-                    document.querySelectorAll('#rsvpForm input, #rsvpForm select, #rsvpForm textarea').forEach(el => el.disabled = true);
-                } else {
-                    alert('Սխալ տեղի ունեցավ:');
-                    submitBtn.innerText = originalText;
-                    submitBtn.disabled = false;
-                }
-            } catch (error) {
-                alert('Կապի սխալ:');
-                submitBtn.innerText = originalText;
-                submitBtn.disabled = false;
+            // 3. Ցուցադրում ենք շնորհակալական պատուհանը (Modal)
+            const modal = document.getElementById('successModal');
+            if (modal) {
+                modal.classList.add('show');
             }
-        });
+
+            // 4. Անջատում ենք ֆորմայի բոլոր դաշտերը
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => el.disabled = true);
+
+            console.log("Demo Mode Active: Ոչ մի տվյալ չի ուղարկվել սերվերին։");
+        }, 1200);
+    });
 
         // Մոդալ պատուհանի փակում
         function closeModal() {
