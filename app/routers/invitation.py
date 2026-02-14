@@ -4,7 +4,7 @@ from app import schemas
 from app.services.invitation import InvitationService
 from app.services.rsvp import RSVPService
 from app.dependencies import get_invitation_service, get_rsvp_service
-
+from datetime import timedelta
 router = APIRouter(prefix="/invite", tags=["Invitation & RSVP"])
 
 # Jinja2 Templates-ի կարգավորում
@@ -35,7 +35,8 @@ def get_invitation_page(
 
     return templates.TemplateResponse(template_file, {
         "request": request,
-        "invitation": invitation
+        "invitation": invitation,
+        "timedelta": timedelta
     })
 
 

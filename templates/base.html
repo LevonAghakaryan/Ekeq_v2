@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="only light">
+
     <title>{% block title %}YINVITE{% endblock %}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +17,7 @@
                         bgLight: '#eef2e4',
                         textGrey: '#787878',
                         nudeBeige: '#445E3F',
-                        goldAccent: '#7D936C', // Սա քո նոր կանաչն է
+                        goldAccent: '#7D936C',
                         headerDark: '#333333',
                         whiteCustom: '#ffffff',
                     },
@@ -33,23 +35,40 @@
     <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
 
     <style>
+        /* Ստիպում ենք բրաուզերին միշտ օգտագործել Light ռեժիմը */
+        :root {
+            color-scheme: light;
+        }
+
         /* Հիմնական կարգավորումներ */
         body {
             font-family: 'Noto Sans Armenian', sans-serif;
-            background-color: #eef2e4; /* var(--bg-light) */
-            color: #787878; /* var(--text-grey) */
+            background-color: #eef2e4 !important;
+            color: #787878 !important;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
         }
 
-        /* Սահուն անցումներ բոլոր էլեմենտների համար, եթե պետք է */
+        /* Պաշտպանություն սարքի ավտոմատ Dark Mode-ից */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #eef2e4 !important;
+                color: #787878 !important;
+            }
+        }
+
         * {
             box-sizing: border-box;
         }
 
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Header-ի տակ ազատ տեղ թողնելու համար anchor հղումների դեպքում */
+        #about-us, #how-to-order, #about {
+            scroll-margin-top: 100px;
         }
     </style>
 </head>

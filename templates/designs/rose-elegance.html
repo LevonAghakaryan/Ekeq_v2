@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ invitation.content.couple_names.groom }} & {{ invitation.content.couple_names.bride }} - Հրավիրատոմս</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+Armenian:wght@300;400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-gold-dark': '#B76E79',
+                        'rose-gold-light': '#E0BFB8',
+                        'gold': '#B76E79',
+                        'bg-color': '#ffffff',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root { --rose-gold-dark: #B76E79; --rose-gold-light: #E0BFB8; }
+        @keyframes heartBeat { 0% { transform: scale(1); } 15% { transform: scale(1.1); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } 60% { transform: scale(1); } 100% { transform: scale(1); } }
+        @keyframes arrowMove { 0% {transform:translateX(0);} 50% {transform:translateX(5px);} 100% {transform:translateX(0);} }
+        @keyframes pulseText { 0%, 100% {opacity: 1;} 50% {opacity: 0.5;} }
+        .heart-beat-anim { animation: heartBeat 1.5s infinite ease-in-out; }
+        .arrow-anim { animation: arrowMove 1.5s infinite; }
+        .pulse-text-anim { animation: pulseText 2s infinite; }
+
+        #unlock-screen { transition: transform 0.8s ease-in-out, opacity 0.8s; }
+        .timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--rose-gold-dark); opacity: 0.3; }
+    </style>
+</head>
+<body class="font-['Noto_Sans_Armenian'] bg-white text-[#333] overflow-x-hidden md:flex md:justify-center md:items-start">
+
+<div class="mobile-container w-full max-w-[450px] min-h-screen bg-white relative shadow-[0_0_40px_rgba(0,0,0,0.1)] overflow-x-hidden">
+
+    <div id="unlock-screen" class="fixed inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center z-[9999] flex flex-col justify-end items-center pb-[50px] md:absolute">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 z-1"></div>
+
+        <div class="z-10 mb-[60px] text-center text-white w-full px-5">
+            <div class="flex flex-col items-center justify-center">
+                <h2 class="font-['Great_Vibes'] text-[3.2rem] leading-none m-0">{{ invitation.content.couple_names.groom }}</h2>
+                <div class="flex items-center w-[60%] my-[5px]">
+                    <div class="flex-1 h-[1px] bg-white/30"></div>
+                    <span class="font-['Cinzel'] text-[1.2rem] italic mx-[15px] text-gold">{{ invitation.content.couple_names.separator }}</span>
+                    <div class="flex-1 h-[1px] bg-white/30"></div>
+                </div>
+                <h2 class="font-['Great_Vibes'] text-[3.2rem] leading-none m-0">{{ invitation.content.couple_names.bride }}</h2>
+            </div>
+            <p class="text-[0.8rem] tracking-[4px] uppercase mt-[25px] opacity-90">Հրավիրատոմս</p>
+        </div>
+
+        <div class="slider-container relative w-[85%] h-[60px] bg-white/25 backdrop-blur-[5px] rounded-[50px] border border-white/40 z-10 overflow-hidden shadow-[0_10px_20px_rgba(0,0,0,0.2)]" id="sliderContainer">
+            <div class="slider-text absolute w-full h-full flex justify-center items-center text-white text-[1rem] tracking-[1px] pointer-events-none pl-[20px] pulse-text-anim">
+                Սահեցրեք աջ <i class="fa-solid fa-chevron-right arrow-anim ml-[10px]"></i>
+            </div>
+            <div id="sliderHandle" class="slider-handle absolute left-0 top-0 h-full w-[60px] bg-white rounded-full flex justify-center items-center text-rose-gold-dark text-[1.2rem] cursor-pointer shadow-[2px_0_10px_rgba(0,0,0,0.2)]">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-invitation" class="hidden">
+
+        <div class="hero-wrapper relative w-full h-screen min-h-[600px] bg-black overflow-hidden">
+            {% set hero_img = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop" %}
+            {% for media in invitation.media_files %}{% if media.label == 'main_hero' %}{% set hero_img = media.file_url %}{% endif %}{% endfor %}
+            <img src="{{ hero_img }}" class="absolute inset-0 w-full h-full object-cover z-1" alt="Couple">
+            <div class="absolute inset-0 bg-[url('https://i.pinimg.com/736x/d6/19/b0/d619b0e43a34f232e0db90051137310c.jpg')] bg-cover bg-bottom mix-blend-lighten z-2"></div>
+
+            <div class="relative z-3 h-full flex flex-col justify-center items-center text-center pb-[80px]" data-aos="zoom-in">
+                <p class="font-['Cinzel'] tracking-[3px] text-rose-gold-light mb-[10px] text-[1rem] font-extrabold drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
+                    WEDDING DAY | {{ invitation.event_date.strftime('%d.%m.%Y') if invitation.event_date else '10.05.2026' }}
+                </p>
+                <div class="font-['Great_Vibes'] text-[3.5rem] text-rose-gold-light leading-[1.1] drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)] flex flex-col items-center">
+                    <span>{{ invitation.content.couple_names.groom }}</span>
+                    <i class="font-['Cinzel'] text-[1.5rem] text-white not-italic my-[5px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">{{ invitation.content.couple_names.separator }}</i>
+                    <span>{{ invitation.content.couple_names.bride }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative bg-white -mt-[10px] px-5 pt-[30px] pb-[60px] z-10 text-center">
+            <div class="max-w-[600px] mx-auto" data-aos="fade-up">
+                <h2 class="font-['Great_Vibes'] text-[2.5rem] text-rose-gold-dark mb-[15px] font-normal">{{ invitation.content.welcome_text.title }}</h2>
+                <div class="w-[80px] h-[2px] bg-[radial-gradient(circle,_var(--rose-gold-dark)_0%,_transparent_100%)] mx-auto my-[25px]"></div>
+                <p class="text-[1.1rem] leading-[1.8] text-[#4a4a4a] font-['Cinzel']">{{ invitation.content.welcome_text.description }}</p>
+                <div class="w-[80px] h-[2px] bg-[radial-gradient(circle,_var(--rose-gold-dark)_0%,_transparent_100%)] mx-auto my-[25px]"></div>
+            </div>
+        </div>
+
+        {% if invitation.event_date %}
+        {% set d = invitation.event_date %}
+        <div class="flex flex-col items-center justify-center text-center w-full my-5" data-aos="zoom-in">
+            <div class="mb-[25px]">
+                <h2 class="font-['Great_Vibes'] text-[4rem] text-rose-gold-dark leading-[1.1]">
+                    {% set months = ['', 'Հունվար', 'Փետրվար', 'Մարտ', 'Ապրիլ', 'Մայիս', 'Հունիս', 'Հուլիս', 'Օգոստոս', 'Սեպտեմբեր', 'Հոկտեմբեր', 'Նոյեմբեր', 'Դեկտեմբեր'] %}{{ months[d.month] }}
+                </h2>
+                <p class="font-['Cinzel'] text-[1.4rem] tracking-[6px] text-[#888] font-bold mt-[5px] mb-[25px]">{{ d.year }}</p>
+            </div>
+            <div class="flex justify-center items-center gap-2">
+                {% set weekdays = ['Երկ', 'Երք', 'Չոր', 'Հնգ', 'Ուրբ', 'Շբթ', 'Կիր'] %}
+                {% for i in range(-2, 3) %}
+                {% set current_day = d + timedelta(days=i) %}
+                {% if i == 0 %}
+                <div class="relative w-[80px] h-[80px] mx-[5px] flex items-center justify-center active-heart">
+                    <div class="absolute inset-0 z-0 heart-beat-anim">
+                        <svg viewBox="0 0 24 24" class="w-full h-full fill-rose-gold-dark drop-shadow-[0_4px_8px_rgba(183,110,121,0.4)]">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <div class="relative z-[2] flex flex-col items-center mt-[-5px]">
+                        <span class="text-white text-[0.8rem] opacity-90 uppercase">{{ weekdays[current_day.weekday()] }}</span>
+                        <span class="text-white text-[1.8rem] leading-none font-bold">{{ current_day.day }}</span>
+                    </div>
+                </div>
+                {% else %}
+                <div class="flex flex-col items-center justify-center w-[40px]">
+                    <span class="text-[0.7rem] text-[#999] uppercase mb-[4px]">{{ weekdays[current_day.weekday()] }}</span>
+                    <span class="font-['Cinzel'] text-[1.2rem] text-[#333] font-semibold">{{ current_day.day }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="py-10 mt-[50px]">
+            <h2 class="font-['Cinzel'] text-gold tracking-[2px] mb-[30px] text-center text-[1.5rem]">Հարսանյաց Ծրագիր</h2>
+            {% for loc in invitation.content.locations %}
+            <div data-aos="fade-up" class="mb-10 flex flex-col items-center text-center px-5">
+                {% set loc_image = "https://via.placeholder.com/400x250?text=No+Image" %}
+                {% for media in invitation.media_files %}{% if media.label == loc.type %}{% set loc_image = media.file_url %}{% endif %}{% endfor %}
+                <div class="w-[180px] h-[180px] overflow-hidden rounded-full border-[3px] border-gold p-[5px] mb-[15px] shadow-[0_5px_15px_rgba(0,0,0,0.1)] transition-transform duration-400 hover:scale-105 hover:rotate-2">
+                    <img src="{{ loc_image }}" class="w-full h-full object-cover rounded-full" alt="{{ loc.title }}">
+                </div>
+                <h3 class="font-['Cinzel'] text-[1.5rem] text-gold uppercase tracking-wider">{{ loc.title }}</h3>
+                <p class="my-[10px] mx-5 leading-[1.6]">
+                    {{ loc.address }} <br>
+                    <strong class="text-gold">Ժամը՝ {{ loc.time }}</strong>
+                </p>
+                {% if loc.map_url %}
+                <a href="{{ loc.map_url }}" target="_blank" class="inline-block mt-[10px] px-5 py-2 border border-gold text-gold rounded-[20px] text-[0.9rem] transition-all hover:bg-gold hover:text-white hover:shadow-lg">
+                    <i class="fa-solid fa-location-dot mr-1"></i> Քարտեզ
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="timeline relative my-10 mx-5 pl-0" data-aos="fade-up">
+            {% for loc in invitation.content.locations %}
+            <div class="relative mb-10 pl-[25px]">
+                <div class="absolute left-0 top-[5px] w-[14px] h-[14px] bg-white border-2 border-rose-gold-dark rounded-full z-[2] box-border"></div>
+                <span class="block font-bold font-['Cinzel'] text-rose-gold-dark text-[0.9rem]">{{ loc.time }}</span>
+                <div class="font-semibold text-[1.1rem] mt-[5px]">{{ loc.title }}</div>
+                <div class="text-[0.85rem] text-[#777] leading-[1.4]">{{ loc.address }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {# 1. Սահմանում ենք ֆոնային նկարը #}
+        {% set gallery_media = invitation.media_files | selectattr('label', 'equalto', 'gallery') | first %}
+        {% set bg_url = gallery_media.file_url if gallery_media else "https://i.pinimg.com/736x/09/ff/a4/09ffa440ddd0834287405347657d5360.jpg" %}
+
+        {# 2. Սահմանում ենք տեքստերը՝ խուսափելով UndefinedError-ից #}
+        {% set details = invitation.content.details_section if invitation.content and invitation.content.details_section else {} %}
+
+        <div class="relative w-full min-h-[500px] py-[60px] px-5 bg-fixed bg-center bg-cover flex items-center justify-center text-center before:content-[''] before:absolute before:inset-0 before:bg-black/50 before:z-1"
+             style="background-image: url('{{ bg_url }}');"
+             data-aos="fade-up">
+
+            <div class="relative z-[2] text-white max-w-[600px] drop-shadow-md">
+
+                <h2 class="font-['Great_Vibes'] text-[3.5rem] mb-5 text-rose-gold-light drop-shadow-[0_0_10px_rgba(224,191,184,0.4)]">
+                    {{ details.title | default('Details Special') }}
+                </h2>
+
+                <p class="mb-5 leading-[1.6] opacity-90 font-['Noto_Sans_Armenian']">
+                    {{ details.description | default('Ձեզ հետ բերեք ՍԵՐ, ժպիտներ ու անսահման դրական էմոցիաներ, ինչպես նաև հարմարավետ կոշիկներ՝ պարելու համար։') }}
+                </p>
+
+                <hr class="border-0 border-t border-white/50 my-5 mx-auto w-1/2">
+
+                <p class="italic text-[#eee] font-['Noto_Sans_Armenian']">
+                    {{ details.note | default('Թույլ տանք, որ այդ օրը սպիտակ զգեստով լինի միայն հարսնացուն 🤍') }}
+                </p>
+
+            </div>
+        </div>
+
+        <div class="text-center py-10 px-5" data-aos="fade-up">
+            <p class="font-['Great_Vibes'] text-[2.5rem] text-[#333] mb-[25px]">
+                {{ invitation.content.countdown_title | default('Մնացել է...') }}
+            </p>
+
+            {# Թաքնված դաշտ ամսաթիվը JS-ին փոխանցելու համար #}
+            <div id="event-date" data-date="{{ invitation.event_date.isoformat() }}" class="hidden"></div>
+
+            <div class="flex justify-center gap-[15px]">
+                <div class="flex flex-col items-center min-w-[65px]">
+                    <div id="days" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
+                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Օր</div>
+                </div>
+                <div class="text-[1.5rem] text-[#ccc] mt-[5px]">:</div>
+                <div class="flex flex-col items-center min-w-[65px]">
+                    <div id="hours" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
+                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Ժամ</div>
+                </div>
+                <div class="text-[1.5rem] text-[#ccc] mt-[5px]">:</div>
+                <div class="flex flex-col items-center min-w-[65px]">
+                    <div id="minutes" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
+                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Րոպե</div>
+                </div>
+                <div class="text-[1.5rem] text-[#ccc] mt-[5px]">:</div>
+                <div class="flex flex-col items-center min-w-[65px]">
+                    <div id="seconds" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
+                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Վրկ</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-5 md:p-[30px] bg-white" id="rsvp">
+            <h2 class="text-center font-['Great_Vibes'] text-gold text-[3rem] mb-[30px]">R.S.V.P</h2>
+
+            <input type="hidden" id="inv-slug" value="{{ invitation.slug }}">
+            <input type="hidden" id="admin-phone" value="{{ invitation.content.phone_number|default('37494000000') }}">
+
+            <div class="mb-5 text-left">
+                <label class="block mb-2 text-[0.85rem] text-[#555]">Նշեք Ձեր անուն/ազգանունը</label>
+                <input type="text" id="gName" class="w-full p-3 border border-[#ddd] rounded-lg bg-[#fafafa]" placeholder="Անուն Ազգանուն">
+            </div>
+
+            <div class="mb-5 text-left" id="attendance-box">
+                <label class="block mb-2 text-[0.85rem] text-[#555]">Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
+                <div class="flex flex-col gap-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="attend" value="yes" checked class="accent-gold" onchange="toggleGuestCount(true)"> Այո, կգամ
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="attend" value="no" class="accent-gold" onchange="toggleGuestCount(false)"> Ցավոք, չեմ կարողանա
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-5 text-left" id="guest-count-wrapper">
+                <label class="block mb-2 text-[0.85rem] text-[#555]">Հյուրերի քանակ</label>
+                <select id="gCount" class="w-full p-3 border border-[#ddd] rounded-lg bg-[#fafafa]">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <button id="rsvpBtn" onclick="sendRsvp()" class="w-full p-[15px] bg-rose-gold-dark text-white rounded-[50px] text-[1rem] tracking-wider shadow-[0_5px_15px_rgba(183,110,121,0.4)] hover:brightness-110 transition-all flex justify-center items-center gap-2">
+                <span id="btnText">ՈՒՂԱՐԿԵԼ</span>
+
+            </button>
+        </div>
+
+        </div>
+    </div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+
+    // 1. Սլայդերի տրամաբանությունը (Unlock Screen)
+    const sliderContainer = document.getElementById('sliderContainer');
+    const sliderHandle = document.getElementById('sliderHandle');
+    const unlockScreen = document.getElementById('unlock-screen');
+    const mainInv = document.getElementById('main-invitation');
+    let isDragging = false, startX = 0, currentX = 0;
+    const maxSlide = sliderContainer.offsetWidth - sliderHandle.offsetWidth;
+
+    const onMove = (clientX) => {
+        if (!isDragging) return;
+        currentX = Math.min(Math.max(clientX - startX, 0), maxSlide);
+        sliderHandle.style.transform = `translateX(${currentX}px)`;
+        unlockScreen.style.opacity = 1 - (currentX / maxSlide);
+        if (currentX > maxSlide * 0.9) {
+            isDragging = false;
+            unlockScreen.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                unlockScreen.style.display = 'none';
+                mainInv.style.display = 'block';
+                AOS.refresh();
+            }, 500);
+        }
+    };
+
+    sliderHandle.addEventListener('touchstart', e => { isDragging = true; startX = e.touches[0].clientX; });
+    sliderHandle.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
+    sliderHandle.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; });
+    document.addEventListener('mousemove', e => onMove(e.clientX));
+    const endDrag = () => { if(isDragging){ isDragging = false; sliderHandle.style.transform = 'translateX(0)'; unlockScreen.style.opacity = 1; }};
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+
+    // 2. ԴԻՆԱՄԻԿ ԹԱՅՄԵՐ (Ուղղված տարբերակ)
+    function updateCountdown() {
+        const eventDateElem = document.getElementById('event-date');
+        if (!eventDateElem || !eventDateElem.dataset.date) return;
+
+        // Ստեղծում ենք ամսաթիվը (replace-ը օգնում է Safari-ին ճիշտ հասկանալ ISO-ն)
+        const dateStr = eventDateElem.dataset.date.replace(' ', 'T');
+        const eventDate = new Date(dateStr).getTime();
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+
+        if (distance <= 0) {
+            document.getElementById('days').innerText = "00";
+            document.getElementById('hours').innerText = "00";
+            document.getElementById('minutes').innerText = "00";
+            document.getElementById('seconds').innerText = "00";
+            return;
+        }
+
+        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('days').innerText = String(d).padStart(2, '0');
+        document.getElementById('hours').innerText = String(h).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+    }
+
+    // Աշխատեցնում ենք ամեն վայրկյան
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+// 1. Հյուրերի քանակի դաշտի ցուցադրում/թաքցնում
+function toggleGuestCount(show) {
+    const wrapper = document.getElementById('guest-count-wrapper');
+    if (show) {
+        wrapper.style.display = 'block';
+    } else {
+        wrapper.style.display = 'none';
+    }
+}
+
+    // 2. RSVP ուղարկելու ֆունկցիան
+    function sendRsvp() {
+        const name = document.getElementById('gName').value;
+        const btn = document.getElementById('rsvpBtn');
+        const btnText = document.getElementById('btnText');
+        const attendance = document.querySelector('input[name="attend"]:checked').value;
+        const guestCount = document.getElementById('gCount').value;
+
+        // Ստուգում ենք՝ արդյոք անունը լրացված է
+        if (!name.trim()) {
+            alert("Խնդրում ենք լրացնել Ձեր անունը 📝");
+            return;
+        }
+
+        // Վիզուալ փոփոխություն ուղարկելիս ⏳
+        btnText.innerText = "Ուղարկվում է...";
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+
+        // Սիմուլյացիա (1.2 վայրկյան սպասում)
+        setTimeout(() => {
+            btnText.innerText = "Հաստատված է ✨";
+            btn.style.backgroundColor = "#8e918f"; // Փոխում ենք գույնը, որ հասկացվի՝ ուղարկված է
+            btn.style.cursor = "default";
+            btn.style.opacity = "1";
+
+            // Անջատում ենք դաշտերը, որ կրկնակի չուղարկեն
+            document.getElementById('gName').disabled = true;
+            document.querySelectorAll('input[name="attend"]').forEach(el => el.disabled = true);
+            document.getElementById('gCount').disabled = true;
+
+            // Ցուցադրում ենք հաղորդագրություն (կարող ես նաև Modal բացել այստեղ)
+            alert(`Շնորհակալություն, ${name}: Ձեր պատասխանը գրանցված է: ✨`);
+
+            console.log("Demo Mode Active: Տվյալները ստացված են.", {
+                name: name,
+                attending: attendance,
+                guests: attendance === 'yes' ? guestCount : 0
+            });
+        }, 1200);
+    }
+</script>
+</body>
+</html>
