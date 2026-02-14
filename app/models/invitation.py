@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, JSON, Boolean  # Ավելացրել ենք Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from core.database import Base
@@ -12,25 +12,24 @@ class Invitation(Base):
     event_title = Column(String(200), nullable=False)
 
     # --- ՆՈՐ ԴԱՇՏԵՐ ---
-    # Հարսանիքի հիմնական օրը (ֆիլտրման և օրացույցի համար)
     event_date = Column(DateTime, nullable=True)
-    # Բոլոր դինամիկ տեքստերը (couple_names, welcome_text, locations, rsvp_settings)
     content = Column(JSON, nullable=True)
-    # ------------------
-    # Անվտանգության տոկեններ (UUID-ների համար)
-    # guest_token-ը կարող է լինել nullable, եթե ուզում ես հանրային հրավիրատոմսեր ունենալ
-    guest_token = Column(String(100), unique=True, nullable=True, index=True)
 
-    # admin_token-ը պարտադիր է կառավարման էջի (Dashboard) համար
+    # Անվտանգության տոկեններ
+    guest_token = Column(String(100), unique=True, nullable=True, index=True)
     admin_token = Column(String(100), unique=True, nullable=False, index=True)
-    # Անհատական երաժշտություն (կամընտրական)
+
+    # Անհատական երաժշտություն
     music_url = Column(String(255), nullable=True)
 
     template_id = Column(Integer, ForeignKey("templates.id"), nullable=False)
-
-    # Ավելացրինք order_id, որպեսզի հասկանանք՝ որ պատվերի արդյունքն է սա
-    # nullable=True է, որպեսզի եթե ձեռքով (առանց պատվերի) հրավիրատոմս սարքես, խնդիր չլինի
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=True, index=True)
+
+    # ============================================================
+    # 👇 ԱՎԵԼԱՑՐՈՒ ԱՅՍ ԵՐԿՈՒ ՏՈՂԸ SPECIAL DESIGN-Ի ՀԱՄԱՐ 👇
+    is_custom = Column(Boolean, default=False)  # Նշում է՝ արդյոք սա հատուկ դիզայն է
+    custom_html_path = Column(String(255), nullable=True)  # HTML ֆայլի անունը/ճանապարհը
+    # ============================================================
 
     created_at = Column(DateTime, server_default=func.now())
 
@@ -38,5 +37,4 @@ class Invitation(Base):
     template = relationship("Template", back_populates="invitations")
     responses = relationship("RSVPResponse", back_populates="invitation", cascade="all, delete-orphan")
     order = relationship("Order", back_populates="invitation")
-    # Փոխված անունով կապը դեպի InvitationMedia
     media_files = relationship("InvitationMedia", back_populates="invitation", cascade="all, delete-orphan")

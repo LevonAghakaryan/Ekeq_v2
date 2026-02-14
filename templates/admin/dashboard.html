@@ -106,9 +106,11 @@
                                         '{{ order.invitation.admin_token }}',
                                         '{{ order.invitation.content | tojson | forceescape }}',
                                         '{{ order.invitation.event_date }}',
-                                        '{{ order.invitation.music_url }}')"
+                                        '{{ order.invitation.music_url }}',
+                                        '{{ order.invitation.is_custom }}',
+                                        '{{ order.invitation.custom_html_path }}')"
                                         class="w-full flex items-center gap-3 px-4 py-2 text-[11px] text-headerDark hover:bg-bgLight rounded-xl text-left">
-                                        ✏️ Edit JSON
+                                        ✏️ Edit JSON & Design
                                     </button>
                                 </div>
                             </div>
@@ -192,6 +194,18 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center gap-3 bg-bgLight p-3 rounded-xl border border-goldAccent/20">
+                    <input type="checkbox" name="is_custom" value="true" class="w-5 h-5 accent-goldAccent">
+                    <label class="text-[10px] uppercase tracking-[1px] font-bold text-headerDark">Special Design (Custom)</label>
+                </div>
+                <div>
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Custom HTML Path</label>
+                    <input type="text" name="custom_html_path" placeholder="customs/wedding_v1.html"
+                           class="w-full bg-bgLight p-3 rounded-xl outline-none text-sm border focus:border-goldAccent">
+                </div>
+            </div>
+
             <div>
                 <div class="flex justify-between items-end mb-2">
                     <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Content JSON</label>
@@ -239,6 +253,19 @@
                        placeholder="https://example.com/music.mp3">
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center gap-3 bg-white border-2 border-gray-100 p-3 rounded-xl">
+                    <input type="checkbox" name="is_custom" id="edit_is_custom" value="true" class="w-5 h-5 accent-goldAccent">
+                    <label class="text-[10px] uppercase tracking-[1px] font-bold text-headerDark">Special Design</label>
+                </div>
+                <div>
+                    <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Custom HTML Path</label>
+                    <input type="text" name="custom_html_path" id="edit_custom_html_path"
+                           class="w-full bg-white border-2 border-gray-100 p-3 rounded-xl text-xs outline-none focus:border-goldAccent transition-all"
+                           placeholder="customs/file.html">
+                </div>
+            </div>
+
             <div>
                 <label class="text-[9px] uppercase tracking-[2px] ml-2 text-textGrey">Content JSON</label>
                 <textarea name="content_json" id="edit_json_editor" rows="10" required
@@ -257,20 +284,14 @@
     // --- Helper Functions ---
     function copyToMedia(invId) {
         const input = document.getElementById('media_invitation_id');
-
-        // Ստուգում ենք՝ արդյոք input-ը գոյություն ունի
         if (input) {
             input.value = invId;
-
             const mediaSection = document.getElementById('media-section');
             if (mediaSection) {
                 mediaSection.scrollIntoView({ behavior: 'smooth' });
             }
-
             input.classList.add('ring-4', 'ring-goldAccent/30');
             setTimeout(() => input.classList.remove('ring-4', 'ring-goldAccent/30'), 1500);
-        } else {
-            console.error("Չհաջողվեց գտնել media_invitation_id տարրը 🧐");
         }
     }
 
@@ -308,24 +329,21 @@
         }, 10);
     }
 
-    function openEditModal(token, content, eventDate, musicUrl) {
+    function openEditModal(token, content, eventDate, musicUrl, isCustom, customPath) {
         // 1. Լրացնում ենք թաքնված տոկենը
         document.getElementById('edit_admin_token').value = token;
 
-        // 2. JSON-ի գեղեցիկ դասավորում (Pretty Print) 💎
+        // 2. JSON-ի գեղեցիկ դասավորում (Pretty Print)
         const editor = document.getElementById('edit_json_editor');
         try {
-            // Եթե content-ը տեքստ է, սարքում ենք օբյեկտ, հետո նորից տեքստ՝ 4 բացատով
             let parsed = (typeof content === 'string') ? JSON.parse(content) : content;
             editor.value = JSON.stringify(parsed, null, 4);
         } catch (e) {
-            console.error("JSON parse error:", e);
-            editor.value = content; // Եթե սխալ լինի, ուղղակի անփոփոխ կդնի
+            editor.value = content;
         }
 
-        // 3. Լրացնում ենք ամսաթիվը (HTML input-ի համար 'YYYY-MM-DDTHH:MM' ֆորմատով)
+        // 3. Լրացնում ենք ամսաթիվը
         if (eventDate && eventDate !== 'None') {
-            // SQL-ից եկած "2025-10-10 15:00:00"-ը սարքում ենք "2025-10-10T15:00"
             document.getElementById('edit_event_date').value = eventDate.replace(" ", "T").substring(0, 16);
         } else {
             document.getElementById('edit_event_date').value = '';
@@ -334,7 +352,12 @@
         // 4. Լրացնում ենք երաժշտության հղումը
         document.getElementById('edit_music_url').value = (musicUrl && musicUrl !== 'None') ? musicUrl : '';
 
-        // 5. Մոդալի բացում
+        // 5. Custom դիզայնի տվյալներ (ՆՈՐ) 🎨
+        const isCustomBool = (isCustom === 'True' || isCustom === true);
+        document.getElementById('edit_is_custom').checked = isCustomBool;
+        document.getElementById('edit_custom_html_path').value = (customPath && customPath !== 'None') ? customPath : '';
+
+        // 6. Մոդալի բացում
         const modal = document.getElementById('editModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -358,41 +381,17 @@
         }, 200);
     }
 
-    // --- JSON Sample Filler ---
     function fillJson(type) {
         let sample = {};
-
         if (type === 'wedding') {
             sample = {
-                "couple_names": {
-                    "groom": "Անուն",
-                    "bride": "Անուն",
-                    "separator": "&"
-                },
-                "welcome_text": {
-                    "title": "Սիրով Հրավիրում ենք",
-                    "description": "Սիրով հրավիրում ենք Ձեզ ներկա գտնվելու մեր հարսանյաց արարողությանը:"
-                },
+                "couple_names": { "groom": "Անուն", "bride": "Անուն", "separator": "&" },
+                "welcome_text": { "title": "Սիրով Հրավիրում ենք", "description": "Սիրով հրավիրում ենք Ձեզ ներկա գտնվելու մեր հարսանյաց արարողությանը:" },
                 "locations": [
-                    {
-                        "type": "church",
-                        "title": "Պսակադրություն",
-                        "address": "Սուրբ Գայանե եկեղեցի",
-                        "time": "14:00",
-                        "map_url": ""
-                    },
-                    {
-                        "type": "restaurant",
-                        "title": "Հարսանյաց հանդիսություն",
-                        "address": "«Դվին» Ռեստորանային համալիր",
-                        "time": "18:00",
-                        "map_url": ""
-                    }
+                    { "type": "church", "title": "Պսակադրություն", "address": "Սուրբ Գայանե եկեղեցի", "time": "14:00", "map_url": "" },
+                    { "type": "restaurant", "title": "Հարսանյաց հանդիսություն", "address": "«Դվին» Ռեստորանային համալիր", "time": "18:00", "map_url": "" }
                 ],
-                "rsvp_settings": {
-                    "deadline": "2025-10-10",
-                    "whatsapp_number": "37494000000"
-                }
+                "rsvp_settings": { "deadline": "2025-10-10", "whatsapp_number": "37494000000" }
             };
         } else {
             sample = {

@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from core.config import settings
 import json
+from datetime import datetime
 from app import services, schemas
 from app.dependencies import (
     get_invitation_service,
@@ -58,12 +59,14 @@ def admin_create_invitation(
         slug: str = Form(...),
         event_title: str = Form(...),
         content_json: str = Form(...),
+        # 👇 ՆՈՐ ԴԱՇՏԵՐ 👇
+        is_custom: bool = Form(False),
+        custom_html_path: str = Form(None),
         user: str = Depends(authenticate),
         invitation_service: services.InvitationService = Depends(get_invitation_service),
         order_service: services.OrderService = Depends(get_order_service)
 ):
     try:
-        # Փորձում ենք վերածել տեքստը JSON-ի
         content_data = json.loads(content_json)
 
         invitation_data = schemas.InvitationCreate(
@@ -71,12 +74,12 @@ def admin_create_invitation(
             event_title=event_title,
             template_id=template_id,
             order_id=order_id,
-            content=content_data
+            content=content_data,
+            is_custom=is_custom,
+            custom_html_path=custom_html_path
         )
 
         invitation_service.create_invitation(invitation_data)
-
-        # Պատվերի կարգավիճակը դարձնում ենք "In Progress" կամ "Completed"
         order_service.repo.update_status(order_id, "Completed")
 
         return RedirectResponse(url="/system-admin/dashboard?success=created", status_code=303)
@@ -86,7 +89,41 @@ def admin_create_invitation(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# --- Մեդիա ֆայլերի ավելացում ---
+# --- Հրավիրատոմսի Տեքստերի Թարմացում ---
+@router.post("/invitations/update-by-token")
+def admin_update_content_by_token(
+        admin_token: str = Form(...),
+        event_date: str = Form(None),
+        music_url: str = Form(None),
+        content_json: str = Form(...),
+        # 👇 ՆՈՐ ԴԱՇՏԵՐ 👇
+        is_custom: bool = Form(False),
+        custom_html_path: str = Form(None),
+        user: str = Depends(authenticate),
+        service: services.InvitationService = Depends(get_invitation_service)
+):
+    try:
+        update_data = {
+            "content": json.loads(content_json),
+            "music_url": music_url,
+            "is_custom": is_custom,
+            "custom_html_path": custom_html_path
+        }
+
+        # Օրվա ձևաչափի մշակում
+        if event_date:
+            try:
+                update_data["event_date"] = datetime.fromisoformat(event_date)
+            except ValueError:
+                pass # կամ դնել default արժեք
+
+        service.update_invitation_by_token(admin_token, update_data)
+        return RedirectResponse(url="/system-admin/dashboard?success=updated", status_code=303)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Թարմացման սխալ: {str(e)}")
+
+
+# --- Մնացած ռութերը (Media, Status) թողնում ենք նույնը ---
 @router.post("/invitations/{invitation_id}/media")
 def admin_add_media(
         invitation_id: int,
@@ -96,16 +133,9 @@ def admin_add_media(
         user: str = Depends(authenticate),
         media_service: services.InvitationMediaService = Depends(get_invitation_media_service)
 ):
-    media_service.add_media_to_invitation(
-        invitation_id=invitation_id,
-        file_url=file_url,
-        file_type=file_type,
-        label=label
-    )
+    media_service.add_media_to_invitation(invitation_id, file_url, file_type, label)
     return RedirectResponse(url="/system-admin/dashboard?success=media_added", status_code=303)
 
-
-# --- Պատվերի կարգավիճակի փոփոխություն ---
 @router.post("/orders/{order_id}/status")
 def admin_update_order_status(
         order_id: int,
@@ -115,25 +145,3 @@ def admin_update_order_status(
 ):
     order_service.repo.update_status(order_id, status)
     return RedirectResponse(url="/system-admin/dashboard", status_code=303)
-
-
-# --- Հրավիրատոմսի Տեքստերի Թարմացում ---
-@router.post("/invitations/update-by-token")
-def admin_update_content_by_token(
-        admin_token: str = Form(...),
-        event_date: str = Form(None),
-        music_url: str = Form(None),
-        content_json: str = Form(...),
-        user: str = Depends(authenticate),
-        service: services.InvitationService = Depends(get_invitation_service)
-):
-    try:
-        update_data = {
-            "content": json.loads(content_json),
-            "music_url": music_url,
-            "event_date": event_date  # Այստեղ կախված է ֆորմատից, կարող է պետք լինել դարձնել datetime
-        }
-        service.update_invitation_by_token(admin_token, update_data)
-        return RedirectResponse(url="/system-admin/dashboard", status_code=303)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Թարմացման սխալ")
