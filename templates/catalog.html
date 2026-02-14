@@ -160,6 +160,13 @@
             alert('⚠️ Կապի սխալ։ Ստուգեք ինտերնետ միացումը։');
         }
     };
+
+    window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        // Եթե էջը բեռնվել է քեշից (օրինակ Back սեղմելիս), թարմացնել այն
+        window.location.reload();
+    }
+    });
 </script>
 
 {% endblock %}

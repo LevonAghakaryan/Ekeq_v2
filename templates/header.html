@@ -9,16 +9,39 @@
 >
     <div class="flex justify-between items-center">
 
-        <div class="flex flex-col">
-            <a href="/" class="flex flex-col group">
-                <span class="text-[#7D936C] font-bold text-[20px] tracking-[1px] max-[330px]:text-[16px]">
-                    HARSANYAC
+    <div class="flex items-center">
+        <a href="/" class="flex items-center gap-[15px] group no-underline">
+
+<div class="w-[55px] h-[55px] rounded-full overflow-hidden flex-shrink-0 bg-transparent flex items-center justify-center border border-[#333333]/30 p-[5px]">
+    <img src="/static/images/logo_header.jpg"
+         alt="Logo"
+         class="w-[90%] h-[90%] object-contain logo-style">
+</div>
+
+<style>
+    .logo-style {
+        /* 1. Շրջում ենք գույները (սևը դառնում է սպիտակ) */
+        filter: invert(1);
+
+        /* 2. Բարձրացնում ենք կոնտրաստը և պայծառությունը,
+              որպեսզի ֆոնի մոխրագույնը դառնա լրիվ սև ու անհետանա */
+        filter: invert(1) brightness(1.5) contrast(200%);
+
+        /* 3. Screen-ը կթողնի միայն լուսավոր (սպիտակ) մասերը */
+        mix-blend-mode: screen;
+    }
+</style>
+
+            <div class="flex flex-col">
+                <span class="text-[#7D936C] font-bold text-[20px] tracking-[1px] leading-none max-[330px]:text-[16px] group-hover:text-[#a3c28d] transition-colors">
+                    NAIVA
                 </span>
-                <small class="text-[8px] tracking-[2px] text-[#ccc] uppercase mt-[-2px]">
+                <small class="text-[8px] tracking-[2px] text-[#ccc] uppercase mt-[4px] group-hover:text-white transition-colors">
                     Premium Invitations
                 </small>
-            </a>
-        </div>
+            </div>
+        </a>
+    </div>
 
         <button
             id="menu-btn"
