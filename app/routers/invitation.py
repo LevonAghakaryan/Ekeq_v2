@@ -4,7 +4,7 @@ from app import schemas
 from app.services.invitation import InvitationService
 from app.services.rsvp import RSVPService
 from app.dependencies import get_invitation_service, get_rsvp_service
-
+from datetime import timedelta
 router = APIRouter(prefix="/invite", tags=["Invitation & RSVP"])
 
 # Jinja2 Templates-ի կարգավորում
@@ -15,27 +15,27 @@ templates = Jinja2Templates(directory="templates")
 def get_invitation_page(
         slug: str,
         request: Request,
-        gt: str = None,  # Հյուրի տոկենը URL-ից (?gt=...)
+        gt: str = None,
         service: InvitationService = Depends(get_invitation_service)
 ):
-    """Բացում է հրավիրատոմսի էջը՝ հանրային կամ մասնավոր ստուգումով"""
     invitation = service.get_invitation_data(slug)
 
-    # 🔐 Անվտանգության ճկուն ստուգում
-    # Եթե բազայում guest_token-ը լրացված է (NULL չէ), ապա ստուգում ենք URL-ի տոկենը
-    # Եթե slug-ը քո օրինակներից է (wedding-...) և բազայում NULL է, այն կբացվի ազատ
+    # 1. 🔐 Անվտանգության ստուգում
     if invitation.guest_token:
         if invitation.guest_token != gt:
-            raise HTTPException(
-                status_code=403,
-            )
+            raise HTTPException(status_code=403)
 
-    # Որոշում ենք որ HTML տեմպլեյթն օգտագործենք
-    template_file = f"designs/{invitation.template.html_file}"
+    # 2. 🎨 Դիզայնի ընտրություն (ՊԵՏՔ Է ԼԻՆԻ IF-ԻՑ ԴՈՒՐՍ)
+    # Սա կաշխատի թե՛ Public, թե՛ Private հրավիրատոմսերի համար
+    if getattr(invitation, 'is_custom', False) and invitation.custom_html_path:
+        template_file = invitation.custom_html_path
+    else:
+        template_file = f"designs/{invitation.template.html_file}"
 
     return templates.TemplateResponse(template_file, {
         "request": request,
-        "invitation": invitation
+        "invitation": invitation,
+        "timedelta": timedelta
     })
 
 

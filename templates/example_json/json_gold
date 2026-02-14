@@ -1,0 +1,31 @@
+{
+    "couple_names": {
+        "bride": "Անի",
+        "groom": "Արամ",
+        "separator": "&"
+    },
+    "locations": [
+        {
+            "address": "ք. Էջմիածին",
+            "map_url": "https://goo.gl/maps/example1",
+            "time": "14:00",
+            "title": "Սուրբ Գայանե եկեղեցի",
+            "type": "church"
+        },
+        {
+            "address": "Երևան, փողոց 123",
+            "map_url": "https://goo.gl/maps/example2",
+            "time": "17:00",
+            "title": "Ռեստորանային համալիր",
+            "type": "restaurant"
+        }
+    ],
+    "rsvp_settings": {
+        "deadline": "2025-09-30",
+        "whatsapp_number": "37494000000"
+    },
+    "welcome_text": {
+        "description": "Սիրով հրավիրում ենք Ձեզ մասնակցելու մեր հարսանյաց հանդեսին:",
+        "title": "Սիրելի Հյուրեր"
+    }
+}

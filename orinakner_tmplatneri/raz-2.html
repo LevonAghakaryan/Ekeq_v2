@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wedding Invitation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+Armenian:wght@300;400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #333;
+        /* --- ՆՈՐ ԳՈՒՅՆԵՐԸ (Rose Gold) --- */
+        --rose-gold-dark: #B76E79; /* Մուգ Rose Gold (Սպիտակ ֆոնի վրա գրելու համար) */
+        --rose-gold-light: #E0BFB8; /* Բաց Rose Gold (Մուգ ֆոնի վրա գրելու համար) */
+
+        /* Հին փոփոխականը հարմարեցնում ենք նորին, որ ամեն տեղ փոխվի */
+        --gold: #B76E79;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Noto Sans Armenian', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        overflow-x: hidden;
+    }
+
+    /* --- 1. SLIDE TO UNLOCK SCREEN --- */
+    #unlock-screen {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        z-index: 9999;
+        display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+        padding-bottom: 50px;
+        transition: transform 0.8s ease-in-out, opacity 0.8s;
+    }
+
+    .overlay-gradient {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+        z-index: 1;
+    }
+
+    /* Slider Container */
+    .slider-container {
+        position: relative;
+        width: 85%;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 50px;
+        border: 1px solid rgba(255,255,255,0.4);
+        z-index: 10;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .slider-text {
+        position: absolute;
+        width: 100%; height: 100%;
+        display: flex; justify-content: center; align-items: center;
+        color: white;
+        font-size: 1rem; letter-spacing: 1px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        pointer-events: none;
+        padding-left: 20px;
+        animation: pulseText 2s infinite;
+    }
+
+    .slider-handle {
+        position: absolute;
+        left: 0; top: 0;
+        height: 100%; width: 60px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        color: var(--rose-gold-dark); /* Կոճակի սլաքը Rose Gold */
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        transition: transform 0.1s;
+    }
+
+    .arrow-anim { animation: arrowMove 1.5s infinite; }
+
+    /* --- 2. HERO SECTION (Նկարի հատված) --- */
+    .hero-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        min-height: 600px;
+        background-color: #000;
+        overflow: hidden;
+    }
+
+    .couple-bg {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover; z-index: 1;
+    }
+
+    .frame-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url('https://i.pinimg.com/736x/d6/19/b0/d619b0e43a34f232e0db90051137310c.jpg');
+        background-size: cover; background-position: center bottom;
+        z-index: 2;
+        mix-blend-mode: lighten; opacity: 1;
+    }
+
+    .hero-content {
+        position: relative; z-index: 3; height: 100%;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        text-align: center; padding-bottom: 80px;
+    }
+
+    /* 1. Վերևի ամսաթիվը (WEDDING DAY...) */
+.top-date {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 3px;
+
+    /* Գույնը՝ Բաց Rose Gold */
+    color: #E0BFB8;
+
+    margin-bottom: 10px;
+    font-size: 1rem; /* Մի փոքր մեծացրինք (0.9 -> 1rem) */
+
+    /* ԱՎԵԼԱՑՐԱԾ Է՝ Հաստություն */
+    font-weight: 800;
+
+    /* ԱՎԵԼԱՑՐԱԾ Է՝ Կրկնակի ուժեղ ստվեր */
+    text-shadow:
+        0 2px 2px rgba(0,0,0,1),   /* Շատ մուգ, կարճ ստվեր */
+        0 0 15px rgba(0,0,0,0.8);  /* Լայն սև «լուսապսակ» տառերի շուրջ */
+}
+
+/* 2. Անունները (Harut & Qnarik) */
+.names-white {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+
+    color: #E0BFB8; /* <--- Դրեցինք Բաց Rose Gold */
+
+    line-height: 1.1;
+    /* Ուժեղ ստվեր */
+    text-shadow: 0 3px 8px rgba(0,0,0,0.9);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    .names-white i {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+
+    /* Խորհուրդ եմ տալիս «&»-ը թողնել ՍՊԻՏԱԿ, որ անունները ավելի սիրուն երևան */
+    color: #ffffff;
+    /* Եթե ուզում ես սա էլ Rose Gold լինի, գրիր՝ color: #E0BFB8; */
+
+    font-style: italic;
+    margin: 5px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+}
+    /* --- 3. INVITATION TEXT (ROSE GOLD EDITION) --- */
+    .invitation-text-container {
+        position: relative;
+        background-color: #ffffff;
+        margin-top: -10px;
+        padding: 30px 20px 60px;
+        z-index: 10;
+        text-align: center;
+    }
+
+    .text-box { max-width: 600px; margin: 0 auto; }
+
+    .invite-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 2.5rem;
+        color: var(--rose-gold-dark); /* <--- Rose Gold */
+        margin-bottom: 15px;
+        font-weight: normal;
+    }
+
+    .invitation-text {
+        font-size: 1.1rem; line-height: 1.8;
+        color: #4a4a4a; font-family: 'Cinzel', serif;
+    }
+
+    .divider {
+        width: 80px; height: 2px;
+        /* Rose Gold Գրադիենտ */
+        background: radial-gradient(circle, var(--rose-gold-dark) 0%, transparent 100%);
+        margin: 25px auto;
+    }
+
+    .highlight-date {
+        color: var(--rose-gold-dark); /* <--- Rose Gold */
+        font-weight: bold; font-size: 1.3rem;
+        border-bottom: 1px solid var(--rose-gold-dark);
+        padding-bottom: 3px;
+    }
+
+    /* --- 4. CALENDAR SECTION (ROSE GOLD EDITION) --- */
+    .date-header-block {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; text-align: center;
+        width: 100%; margin: 20px auto;
+    }
+
+    .month-year-group { margin-bottom: 25px; }
+
+    .main-date-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 4rem;
+        color: var(--rose-gold-dark); /* <--- Rose Gold */
+        margin: 0; line-height: 1.1;
+        width: 100%; text-align: center;
+    }
+
+    .year-subtitle {
+        font-family: 'Cinzel', serif; font-size: 1.4rem; letter-spacing: 6px;
+        color: #888; margin: 5px 0 25px 0; font-weight: bold;
+        width: 100%; text-align: center;
+    }
+
+    .mini-calendar-row {
+        display: flex; justify-content: center; align-items: center; gap: 8px;
+    }
+
+    .mini-day {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; width: 40px; position: relative;
+    }
+
+    .d-name {
+        font-size: 0.7rem; color: #999; text-transform: uppercase;
+        margin-bottom: 4px; font-family: 'Noto Sans Armenian', sans-serif;
+    }
+
+    .d-num {
+        font-family: 'Cinzel', serif; font-size: 1.2rem;
+        color: #333; font-weight: 600;
+    }
+
+    /* ՄԵԾ ՍՐՏԻԿԸ */
+    .active-heart {
+        width: 80px; height: 80px;
+        position: relative; margin: 0 5px;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    .heart-bg {
+        position: absolute; width: 100%; height: 100%;
+        z-index: 0; animation: heartBeat 1.5s infinite ease-in-out;
+    }
+
+    .heart-bg svg {
+        width: 100%; height: 100%;
+        fill: var(--rose-gold-dark); /* <--- Rose Gold */
+        filter: drop-shadow(0 4px 8px rgba(183, 110, 121, 0.4)); /* Վարդագույն ստվեր */
+    }
+
+    .heart-text-group {
+        position: relative; z-index: 2;
+        display: flex; flex-direction: column; align-items: center;
+        margin-top: -5px;
+    }
+
+    .active-text.d-name {
+        color: #fff !important; font-size: 0.8rem; margin-bottom: 0; opacity: 0.9;
+    }
+
+    .active-text.d-num {
+        color: #fff !important; font-size: 1.8rem; line-height: 1; font-weight: bold;
+    }
+
+    @keyframes heartBeat {
+        0% { transform: scale(1); } 15% { transform: scale(1.1); }
+        30% { transform: scale(1); } 45% { transform: scale(1.1); }
+        60% { transform: scale(1); } 100% { transform: scale(1); }
+    }
+
+    /* --- 5. LOCATIONS SECTION --- */
+    .location-card { margin: 40px 20px; text-align: center; }
+    .loc-block { margin-bottom: 50px; }
+
+    .loc-img {
+        width: 140px; height: 140px; object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid var(--rose-gold-dark); /* <--- Rose Gold */
+        padding: 3px; margin: 0 auto 15px; display: block;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .loc-title {
+        font-family: 'Great Vibes', cursive; font-size: 2.2rem;
+        color: var(--rose-gold-dark); /* <--- Rose Gold */
+        margin: 10px 0; text-shadow: none;
+    }
+
+    .loc-text {
+        font-size: 0.95rem; line-height: 1.6; color: #555;
+        padding: 0 10px; margin: 15px 0;
+    }
+
+    .loc-btn {
+        display: inline-block; padding: 12px 30px;
+        border: 1px solid var(--rose-gold-dark); /* <--- Rose Gold */
+        color: var(--rose-gold-dark);
+        border-radius: 50px; text-decoration: none;
+        font-size: 0.85rem; font-weight: 600;
+        transition: all 0.3s ease; background: #fff;
+    }
+
+    .loc-btn:active {
+        background: var(--rose-gold-dark); color: #fff;
+    }
+
+    /* --- 6. TIMELINE --- */
+    .timeline { position: relative; margin: 40px 20px; padding-left: 20px; }
+    .timeline::before {
+        content: ''; position: absolute; left: 6px; top: 0; bottom: 0;
+        width: 1px; background: var(--rose-gold-dark); opacity: 0.5;
+    }
+    .tl-item { position: relative; margin-bottom: 40px; padding-left: 20px; }
+    .tl-dot {
+        position: absolute; left: -20px; top: 5px;
+        width: 12px; height: 12px; background: var(--bg-color);
+        border: 2px solid var(--rose-gold-dark); /* <--- Rose Gold */
+        border-radius: 50%; z-index: 2;
+    }
+    .tl-time { font-weight: bold; font-family: 'Cinzel'; color: var(--rose-gold-dark); }
+    .tl-event { font-weight: 600; font-size: 1.1rem; margin-top: 5px; }
+    .tl-desc { font-size: 0.85rem; color: #777; }
+
+    /* --- 7. COUNTDOWN SECTION --- */
+    .countdown-container {
+        text-align: center; padding: 40px 20px; background: transparent; margin-bottom: 20px;
+    }
+    .cd-title {
+        font-family: 'Great Vibes', cursive; font-size: 2.5rem;
+        color: #333; margin-bottom: 25px; font-weight: normal;
+    }
+    .countdown { display: flex; justify-content: center; gap: 15px; }
+    .cd-box {
+        display: flex; flex-direction: column; align-items: center;
+        position: relative; min-width: 65px;
+    }
+    .cd-num {
+        font-family: 'Cinzel', serif; font-size: 2.2rem;
+        color: var(--rose-gold-dark); /* <--- Rose Gold */
+        font-weight: 600; line-height: 1;
+    }
+    .cd-label {
+        font-family: 'Noto Sans Armenian', sans-serif; font-size: 0.7rem;
+        text-transform: uppercase; letter-spacing: 1px; color: #888;
+        margin-top: 8px; border-top: 1px solid #eee; width: 100%; padding-top: 5px;
+    }
+
+    /* --- 8. DARK SECTION (DETAILS SPECIAL) --- */
+    .dark-section {
+        position: relative; width: 100%; min-height: 500px; padding: 60px 20px;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    url('https://i.pinimg.com/736x/09/ff/a4/09ffa440ddd0834287405347657d5360.jpg');
+        background-size: cover; background-position: center; background-attachment: fixed;
+        display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+
+    .ds-content {
+        position: relative; z-index: 2; color: #fff; max-width: 600px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .ds-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+
+        /* ԲԱՑ, ՓԱՅԼՈՒՆ ROSE GOLD */
+        color: var(--rose-gold-light);
+
+        /* Փայլի էֆեկտ */
+        text-shadow: 0 0 10px rgba(224, 191, 184, 0.4),
+                     0 0 5px rgba(0, 0, 0, 0.5);
+
+        position: relative; z-index: 10;
+    }
+
+    /* --- 9. RSVP FORM (ՋՆՋՎԱԾ Է "Side" հատվածը) --- */
+    .rsvp-container { padding: 30px 20px; background: #fff; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: #555; }
+    input[type="text"], select {
+        width: 100%; padding: 12px;
+        border: 1px solid #ddd; border-radius: 8px;
+        font-family: inherit; background: #fafafa;
+    }
+
+    .submit-btn {
+        background: var(--rose-gold-dark); /* <--- Rose Gold */
+        color: white; width: 100%; padding: 15px; border: none; border-radius: 50px;
+        font-size: 1rem; letter-spacing: 1px; cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 5px 15px rgba(183, 110, 121, 0.4);
+    }
+
+    /* Animation */
+    @keyframes arrowMove { 0% {transform:translateX(0);} 50% {transform:translateX(5px);} 100% {transform:translateX(0);} }
+    @keyframes pulseText { 0%, 100% {opacity: 1;} 50% {opacity: 0.5;} }
+
+    /* --- 10. MEDIA QUERIES (DESKTOP) --- */
+    @media screen and (min-width: 768px) {
+        body {
+            background-color: #ffffff;
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            display: flex; justify-content: center; align-items: flex-start;
+        }
+
+        .mobile-container {
+            width: 100%; max-width: 450px; min-height: 100vh;
+            background-color: #fff; position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            overflow-x: hidden;
+        }
+
+        #unlock-screen {
+            position: absolute !important; width: 100% !important; height: 100% !important;
+            top: 0; left: 0;
+        }
+
+        .dark-section, header, .main-bg {
+            background-attachment: scroll !important;
+        }
+    }
+</style>
+
+
+</head>
+<body>
+
+<div class="mobile-container">
+
+    <div id="unlock-screen">
+        <div class="overlay-gradient"></div>
+
+        <div style="z-index: 10; margin-bottom: 60px; text-align: center; color: white; width: 100%; padding: 0 20px;">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="font-family:'Great Vibes', cursive; font-size: 3.2rem; line-height: 1; margin: 0;">Harut</h2>
+                <div style="display: flex; align-items: center; width: 60%; margin: 5px 0;">
+                    <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.3);"></div>
+                    <span style="font-family: 'Cinzel', serif; font-size: 1.2rem; font-style: italic; margin: 0 15px; color: var(--gold);">and</span>
+                    <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.3);"></div>
+                </div>
+                <h2 style="font-family:'Great Vibes', cursive; font-size: 3.2rem; line-height: 1; margin: 0;">Qnarik</h2>
+            </div>
+            <p style="font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 25px; opacity: 0.9;">Հրավիրատոմս</p>
+        </div>
+
+        <div class="slider-container" id="sliderContainer">
+            <div class="slider-text">Սահեցրեք աջ <i class="fa-solid fa-chevron-right arrow-anim" style="margin-left: 10px;"></i></div>
+            <div class="slider-handle" id="sliderHandle">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+        </div>
+    </div>
+    <div id="main-invitation" style="display: none;">
+
+        <div class="hero-wrapper">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop" class="couple-bg" alt="Couple Photo">
+            <div class="frame-overlay"></div>
+            <div class="hero-content" data-aos="zoom-in">
+                <p class="top-date">WEDDING DAY | 10.05.2026</p>
+                <div class="names-white">
+                    <span>Harut</span>
+                    <i>&</i>
+                    <span>Qnarik</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="invitation-text-container">
+            <div class="text-box" data-aos="fade-up" data-aos-duration="1000">
+                <h2 class="invite-title">Հարգելի՛ հյուրեր</h2>
+                <div class="divider"></div>
+                <p class="invitation-text">
+                    Սիրով հրավիրում ենք Ձեզ ներկա գտնվելու<br>
+                    մեր հարսանյաց արարողությանը։
+                    <br><br>
+                    Ծանոթացեք ծրագրին և հաստատեք Ձեր ներկայությունը մինչև
+                    <br><br>
+                    <span class="highlight-date">Մայիսի 10-ը</span>
+                </p>
+                <div class="divider"></div>
+            </div>
+        </div>
+
+        <div class="date-header-block" data-aos="zoom-in">
+            <div class="month-year-group">
+                <h2 class="main-date-title">Մայիս</h2>
+                <p class="year-subtitle">2026</p>
+            </div>
+
+            <div class="mini-calendar-row">
+                <div class="mini-day">
+                    <span class="d-name">Ուրբ</span>
+                    <span class="d-num">8</span>
+                </div>
+                <div class="mini-day">
+                    <span class="d-name">Շբթ</span>
+                    <span class="d-num">9</span>
+                </div>
+
+                <div class="mini-day active-heart">
+                    <div class="heart-bg">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <div class="heart-text-group">
+                        <span class="d-name active-text">Կիր</span>
+                        <span class="d-num active-text">10</span>
+                    </div>
+                </div>
+
+                <div class="mini-day">
+                    <span class="d-name">Երկ</span>
+                    <span class="d-num">11</span>
+                </div>
+                <div class="mini-day">
+                    <span class="d-name">Երք</span>
+                    <span class="d-num">12</span>
+                </div>
+            </div>
+        </div>
+
+        <div data-aos="fade-up" style="margin-top: 50px;">
+            <div class="location-card">
+                <h2 style="font-family: 'Cinzel', serif; color: var(--gold); letter-spacing: 2px; margin-bottom: 30px;">Հարսանյաց Ծրագիր</h2>
+                <div style="margin-bottom: 40px;">
+                    <img src="https://d31qtdfy11mjj9.cloudfront.net/places/1508339393831241403.jpg" class="loc-img" alt="Սաղմոսավանք">
+                    <div class="loc-title">Եկեղեցի</div>
+                    <p style="margin: 15px 20px; line-height: 1.6;">
+                        Պսակադրության արարողությունը տեղի կունենա <b>Սուրբ Գրիգոր Լուսավորիչ</b> մայր եկեղեցում։
+                    </p>
+                    <a href="https://maps.app.goo.gl/YourLinkHere" target="_blank" class="loc-btn">
+                        <i class="fa-solid fa-location-dot"></i> Քարտեզ
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 40px;">
+            <img src="https://i.pinimg.com/1200x/e4/7a/db/e47adb0dbedae1df075aeeb4f9a9734c.jpg" class="loc-img" alt="Palladium Hall">
+            <div class="loc-title">Ռեստորան</div>
+            <p style="margin: 15px 20px; line-height: 1.6; max-width: 300px;">
+                Հարսանյաց հանդեսը տեղի կունենա <b>Palladium Hall</b> հանդիսությունների սրահում։
+            </p>
+            <a href="https://maps.app.goo.gl/YourLinkHere" target="_blank" class="loc-btn">
+                <i class="fa-solid fa-wine-glass"></i> Քարտեզ
+            </a>
+        </div>
+
+        <div class="timeline" data-aos="fade-left">
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-time">13:00</div>
+                <div class="tl-event">Փեսայի տուն</div>
+                <div class="tl-desc">Սկիզբը և ուրախությունը</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-time">14:30</div>
+                <div class="tl-event">Հարսի տուն</div>
+                <div class="tl-desc">Հարսի դուրսբերում</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-time">16:00</div>
+                <div class="tl-event">Պսակադրություն</div>
+                <div class="tl-desc">Սուրբ օրհնություն</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-time">17:00</div>
+                <div class="tl-event">Տոնական Խնջույք</div>
+                <div class="tl-desc">Անմոռանալի երեկո</div>
+            </div>
+        </div>
+
+        <div class="dark-section" data-aos="fade-up">
+            <div class="ds-content">
+                <div class="ds-title">Details Special</div>
+                <p style="margin-bottom: 20px;">
+                    Ձեզ հետ բերեք ՍԵՐ, ժպիտներ ու անսահման դրական էմոցիաներ, ինչպես նաև հարմարավետ կոշիկներ՝ պարելու համար։
+                </p>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.5); margin: 20px auto; width: 50%;">
+                <p style="font-style: italic; color: #eee;">
+                    Թույլ տանք, որ այդ օրը սպիտակ զգեստով լինի միայն հարսնացուն 🤍
+                </p>
+            </div>
+        </div>
+
+        <div class="countdown-container" data-aos="fade-up">
+            <p class="cd-title">Մնացել է...</p>
+            <div class="countdown">
+                <div class="cd-box">
+                    <div class="cd-num" id="days">00</div>
+                    <div class="cd-label">Օր</div>
+                </div>
+                <div style="font-size: 1.5rem; color: #ccc; margin-top: 5px;">:</div>
+                <div class="cd-box">
+                    <div class="cd-num" id="hours">00</div>
+                    <div class="cd-label">Ժամ</div>
+                </div>
+                <div style="font-size: 1.5rem; color: #ccc; margin-top: 5px;">:</div>
+                <div class="cd-box">
+                    <div class="cd-num" id="minutes">00</div>
+                    <div class="cd-label">Րոպե</div>
+                </div>
+                <div style="font-size: 1.5rem; color: #ccc; margin-top: 5px;">:</div>
+                <div class="cd-box">
+                    <div class="cd-num" id="seconds">00</div>
+                    <div class="cd-label">Վրկ</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rsvp-container" id="rsvp">
+            <h2 style="text-align:center; font-family:'Great Vibes'; color:var(--gold); font-size:3rem; margin-bottom:30px;">R.S.V.P</h2>
+            <div class="form-group">
+                <label>Նշեք Ձեր անուն/ազգանունը</label>
+                <input type="text" id="gName" placeholder="Անուն Ազգանուն">
+            </div>
+            <div class="form-group">
+                <label>Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
+                <div class="checkbox-group">
+                    <label><input type="radio" name="attend" value="yes" checked> Այո, կգամ</label>
+                    <label><input type="radio" name="attend" value="no"> Ցավոք, չեմ կարողանա</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Հյուրերի քանակ</label>
+                <select id="gCount">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+            </div>
+            <button class="submit-btn" onclick="sendWhatsapp()">ՈՒՂԱՐԿԵԼ</button>
+        </div>
+
+    </div> </div> <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+
+    // --- 1. SLIDE TO UNLOCK LOGIC ---
+    const sliderContainer = document.getElementById('sliderContainer');
+    const sliderHandle = document.getElementById('sliderHandle');
+    const unlockScreen = document.getElementById('unlock-screen');
+    const mainInv = document.getElementById('main-invitation');
+
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    const maxSlide = sliderContainer.offsetWidth - sliderHandle.offsetWidth;
+
+    // Touch Events
+    sliderHandle.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+    });
+
+    sliderHandle.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        let touchX = e.touches[0].clientX;
+        let moveX = touchX - startX;
+
+        if (moveX < 0) moveX = 0;
+        if (moveX > maxSlide) moveX = maxSlide;
+
+        sliderHandle.style.transform = `translateX(${moveX}px)`;
+        currentX = moveX;
+
+        unlockScreen.style.opacity = 1 - (moveX / maxSlide);
+    });
+
+    sliderHandle.addEventListener('touchend', () => {
+        isDragging = false;
+        if (currentX > maxSlide * 0.8) {
+            unlockScreen.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                unlockScreen.style.display = 'none';
+                mainInv.style.display = 'block';
+                AOS.refresh();
+            }, 500);
+        } else {
+            sliderHandle.style.transform = 'translateX(0)';
+            unlockScreen.style.opacity = 1;
+        }
+    });
+
+    // Mouse Events
+    sliderHandle.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+    });
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        let moveX = e.clientX - startX;
+        if (moveX < 0) moveX = 0;
+        if (moveX > sliderContainer.offsetWidth - 60) moveX = sliderContainer.offsetWidth - 60;
+        sliderHandle.style.transform = `translateX(${moveX}px)`;
+
+        if (moveX > (sliderContainer.offsetWidth - 60) * 0.9) {
+            isDragging = false;
+            unlockScreen.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                unlockScreen.style.display = 'none';
+                mainInv.style.display = 'block';
+                AOS.refresh();
+            }, 500);
+        }
+    });
+    document.addEventListener('mouseup', () => {
+        if(isDragging) {
+            isDragging = false;
+            sliderHandle.style.transform = 'translateX(0)';
+            unlockScreen.style.opacity = 1;
+        }
+    });
+
+    // --- 2. COUNTDOWN LOGIC ---
+    const weddingDate = new Date("May 10, 2026 13:00:00").getTime();
+
+    setInterval(() => {
+        const now = new Date().getTime();
+        const distance = weddingDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Ստուգում ենք, որ էլեմենտները գտնվել են
+        if(document.getElementById("days")) {
+             document.getElementById("days").innerText = days;
+             document.getElementById("hours").innerText = hours;
+             document.getElementById("minutes").innerText = minutes;
+             document.getElementById("seconds").innerText = seconds;
+        }
+    }, 1000);
+
+    // --- 3. WHATSAPP RSVP ---
+    function sendWhatsapp() {
+        const name = document.getElementById('gName').value;
+        const attend = document.querySelector('input[name="attend"]:checked').value === 'yes' ? 'Կգամ' : 'Չեմ կարողանա';
+        const side = document.querySelector('input[name="side"]:checked').value === 'groom' ? 'Հարութի (Փեսա)' : 'Քնարիկի (Հարս)';
+        const count = document.getElementById('gCount').value;
+
+        if(!name) { alert("Խնդրում ենք լրացնել անունը"); return; }
+        const phoneNumber = "37494000000"; // Գրիր իրական համարը
+        const message = `Հարսանյաց Հրավեր RSVP:%0A%0A👤 Հյուր: ${name}%0A✅ Մասնակցություն: ${attend}%0A🔢 Քանակ: ${count} հոգի%0A💌 Հրավիրված է: ${side} կողմից`;
+        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    }
+</script>
+</body>
+</html>

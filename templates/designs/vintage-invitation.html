@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ invitation.content.couple_names.groom }} & {{ invitation.content.couple_names.bride }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #d1d1d1; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; font-family: 'Lora', serif; overflow-x: hidden; }
+
+        .invitation-wrapper {
+            position: relative; width: 100%; max-width: 480px; min-height: 100vh;
+            background-image: url('https://i.pinimg.com/736x/d0/8f/6f/d08f6f210c174f5e55ab0c4a4f536f66.jpg');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            box-shadow: 0 0 50px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center; padding: 50px 25px; text-align: center;
+        }
+
+        h1 { color: #ffffff; letter-spacing: 6px; font-family: 'Playfair Display', serif; text-shadow: 2px 2px 12px rgba(0,0,0,0.3); font-size: 2.2rem; text-transform: uppercase; margin-bottom: 35px; font-weight: 400; }
+
+        .masked-photo {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: sepia(0.2) brightness(1.05) contrast(1.05);
+            mask: url(#brushMask); -webkit-mask: url(#brushMask); mask-size: 100% 100%; -webkit-mask-size: 100% 100%;
+            transition: transform 1.5s ease;
+        }
+        .photo-container:hover .masked-photo { transform: scale(1.05); }
+
+        .photo-container { position: relative; width: 100%; aspect-ratio: 1 / 1.2; margin-bottom: 40px; padding: 5px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+        .invite-text { color: #4a3b28; font-size: 1.15rem; line-height: 1.7; margin-bottom: 45px; font-style: italic; letter-spacing: 0.3px; }
+
+        /* TIMELINE */
+        .program-section { width: 100%; margin: 40px 0; padding: 25px; background: rgba(255, 255, 255, 0.12); border-radius: 20px; backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.2); position: relative; }
+        .program-title { color: #4a3b28; font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 35px; letter-spacing: 4px; text-transform: uppercase; }
+        .timeline-item { display: flex; align-items: center; margin-bottom: 40px; text-align: left; position: relative; z-index: 2; }
+        .timeline-item:not(:last-child)::after { content: ''; position: absolute; left: 27px; top: 55px; width: 1px; height: 40px; border-left: 1px dotted #8b7355; opacity: 0.5; }
+        .icon-box { width: 55px; height: 55px; background-size: contain; background-repeat: no-repeat; background-position: center; flex-shrink: 0; margin-right: 20px; filter: sepia(0.3) saturate(0.8); z-index: 3; }
+        .event-time { font-family: 'Playfair Display', serif; font-weight: bold; font-size: 1.1rem; color: #8b7355; }
+        .event-desc { font-size: 0.95rem; opacity: 0.85; margin-top: 2px; color: #332b1e; }
+
+        /* CALENDAR */
+        .calendar-box { background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); padding: 25px; border-radius: 12px; width: 100%; margin-bottom: 50px; border: 1px solid rgba(255,255,255,0.2); color: #332b1e; }
+        .selected-day { background: #8b7355; color: white; width: 32px; height: 32px; line-height: 32px; margin: 0 auto; border-radius: 50%; box-shadow: 0 4px 10px rgba(139, 115, 85, 0.3); animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 115, 85, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(139, 115, 85, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 115, 85, 0); }
+        }
+
+        /* LOCATIONS */
+        .loc-item { margin-bottom: 60px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .loc-photo-container { width: 230px; height: 155px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .loc-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #2c241a; font-weight: 500; margin-bottom: 8px; }
+        .loc-address { font-size: 1rem; color: #8b7355; margin-bottom: 20px; font-weight: 500; }
+        .map-btn { text-decoration: none; color: #ffffff; background: linear-gradient(135deg, #8b7355, #735f46); padding: 12px 35px; border-radius: 30px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; }
+        .map-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* TIMER & RSVP */
+        #timer { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; width: 100%; }
+        .timer-item { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); padding: 10px; border-radius: 10px; min-width: 70px; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .timer-num { display: block; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #4a3b28; font-weight: bold; }
+        .timer-label { font-size: 0.7rem; text-transform: uppercase; color: #6b5a42; }
+
+        .rsvp-form { display: flex; flex-direction: column; gap: 20px; margin-top: 25px; width: 100%; padding: 0 10px; margin-bottom: 50px;}
+        .rsvp-form input, .rsvp-form select { padding: 12px 5px; border: none; border-bottom: 1px solid rgba(139, 115, 85, 0.5); background: transparent; font-family: 'Lora', serif; outline: none; color: #4a3b28; font-size: 1rem; }
+        .submit-btn { margin-top: 10px; background: transparent; color: #4a3b28; padding: 12px; border: 1px solid #4a3b28; border-radius: 30px; font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        .submit-btn:hover { background: #4a3b28; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="invitation-wrapper">
+        <h1 data-aos="fade-down" data-aos-duration="1500">{{ invitation.content.couple_names.groom }} & {{ invitation.content.couple_names.bride }}</h1>
+
+        <svg width="0" height="0" style="position: absolute;">
+            <defs>
+                <mask id="brushMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+                    <image width="1" height="1" preserveAspectRatio="none"
+                        href="https://i.pinimg.com/736x/5c/c6/e2/5cc6e21cea8316b1607b60eba3fd92da.jpg"
+                        style="filter: invert(1);" />
+                </mask>
+            </defs>
+        </svg>
+
+        <div class="photo-container" data-aos="zoom-in" data-aos-duration="2000">
+            {% set hero = invitation.media_files | selectattr('label', 'equalto', 'main_hero') | first %}
+            <img class="masked-photo" src="{{ hero.file_url if hero else 'https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg' }}" alt="Couple">
+        </div>
+
+        <p class="invite-text" data-aos="fade-up" data-aos-duration="1500">
+            {{ invitation.content.welcome_text.description | replace('\n', '<br>') | safe }}
+        </p>
+
+        <section class="calendar-box" id="calendar-container" data-aos="fade-up" data-aos-delay="200"></section>
+
+        <div class="waiting-text" style="font-family: 'Playfair Display', serif; letter-spacing: 5px; color: #4a3b28; margin-bottom: 30px;" data-aos="zoom-in">ՍԻՐՈՎ ՍՊԱՍՈՒՄ ԵՆՔ</div>
+
+        {% for loc in invitation.content.locations %}
+        <div class="loc-item" data-aos="fade-up" data-aos-duration="1200">
+            <div class="loc-photo-container">
+                {% set loc_img = invitation.media_files | selectattr('label', 'equalto', loc.type) | first %}
+                <img src="{{ loc_img.file_url if loc_img else 'https://via.placeholder.com/300' }}" class="masked-photo" alt="{{ loc.title }}">
+            </div>
+            <p class="loc-title">{{ loc.title }}</p>
+            <p class="loc-address">Ժամը՝ {{ loc.time }}</p>
+            <a href="{{ loc.map_url }}" target="_blank" class="map-btn">Քարտեզ</a>
+        </div>
+        {% endfor %}
+
+        <div class="program-section" data-aos="flip-left" data-aos-duration="1500">
+            <h2 class="program-title">Օրվա Ծրագիր</h2>
+            {% for loc in invitation.content.locations %}
+            <div class="timeline-item" data-aos="fade-right" data-aos-delay="{{ loop.index0 * 200 }}">
+                <div class="icon-box" style="background-image:url('{% if loc.type == 'church' %}https://static.tildacdn.one/tild3761-3730-4664-a363-386366356561/Frame_1122.png{% elif loc.type == 'restaurant' %}https://static.tildacdn.one/tild6330-6265-4536-b863-313237653364/Frame_114.png{% else %}https://static.tildacdn.one/tild6633-3266-4564-a535-626532353231/Frame_1149.png{% endif %}');"></div>
+                <div class="event-info">
+                    <div class="event-time">{{ loc.time }}</div>
+                    <div class="event-desc">{{ loc.title }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="rsvp-form" id="rsvp" data-aos="fade-up">
+            <p style="font-style: italic; font-size: 0.95rem; color: #4a3b28;">Խնդրում ենք հաստատել ներկայությունը մինչև {{ invitation.content.rsvp_settings.deadline }}</p>
+            <form id="rsvpForm" class="rsvp-form" style="margin-bottom: 20px;">
+                <input type="text" name="guest_name" placeholder="Անուն Ազգանուն" required>
+                <select name="attending" required>
+                    <option value="" disabled selected>Կմասնակցե՞ք</option>
+                    <option value="yes">Սիրով կգանք</option>
+                    <option value="no">Ցավոք չենք կարող</option>
+                </select>
+                <input type="number" name="guest_count" placeholder="Հյուրերի քանակ" required>
+                <button type="submit" id="submitBtn" class="submit-btn">Հաստատել</button>
+            </form>
+        </div>
+
+        <div id="timer" data-aos="zoom-in">
+            <div class="timer-item"><span class="timer-num" id="days">00</span><span class="timer-label">օր</span></div>
+            <div class="timer-item"><span class="timer-num" id="hours">00</span><span class="timer-label">ժամ</span></div>
+            <div class="timer-item"><span class="timer-num" id="minutes">00</span><span class="timer-label">րոպե</span></div>
+            <div class="timer-item"><span class="timer-num" id="seconds">00</span><span class="timer-label">վրկ</span></div>
+        </div>
+    </div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // AOS-ի ակտիվացում
+    AOS.init({ once: true });
+
+    const eventDateStr = "{{ invitation.event_date.isoformat() if invitation.event_date else '' }}";
+    const targetDate = new Date(eventDateStr).getTime();
+
+    // Թայմերի հաշվարկ ⏳
+    function updateTimer() {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+        if (diff < 0) return;
+        document.getElementById("days").innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        document.getElementById("hours").innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        document.getElementById("minutes").innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        document.getElementById("seconds").innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Շաբաթվա օրացույցի գեներացում (7 օր) 📅
+    if (eventDateStr) {
+        const eventDate = new Date(eventDateStr);
+        const monthNames = ["Հունվար", "Փետրվար", "Մարտ", "Ապրիլ", "Մայիս", "Հունիս", "Հուլիս", "Օգոստոս", "Սեպտեմբեր", "Հոկտեմբեր", "Նոյեմբեր", "Դեկտեմբեր"];
+        const dayNames = ["ԵՐԿ", "ԵՐՔ", "ՉՐՔ", "ՀՆԳ", "ՈՒՐԲ", "ՇԲԹ", "ԿԻՐ"];
+
+        let calHtml = `<div class="month-title" style="font-family: 'Playfair Display', serif; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">${monthNames[eventDate.getMonth()]}</div>`;
+        calHtml += `<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;">`;
+
+        dayNames.forEach(d => calHtml += `<div style="font-weight: bold; font-size: 0.7rem; opacity: 0.5; padding-bottom: 10px;">${d}</div>`);
+
+        const dayOfWeek = eventDate.getDay();
+        const diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+        const startOfWeek = new Date(eventDate);
+        startOfWeek.setDate(eventDate.getDate() + diffToMonday);
+
+        for (let i = 0; i < 7; i++) {
+            const currentDay = new Date(startOfWeek);
+            currentDay.setDate(startOfWeek.getDate() + i);
+            const isEventDay = currentDay.toDateString() === eventDate.toDateString();
+            calHtml += `
+                <div style="padding: 8px 0; font-size: 0.95rem;">
+                    ${isEventDay ? `<div class="selected-day">${currentDay.getDate()}</div>` : `<span style="opacity: 0.6;">${currentDay.getDate()}</span>`}
+                </div>`;
+        }
+        document.getElementById('calendar-container').innerHTML = calHtml + `</div>`;
+    }
+
+    // RSVP ձևի մշակում առանց բազա ուղարկելու 📩
+    document.getElementById('rsvpForm').addEventListener('submit', (e) => {
+        e.preventDefault(); // Կանգնեցնում ենք էջի թարմացումը
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "Ուղարկվում է...";
+
+        // Սիմուլյացիա ենք անում փոքրիկ դադար (օրինակ 800մվ), որպեսզի բնական երևա
+        setTimeout(() => {
+            // Միանգամից փոխում ենք բլոկի պարունակությունը հաջողության էֆեկտով
+            document.getElementById('rsvp').innerHTML = `
+                <div class='animate-item' style='animation: pulse 1s ease; text-align: center;'>
+                    <p style='color: #8b7355; font-style: italic; padding: 20px; font-size: 1.1rem;'>
+                        Շնորհակալություն, Ձեր պատասխանը հաստատվեց: ✨
+                    </p>
+                </div>
+            `;
+        }, 800);
+    });
+</script>
+</body>
+</html>

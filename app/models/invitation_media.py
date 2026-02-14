@@ -9,5 +9,8 @@ class InvitationMedia(Base):
     invitation_id = Column(Integer, ForeignKey("invitations.id"), nullable=False)
     file_url = Column(String(255), nullable=False)
     file_type = Column(String(20), nullable=False)  # 'image' կամ 'video'
-
+    # --- ՆՈՐ ԴԱՇՏ ---
+    # Օրինակ՝ 'main_hero', 'church', 'restaurant', 'gallery'
+    label = Column(String(50), nullable=True)
+    # ----------------
     invitation = relationship("Invitation", back_populates="media_files")
