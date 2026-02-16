@@ -45,6 +45,66 @@
         .timer-label { font-size: clamp(0.45rem, 2.5vw, 0.6rem); color: #999; }
         .spacer { height: 70px; }
 
+        /* Ֆիքսված նվագարկիչ ներքևի աջ անկյունում */
+.music-control {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+    width: 42px; /* Փոքրացրել ենք չափը */
+    height: 42px;
+    background-color: rgba(0, 0, 0, 0.6); /* Թափանցիկ սև */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Բարակ և կիսաթափանցիկ եզրագիծ */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px); /* Ապակե էֆեկտ */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+}
+
+.music-control:hover {
+    transform: scale(1.1);
+}
+
+/* Play նշանը */
+/* Play նշանը */
+.play-icon {
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;    /* Փոքրացրած */
+    border-bottom: 6px solid transparent; /* Փոքրացրած */
+    border-left: 10px solid #ffffff;
+    margin-left: 3px;
+}
+
+/* Pause նշանը */
+.pause-icon {
+    display: none;
+    width: 8px;  /* Ավելի նեղ */
+    height: 12px; /* Ավելի կարճ */
+    border-left: 2px solid #ffffff;  /* Ավելի բարակ գծիկ */
+    border-right: 2px solid #ffffff; /* Ավելի բարակ գծիկ */
+}
+
+/* Երբ երաժշտությունը միացված է */
+.music-control.playing .play-icon {
+    display: none;
+}
+.music-control.playing .pause-icon {
+    display: block;
+}
+.music-control.playing {
+    animation: rotate-paper 4s linear infinite;
+}
+
+@keyframes rotate-paper {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
         /* Success Modal Styles */
         #successModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 99999; display: none; align-items: center; justify-content: center; }
         #successModal.show { display: flex; }
@@ -53,6 +113,16 @@
     </style>
 </head>
 <body>
+        {% if invitation.music_url %}
+        <audio id="bgMusic" loop>
+            <source src="{{ invitation.music_url }}" type="audio/mpeg">
+        </audio>
+
+        <div class="music-control" id="musicBtn" onclick="toggleMusic()">
+            <div class="play-icon"></div>
+            <div class="pause-icon"></div>
+        </div>
+        {% endif %}
 
     <div class="invitation-wrapper">
         <div class="base-layer"></div>
@@ -96,7 +166,7 @@
                         <p class="loc-title">{{ loc.title }}</p>
                         <p class="loc-address">{{ loc.address }}<br>Ժամը՝ {{ loc.time }}</p>
                         {% if loc.map_url %}
-                        <a href="{{ loc.map_url }}" target="_blank" class="map-btn">Քարտեզ</a>
+                        <a href="{{ loc.map_url }}" target="_blank" class="map-btn">ԻնՉՊԵՍ ՀԱՍՆԵԼ</a>
                         {% endif %}
                     </div>
                     {% endfor %}
@@ -253,6 +323,20 @@
         window.onload = function() {
             generateCalendar();
         };
+
+    function toggleMusic() {
+        const music = document.getElementById('bgMusic');
+        const btn = document.getElementById('musicBtn');
+
+        if (music.paused) {
+            music.play().then(() => {
+                btn.classList.add('playing');
+            }).catch(err => console.log("Play blocked"));
+        } else {
+            music.pause();
+            btn.classList.remove('playing');
+        }
+    }
     </script>
 </body>
 </html>

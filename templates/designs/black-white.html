@@ -500,6 +500,49 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* --- ԱՎԵԼԱՑՐՈՒ ԱՅՍՏԵՂ --- */
+        .music-control {
+            width: 44px;
+            height: 44px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+
+            margin: -10px auto 20px;
+            transition: all 0.4s ease;
+            z-index: 100;
+        }
+
+        .play-icon {
+            width: 0; height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 10px solid #ffffff;
+            margin-left: 3px;
+        }
+
+        .pause-icon {
+            display: none;
+            width: 10px; height: 12px;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
+        }
+
+        .music-control.playing .play-icon { display: none; }
+        .music-control.playing .pause-icon { display: block; }
+        .music-control.playing { animation: slow-rotate 8s linear infinite; }
+
+        @keyframes slow-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+
     </style>
 </head>
 <body>
@@ -522,7 +565,17 @@
                 <span class="amp">&</span>
                 <span>Լուսինե</span>
             </h1>
+
         </section>
+
+        <div class="music-control" id="musicBtn" onclick="toggleMusic()">
+                <div class="play-icon"></div>
+                <div class="pause-icon"></div>
+        </div>
+
+        <audio id="bgMusic" loop>
+                <source src="{{ invitation.music_url }}" type="audio/mpeg">
+        </audio>
 
         <section class="section greeting reveal">
             <h2 class="section-title">Հարգելի՛ հյուրեր</h2>
@@ -561,11 +614,11 @@
     </div>
 
     <p class="loc-intro">Պսակադրությունը կանցկացվի</p>
-    <p class="loc-name">Հովհաննեսավանք եկեղեցում</p>
+    <p class="loc-name">Սուրբ Գայանե եկեղեցում</p>
     <p class="loc-addr">(գ. Օհանավան)</p>
 
-    <a href="https://www.google.com/maps/search/?api=1&query=Hovhannavank+Monastery" target="_blank" class="btn-map">
-        📍 Տեսնել քարտեզի վրա
+    <a href="https://yandex.com/maps/-/CPU854mj" target="_blank" class="btn-map">
+        ԻՆՉՊԵՍ ՀԱՍՆԵԼ
     </a>
 </div>
             <div class="loc-block">
@@ -577,8 +630,8 @@
     <p class="loc-name">«Palladium Hall» ռեստորանում</p>
     <p class="loc-addr">(Ջրվեժ, Թևոսյան փող., 117/5)</p>
 
-    <a href="https://www.google.com/maps/search/?api=1&query=Palladium+Hall+Yerevan" target="_blank" class="btn-map">
-        📍 Տեսնել քարտեզի վրա
+    <a href="https://yandex.com/maps/-/CPU8qAlT" target="_blank" class="btn-map">
+        ԻՆՉՊԵՍ ՀԱՍՆԵԼ
     </a>
 </div>
         </section>
@@ -742,6 +795,33 @@
                 // Կարելի է նաև տվյալները ուղարկել սերվեր այստեղ...
             });
         })();
+        function openInvitation() {
+            cover.classList.add('opened');
+            document.body.style.overflow = '';
+            setTimeout(function() {
+                document.getElementById('heroPhoto').classList.add('visible');
+                document.getElementById('heroBadge').classList.add('visible');
+                document.getElementById('heroNames').classList.add('visible');
+                document.getElementById('musicBtn').classList.add('visible'); // Այս տողը
+            }, 120);
+        }
+
+        // Ավելացրու սա ֆայլի վերջում
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+
+            if (music.paused) {
+                music.play().then(() => {
+                    btn.classList.add('playing');
+                }).catch(err => {
+                    console.log("Play blocked by browser");
+                });
+            } else {
+                music.pause();
+                btn.classList.remove('playing');
+            }
+        }
     </script>
 </body>
 </html>

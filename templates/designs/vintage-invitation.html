@@ -69,6 +69,89 @@
         .rsvp-form input, .rsvp-form select { padding: 12px 5px; border: none; border-bottom: 1px solid rgba(139, 115, 85, 0.5); background: transparent; font-family: 'Lora', serif; outline: none; color: #4a3b28; font-size: 1rem; }
         .submit-btn { margin-top: 10px; background: transparent; color: #4a3b28; padding: 12px; border: 1px solid #4a3b28; border-radius: 30px; font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #4a3b28; color: white; }
+
+        /* --- VINTAGE MUSIC PLAYER --- */
+        .player-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .play-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            /* Վինտաժային ոսկեգույն գրադիենտ եզրագծի համար */
+            border: 2px solid #8b7355;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15), inset 0 0 10px rgba(139, 115, 85, 0.2);
+            position: relative;
+        }
+
+        /* Կոճակի շուրջը նուրբ օղակ */
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            border-radius: 50%;
+            border: 1px dashed #8b7355;
+            opacity: 0.4;
+            animation: rotate-ring 10s linear infinite;
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #4a3b28;
+        }
+
+        /* Play/Pause նշանի գույնը */
+        .icon-shape {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #4a3b28;
+            margin-left: 4px;
+            transition: all 0.3s ease;
+        }
+
+        /* Երբ երաժշտությունը միացված է */
+        .playing .icon-shape {
+            width: 15px;
+            height: 18px;
+            border-style: double;
+            border-width: 0px 0px 0px 15px;
+            border-color: #4a3b28;
+            margin-left: 0;
+        }
+
+        .playing {
+            border-color: #4a3b28;
+            background: rgba(139, 115, 85, 0.1) !important;
+        }
+
+        /* Ավելի վինտաժային բաբախում */
+        @keyframes pulse-music {
+            0% { box-shadow: 0 0 0 0 rgba(139, 115, 85, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(139, 115, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 115, 85, 0); }
+        }
     </style>
 </head>
 <body>
@@ -91,6 +174,17 @@
             <img class="masked-photo" src="{{ hero.file_url if hero else 'https://i.pinimg.com/736x/bf/f7/69/bff769735efb1598a396e43cc48db38e.jpg' }}" alt="Couple">
         </div>
 
+        {% if invitation.music_url %}
+        <div class="player-container" data-aos="fade-up">
+            <button class="play-btn" id="playBtn" onclick="toggleMusic()">
+                <div id="iconShape" class="icon-shape"></div>
+            </button>
+            <audio id="bgMusic" loop>
+                <source src="{{ invitation.music_url }}" type="audio/mpeg">
+            </audio>
+        </div>
+        {% endif %}
+
         <p class="invite-text" data-aos="fade-up" data-aos-duration="1500">
             {{ invitation.content.welcome_text.description | replace('\n', '<br>') | safe }}
         </p>
@@ -107,7 +201,7 @@
             </div>
             <p class="loc-title">{{ loc.title }}</p>
             <p class="loc-address">Ժամը՝ {{ loc.time }}</p>
-            <a href="{{ loc.map_url }}" target="_blank" class="map-btn">Քարտեզ</a>
+            <a href="{{ loc.map_url }}" target="_blank" class="map-btn">ԻնՉՊԵՍ ՀԱՍՆԵԼ</a>
         </div>
         {% endfor %}
 
@@ -215,6 +309,21 @@
             `;
         }, 800);
     });
+
+    function toggleMusic() {
+    const audio = document.getElementById('bgMusic');
+    const btn = document.getElementById('playBtn');
+
+    if (audio.paused) {
+            audio.play().catch(error => {
+                console.log("Autoplay-ը արգելված է բրաուզերի կողմից");
+            });
+            btn.classList.add('playing');
+        } else {
+            audio.pause();
+            btn.classList.remove('playing');
+        }
+    }
 </script>
 </body>
 </html>

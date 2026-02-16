@@ -293,6 +293,30 @@
             transform: translateY(-2px);
         }
 
+        /* Play նշանը (Եռանկյուն) */
+        .icon-shape {
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid var(--name-color);
+            margin-left: 3px;
+            transition: all 0.2s ease;
+        }
+
+        /* Pause նշանը (Երկու գծիկ) */
+        .icon-shape.pause {
+            width: 8px;
+            height: 14px;
+            border: none;
+            border-left: 4px solid var(--name-color);
+            border-right: 4px solid var(--name-color);
+            background: transparent;
+            margin-left: 0;
+        }
+
+
+
         @keyframes cardEntrance { from { transform: scale(0.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
@@ -300,9 +324,7 @@
 </head>
 <body>
 
-    <audio id="music" loop>
-        <source src="song.mp3" type="audio/mpeg">
-    </audio>
+
 
     <div class="card">
         <div class="header">
@@ -327,10 +349,16 @@
             </svg>
         </div>
 
+        {% if invitation.music_url %}
         <div class="player-container">
+            <audio id="bgMusic" loop>
+                <source src="{{ invitation.music_url }}" type="audio/mpeg">
+            </audio>
             <button class="play-btn" id="playBtn" onclick="toggleMusic()">
-                <div id="iconShape" class="icon-shape"></div> </button>
+                <div id="iconShape" class="icon-shape"></div>
+            </button>
         </div>
+        {% endif %}
 
         <section class="invite-text">
             <b>{{ invitation.content.welcome_text.title }}</b>
@@ -375,7 +403,7 @@
                 <div class="loc-address">{{ loc.address }}</div>
 
                 {% if loc.map_url %}
-                    <a href="{{ loc.map_url }}" target="_blank" class="map-btn">Տեսնել քարտեզի վրա</a>
+                    <a href="{{ loc.map_url }}" target="_blank" class="map-btn">ԻնՉՊԵՍ ՀԱՍՆԵԼ</a>
                 {% endif %}
             </div>
             {% endfor %}
@@ -546,6 +574,18 @@
                     // 3. Սահմանում ենք, որ թայմերը թարմանա ամեն 1 վայրկյանը մեկ
                     setInterval(updateTimer, 1000);
                 };
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const icon = document.getElementById('iconShape');
+
+            if (music.paused) {
+                music.play();
+                icon.classList.add('pause'); // Փոխում է նշանը երկու գծիկի
+            } else {
+                music.pause();
+                icon.classList.remove('pause'); // Վերադարձնում է եռանկյունին
+            }
+        }
     </script>
 </body>
 </html>
