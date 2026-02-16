@@ -3,395 +3,1547 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{{ invitation.content.couple_names.groom }} & {{ invitation.content.couple_names.bride }} - Հրավիրատոմս</title>
+    <title>Հրավիրատոմս - Արմեն և Լուսինե</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Noto+Sans+Armenian:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark: #1a1a1a;
+            --light: #f8f8f4;
+            --text: #222;
+            --muted: #555;
+            --gold: #d4af37;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans Armenian', 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            background: var(--light);
+            color: var(--text);
+        }
 
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+Armenian:wght@300;400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+        /* =========================================
+           1. ԾՐԱՐԻ (INTRO) ՈՃԵՐԸ
+           ========================================= */
+        #intro-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #e0e0e0; /* Ֆոնը մինչև բացվելը */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease-out;
+        }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'rose-gold-dark': '#B76E79',
-                        'rose-gold-light': '#E0BFB8',
-                        'gold': '#B76E79',
-                        'bg-color': '#ffffff',
-                    }
-                }
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transform: scale(0.9); /* Փոքր էկրանների համար մի փոքր փոքրացնենք */
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #f7f7f7;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Քարտը ծրարի մեջ */
+        .card-intro {
+            position: absolute;
+            bottom: 0;
+            left: 15px;
+            width: 270px;
+            height: 180px;
+            background: #fff;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 0.8s ease-in-out, z-index 0.1s;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+        }
+
+            .card-intro h2 {
+        margin: 0 0 10px;
+        font-size: 22px; /* Մի փոքր մեծացրեցի, որ ավելի սիրուն լինի */
+        color: #1a2a6c;  /* Այստեղ տեղադրիր քո ընտրած գույնը */
+        font-family: 'Cormorant Garamond', serif;
+        text-transform: uppercase; /* Կարող ես բոլորը մեծատառ սարքել՝ ավելի խիստ ոճի համար */
+        letter-spacing: 1px;
+    }
+        .card-intro p { font-size: 14px; margin: 0; }
+        .card-intro span { font-size: 10px; color: #999; margin-top: 15px; }
+
+        /* Ծրարի մասերը */
+        .pocket-front {
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 0;
+            border-style: solid;
+            border-width: 0 150px 100px 150px;
+            border-color: transparent transparent #ececec transparent;
+            z-index: 3;
+        }
+        .pocket-left {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            border-style: solid;
+            border-width: 100px 0 100px 150px;
+            border-color: transparent transparent transparent #f7f7f7;
+            z-index: 2;
+        }
+        .pocket-right {
+            position: absolute;
+            top: 0; right: 0; width: 0; height: 0;
+            border-style: solid;
+            border-width: 100px 150px 100px 0;
+            border-color: transparent #f7f7f7 transparent transparent;
+            z-index: 2;
+        }
+
+        /* Կափարիչ (Lid) */
+        .lid {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            border-style: solid;
+            border-width: 110px 150px 0 150px;
+            border-color: #f7f7f7 transparent transparent transparent;
+            z-index: 4;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out, z-index 0.2s 0.3s;
+        }
+
+            .seal {
+        position: absolute;
+        top: 80px; left: 50%;
+        transform: translateX(-50%);
+        width: 50px; height: 50px;
+
+        /* Փոփոխված հատվածը՝ Արծաթագույն գրադիենտ */
+        background: radial-gradient(circle, #e0e0e0 0%, #a8a8a8 50%, #707070 100%);
+        border: 1px solid #c0c0c0; /* Նուրբ եզրագիծ ավելի իրական տեսքի համար */
+
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 5;
+        display: flex; justify-content: center; align-items: center;
+        font-weight: bold;
+
+        /* Տեքստի գույնը կարող ես սարքել մուգ մոխրագույն, որ ավելի լավ կարդացվի */
+        color: #444;
+
+        font-size: 10px;
+        cursor: pointer;
+        animation: pulse 2s infinite;
+    }
+        @keyframes pulse {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        /* Animation Classes for Envelope */
+        .envelope-wrapper.open .lid { transform: rotateX(180deg); z-index: 1; }
+        .envelope-wrapper.open .seal { opacity: 0; pointer-events: none; }
+        .envelope-wrapper.open .card-intro {
+            transform: translateY(-130px);
+            z-index: 2;
+            transition-delay: 0.4s;
+        }
+
+   /* --- ԵՐԱԺՇՏՈՒԹՅԱՆ ԿՈՃԱԿԻ ԴԻԶԱՅՆԸ --- */
+     .music-control {
+            width: 44px;
+            height: 44px;
+            background-color: rgba(114, 14, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+
+            /* ԱՅՍՏԵՂ ՓՈԽՈՒՄ ԵՆՔ flex-ը none-ի, որ սկզբում չերևա */
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+            position: fixed;
+            top: 30px;
+            right: 20px;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+  .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 10px solid #ffffff;
+            margin-left: 3px;
+            transition: 0.3s;
+        }
+
+        .pause-icon {
+            display: none;
+            width: 10px;
+            height: 12px;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
+        }
+
+        /* Երբ երգը միացված է */
+        .music-control.playing .play-icon {
+            display: none;
+        }
+        .music-control.playing .pause-icon {
+            display: block;
+        }
+        .music-control.playing {
+            animation: slow-rotate 8s linear infinite;
+        }
+
+        @keyframes slow-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+
+        /* =========================================
+           2. ՀԻՄՆԱԿԱՆ ԿԱՅՔԻ ՈՃԵՐԸ (MAIN SITE)
+           ========================================= */
+
+        /* Սկզբում թաքնված է, մինչև ծրարը բացվի */
+        #main-site {
+            display: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .main {
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+                    /* ========== HERO SECTION ========== */
+            .hero {
+                position: relative;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column; /* Էլեմենտները դասավորում է իրար տակ */
+                justify-content: flex-start; /* Սկսում է վերևից, ոչ թե մեջտեղից */
+                align-items: center;
+                text-align: center;
+
+                /* ԿԱՐԵՎՈՐ։ Սա իջեցնում է ամբողջ պարունակությունը, որ սահող տողին չկպնի */
+                padding: 140px 24px 80px;
+
+                background: var(--light);
+                overflow: hidden;
+            }
+
+                    /* --- Սահող տողի (Marquee) ոճերը --- */
+        .marquee-wrapper {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            z-index: 10;
+            pointer-events: none;
+
+            border-top: 1px solid var(--text);
+            border-bottom: 1px solid var(--text);
+            padding: 10px 0;
+            background: rgba(248, 248, 244, 0.5);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: 200%; /* ՊԱՐՏԱԴԻՐ Է, որ լինի 200% */
+
+            /* Սա է շարժում տողը */
+            animation: moveRight 35s linear infinite;
+            will-change: transform; /* Օգնում է բրաուզերին ավելի սահուն անել շարժումը */
+        }
+
+        .marquee-content {
+            flex: 0 0 50%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 15px;
+
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #000;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .heart-icon {
+            font-size: 1.8rem;
+            margin-left: 12px;
+            line-height: 1;
+            position: relative;
+            top: -1px;
+            color: #000;
+        }
+
+        /* --- ԱՆԻՄԱՑԻԱ (ՁԱԽԻՑ ԱՋ) --- */
+        /* Սա շատ կարևոր է, առանց սրա չի շարժվի */
+        @keyframes moveRight {
+            0% {
+                transform: translateX(-50%); /* Սկսում է ձախ քաշված վիճակից */
+            }
+            100% {
+                transform: translateX(0%); /* Գնում է դեպի աջ (սկզբնական դիրք) */
             }
         }
-    </script>
 
-    <style>
-        :root { --rose-gold-dark: #B76E79; --rose-gold-light: #E0BFB8; }
-        @keyframes heartBeat { 0% { transform: scale(1); } 15% { transform: scale(1.1); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } 60% { transform: scale(1); } 100% { transform: scale(1); } }
-        @keyframes arrowMove { 0% {transform:translateX(0);} 50% {transform:translateX(5px);} 100% {transform:translateX(0);} }
-        @keyframes pulseText { 0%, 100% {opacity: 1;} 50% {opacity: 0.5;} }
-        .heart-beat-anim { animation: heartBeat 1.5s infinite ease-in-out; }
-        .arrow-anim { animation: arrowMove 1.5s infinite; }
-        .pulse-text-anim { animation: pulseText 2s infinite; }
+            /* --- Անունների կարգավորում --- */
+            .hero .names {
+                font-family: 'Great Vibes', cursive; /* Կամ քո օգտագործած տառատեսակը */
+                font-size: clamp(3rem, 10vw, 5rem);
+                color: var(--text);
+                line-height: 1.2;
 
-        #unlock-screen { transition: transform 0.8s ease-in-out, opacity 0.8s; }
-        .timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--rose-gold-dark); opacity: 0.3; }
-    </style>
-</head>
-<body class="font-['Noto_Sans_Armenian'] bg-white text-[#333] overflow-x-hidden md:flex md:justify-center md:items-start">
+                /* Տարածություն անունների և նկարի միջև */
+                margin-bottom: 40px;
+                z-index: 2; /* Ապահովում ենք, որ տեքստը մնա նկարից վերև, եթե հանկարծ կպնեն */
+            }
 
-<div class="mobile-container w-full max-w-[450px] min-h-screen bg-white relative shadow-[0_0_40px_rgba(0,0,0,0.1)] overflow-x-hidden">
+            .hero .names span { display: block; }
 
-    <div id="unlock-screen" class="fixed inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center z-[9999] flex flex-col justify-end items-center pb-[50px] md:absolute">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 z-1"></div>
+            /* --- Նկարի կարգավորում --- */
+            .hero .photo-wrap {
+                width: 100%;
+                max-width: 320px;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+                /* Նկարը արդեն կլինի անուններից ներքև */
+            }
 
-        <div class="z-10 mb-[60px] text-center text-white w-full px-5">
-            <div class="flex flex-col items-center justify-center">
-                <h2 class="font-['Great_Vibes'] text-[3.2rem] leading-none m-0">{{ invitation.content.couple_names.groom }}</h2>
-                <div class="flex items-center w-[60%] my-[5px]">
-                    <div class="flex-1 h-[1px] bg-white/30"></div>
-                    <span class="font-['Cinzel'] text-[1.2rem] italic mx-[15px] text-gold">{{ invitation.content.couple_names.separator }}</span>
-                    <div class="flex-1 h-[1px] bg-white/30"></div>
-                </div>
-                <h2 class="font-['Great_Vibes'] text-[3.2rem] leading-none m-0">{{ invitation.content.couple_names.bride }}</h2>
-            </div>
-            <p class="text-[0.8rem] tracking-[4px] uppercase mt-[25px] opacity-90">Հրավիրատոմս</p>
-        </div>
-
-        <div class="slider-container relative w-[85%] h-[60px] bg-white/25 backdrop-blur-[5px] rounded-[50px] border border-white/40 z-10 overflow-hidden shadow-[0_10px_20px_rgba(0,0,0,0.2)]" id="sliderContainer">
-            <div class="slider-text absolute w-full h-full flex justify-center items-center text-white text-[1rem] tracking-[1px] pointer-events-none pl-[20px] pulse-text-anim">
-                Սահեցրեք աջ <i class="fa-solid fa-chevron-right arrow-anim ml-[10px]"></i>
-            </div>
-            <div id="sliderHandle" class="slider-handle absolute left-0 top-0 h-full w-[60px] bg-white rounded-full flex justify-center items-center text-rose-gold-dark text-[1.2rem] cursor-pointer shadow-[2px_0_10px_rgba(0,0,0,0.2)]">
-                <i class="fa-solid fa-heart"></i>
-            </div>
-        </div>
-    </div>
-
-    <div id="main-invitation" class="hidden">
-
-        <div class="hero-wrapper relative w-full h-screen min-h-[600px] bg-black overflow-hidden">
-            {% set hero_img = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop" %}
-            {% for media in invitation.media_files %}{% if media.label == 'main_hero' %}{% set hero_img = media.file_url %}{% endif %}{% endfor %}
-            <img src="{{ hero_img }}" class="absolute inset-0 w-full h-full object-cover z-1" alt="Couple">
-            <div class="absolute inset-0 bg-[url('https://i.pinimg.com/736x/d6/19/b0/d619b0e43a34f232e0db90051137310c.jpg')] bg-cover bg-bottom mix-blend-lighten z-2"></div>
-
-            <div class="relative z-3 h-full flex flex-col justify-center items-center text-center pb-[80px]" data-aos="zoom-in">
-                <p class="font-['Cinzel'] tracking-[3px] text-rose-gold-light mb-[10px] text-[1rem] font-extrabold drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
-                    WEDDING DAY | {{ invitation.event_date.strftime('%d.%m.%Y') if invitation.event_date else '10.05.2026' }}
-                </p>
-                <div class="font-['Great_Vibes'] text-[3.5rem] text-rose-gold-light leading-[1.1] drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)] flex flex-col items-center">
-                    <span>{{ invitation.content.couple_names.groom }}</span>
-                    <i class="font-['Cinzel'] text-[1.5rem] text-white not-italic my-[5px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">{{ invitation.content.couple_names.separator }}</i>
-                    <span>{{ invitation.content.couple_names.bride }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="relative bg-white -mt-[10px] px-5 pt-[30px] pb-[60px] z-10 text-center">
-            <div class="max-w-[600px] mx-auto" data-aos="fade-up">
-                <h2 class="font-['Great_Vibes'] text-[2.5rem] text-rose-gold-dark mb-[15px] font-normal">{{ invitation.content.welcome_text.title }}</h2>
-                <div class="w-[80px] h-[2px] bg-[radial-gradient(circle,_var(--rose-gold-dark)_0%,_transparent_100%)] mx-auto my-[25px]"></div>
-                <p class="text-[1.1rem] leading-[1.8] text-[#4a4a4a] font-['Cinzel']">{{ invitation.content.welcome_text.description }}</p>
-                <div class="w-[80px] h-[2px] bg-[radial-gradient(circle,_var(--rose-gold-dark)_0%,_transparent_100%)] mx-auto my-[25px]"></div>
-            </div>
-        </div>
-
-        {% if invitation.event_date %}
-        {% set d = invitation.event_date %}
-        <div class="flex flex-col items-center justify-center text-center w-full my-5" data-aos="zoom-in">
-            <div class="mb-[25px]">
-                <h2 class="font-['Great_Vibes'] text-[4rem] text-rose-gold-dark leading-[1.1]">
-                    {% set months = ['', 'Հունվար', 'Փետրվար', 'Մարտ', 'Ապրիլ', 'Մայիս', 'Հունիս', 'Հուլիս', 'Օգոստոս', 'Սեպտեմբեր', 'Հոկտեմբեր', 'Նոյեմբեր', 'Դեկտեմբեր'] %}{{ months[d.month] }}
-                </h2>
-                <p class="font-['Cinzel'] text-[1.4rem] tracking-[6px] text-[#888] font-bold mt-[5px] mb-[25px]">{{ d.year }}</p>
-            </div>
-            <div class="flex justify-center items-center gap-2">
-                {% set weekdays = ['Երկ', 'Երք', 'Չոր', 'Հնգ', 'Ուրբ', 'Շբթ', 'Կիր'] %}
-                {% for i in range(-2, 3) %}
-                {% set current_day = d + timedelta(days=i) %}
-                {% if i == 0 %}
-                <div class="relative w-[80px] h-[80px] mx-[5px] flex items-center justify-center active-heart">
-                    <div class="absolute inset-0 z-0 heart-beat-anim">
-                        <svg viewBox="0 0 24 24" class="w-full h-full fill-rose-gold-dark drop-shadow-[0_4px_8px_rgba(183,110,121,0.4)]">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="relative z-[2] flex flex-col items-center mt-[-5px]">
-                        <span class="text-white text-[0.8rem] opacity-90 uppercase">{{ weekdays[current_day.weekday()] }}</span>
-                        <span class="text-white text-[1.8rem] leading-none font-bold">{{ current_day.day }}</span>
-                    </div>
-                </div>
-                {% else %}
-                <div class="flex flex-col items-center justify-center w-[40px]">
-                    <span class="text-[0.7rem] text-[#999] uppercase mb-[4px]">{{ weekdays[current_day.weekday()] }}</span>
-                    <span class="font-['Cinzel'] text-[1.2rem] text-[#333] font-semibold">{{ current_day.day }}</span>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="py-10 mt-[50px]">
-            <h2 class="font-['Cinzel'] text-gold tracking-[2px] mb-[30px] text-center text-[1.5rem]">Հարսանյաց Ծրագիր</h2>
-            {% for loc in invitation.content.locations %}
-            <div data-aos="fade-up" class="mb-10 flex flex-col items-center text-center px-5">
-                {% set loc_image = "https://via.placeholder.com/400x250?text=No+Image" %}
-                {% for media in invitation.media_files %}{% if media.label == loc.type %}{% set loc_image = media.file_url %}{% endif %}{% endfor %}
-                <div class="w-[180px] h-[180px] overflow-hidden rounded-full border-[3px] border-gold p-[5px] mb-[15px] shadow-[0_5px_15px_rgba(0,0,0,0.1)] transition-transform duration-400 hover:scale-105 hover:rotate-2">
-                    <img src="{{ loc_image }}" class="w-full h-full object-cover rounded-full" alt="{{ loc.title }}">
-                </div>
-                <h3 class="font-['Cinzel'] text-[1.5rem] text-gold uppercase tracking-wider">{{ loc.title }}</h3>
-                <p class="my-[10px] mx-5 leading-[1.6]">
-                    {{ loc.address }} <br>
-                    <strong class="text-gold">Ժամը՝ {{ loc.time }}</strong>
-                </p>
-                {% if loc.map_url %}
-                <a href="{{ loc.map_url }}" target="_blank" class="inline-block mt-[10px] px-5 py-2 border border-gold text-gold rounded-[20px] text-[0.9rem] transition-all hover:bg-gold hover:text-white hover:shadow-lg">
-                    <i class="fa-solid fa-location-dot mr-1"></i> Քարտեզ
-                </a>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-
-        <div class="timeline relative my-10 mx-5 pl-0" data-aos="fade-up">
-            {% for loc in invitation.content.locations %}
-            <div class="relative mb-10 pl-[25px]">
-                <div class="absolute left-0 top-[5px] w-[14px] h-[14px] bg-white border-2 border-rose-gold-dark rounded-full z-[2] box-border"></div>
-                <span class="block font-bold font-['Cinzel'] text-rose-gold-dark text-[0.9rem]">{{ loc.time }}</span>
-                <div class="font-semibold text-[1.1rem] mt-[5px]">{{ loc.title }}</div>
-                <div class="text-[0.85rem] text-[#777] leading-[1.4]">{{ loc.address }}</div>
-            </div>
-            {% endfor %}
-        </div>
-
-        {# 1. Սահմանում ենք ֆոնային նկարը #}
-        {% set gallery_media = invitation.media_files | selectattr('label', 'equalto', 'gallery') | first %}
-        {% set bg_url = gallery_media.file_url if gallery_media else "https://i.pinimg.com/736x/09/ff/a4/09ffa440ddd0834287405347657d5360.jpg" %}
-
-        {# 2. Սահմանում ենք տեքստերը՝ խուսափելով UndefinedError-ից #}
-        {% set details = invitation.content.details_section if invitation.content and invitation.content.details_section else {} %}
-
-        <div class="relative w-full min-h-[500px] py-[60px] px-5 bg-fixed bg-center bg-cover flex items-center justify-center text-center before:content-[''] before:absolute before:inset-0 before:bg-black/50 before:z-1"
-             style="background-image: url('{{ bg_url }}');"
-             data-aos="fade-up">
-
-            <div class="relative z-[2] text-white max-w-[600px] drop-shadow-md">
-
-                <h2 class="font-['Great_Vibes'] text-[3.5rem] mb-5 text-rose-gold-light drop-shadow-[0_0_10px_rgba(224,191,184,0.4)]">
-                    {{ details.title | default('Details Special') }}
-                </h2>
-
-                <p class="mb-5 leading-[1.6] opacity-90 font-['Noto_Sans_Armenian']">
-                    {{ details.description | default('Ձեզ հետ բերեք ՍԵՐ, ժպիտներ ու անսահման դրական էմոցիաներ, ինչպես նաև հարմարավետ կոշիկներ՝ պարելու համար։') }}
-                </p>
-
-                <hr class="border-0 border-t border-white/50 my-5 mx-auto w-1/2">
-
-                <p class="italic text-[#eee] font-['Noto_Sans_Armenian']">
-                    {{ details.note | default('Թույլ տանք, որ այդ օրը սպիտակ զգեստով լինի միայն հարսնացուն 🤍') }}
-                </p>
-
-            </div>
-        </div>
-
-        <div class="text-center py-10 px-5" data-aos="fade-up">
-            <p class="font-['Great_Vibes'] text-[2.5rem] text-[#333] mb-[25px]">
-                {{ invitation.content.countdown_title | default('Մնացել է...') }}
-            </p>
-
-            {# Թաքնված դաշտ ամսաթիվը JS-ին փոխանցելու համար #}
-            <div id="event-date" data-date="{{ invitation.event_date.isoformat() }}" class="hidden"></div>
-
-            <div class="flex justify-center gap-[15px]">
-                <div class="flex flex-col items-center min-w-[65px]">
-                    <div id="days" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
-                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Օր</div>
-                </div>
-                <div class="text-[1.5rem] text-[#ccc] mt-[5px]">:</div>
-                <div class="flex flex-col items-center min-w-[65px]">
-                    <div id="hours" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
-                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Ժամ</div>
-                </div>
-                <div class="text-[1.5rem] text-[#ccc] mt-[5px]">:</div>
-                <div class="flex flex-col items-center min-w-[65px]">
-                    <div id="minutes" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
-                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Րոպե</div>
-                </div>
-                <div class="text-[1.5rem] text-[#ccc] mt-[5px]">:</div>
-                <div class="flex flex-col items-center min-w-[65px]">
-                    <div id="seconds" class="font-['Cinzel'] text-[2.2rem] text-rose-gold-dark font-semibold leading-none">00</div>
-                    <div class="text-[0.7rem] uppercase tracking-wider text-[#888] mt-2 border-t border-[#eee] w-full pt-[5px]">Վրկ</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-5 md:p-[30px] bg-white" id="rsvp">
-            <h2 class="text-center font-['Great_Vibes'] text-gold text-[3rem] mb-[30px]">R.S.V.P</h2>
-
-            <input type="hidden" id="inv-slug" value="{{ invitation.slug }}">
-            <input type="hidden" id="admin-phone" value="{{ invitation.content.phone_number|default('37494000000') }}">
-
-            <div class="mb-5 text-left">
-                <label class="block mb-2 text-[0.85rem] text-[#555]">Նշեք Ձեր անուն/ազգանունը</label>
-                <input type="text" id="gName" class="w-full p-3 border border-[#ddd] rounded-lg bg-[#fafafa]" placeholder="Անուն Ազգանուն">
-            </div>
-
-            <div class="mb-5 text-left" id="attendance-box">
-                <label class="block mb-2 text-[0.85rem] text-[#555]">Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
-                <div class="flex flex-col gap-2">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="attend" value="yes" checked class="accent-gold" onchange="toggleGuestCount(true)"> Այո, կգամ
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="attend" value="no" class="accent-gold" onchange="toggleGuestCount(false)"> Ցավոք, չեմ կարողանա
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-5 text-left" id="guest-count-wrapper">
-                <label class="block mb-2 text-[0.85rem] text-[#555]">Հյուրերի քանակ</label>
-                <select id="gCount" class="w-full p-3 border border-[#ddd] rounded-lg bg-[#fafafa]">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-
-            <button id="rsvpBtn" onclick="sendRsvp()" class="w-full p-[15px] bg-rose-gold-dark text-white rounded-[50px] text-[1rem] tracking-wider shadow-[0_5px_15px_rgba(183,110,121,0.4)] hover:brightness-110 transition-all flex justify-center items-center gap-2">
-                <span id="btnText">ՈՒՂԱՐԿԵԼ</span>
-
-            </button>
-        </div>
-
-        </div>
-    </div>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    AOS.init();
-
-    // 1. Սլայդերի տրամաբանությունը (Unlock Screen)
-    const sliderContainer = document.getElementById('sliderContainer');
-    const sliderHandle = document.getElementById('sliderHandle');
-    const unlockScreen = document.getElementById('unlock-screen');
-    const mainInv = document.getElementById('main-invitation');
-    let isDragging = false, startX = 0, currentX = 0;
-    const maxSlide = sliderContainer.offsetWidth - sliderHandle.offsetWidth;
-
-    const onMove = (clientX) => {
-        if (!isDragging) return;
-        currentX = Math.min(Math.max(clientX - startX, 0), maxSlide);
-        sliderHandle.style.transform = `translateX(${currentX}px)`;
-        unlockScreen.style.opacity = 1 - (currentX / maxSlide);
-        if (currentX > maxSlide * 0.9) {
-            isDragging = false;
-            unlockScreen.style.transform = 'translateY(-100%)';
-            setTimeout(() => {
-                unlockScreen.style.display = 'none';
-                mainInv.style.display = 'block';
-                AOS.refresh();
-            }, 500);
+            .hero .photo-wrap img {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 3/4;
+                object-fit: cover;
+                display: block;
+            }
+        /* --- Hero Անիմացիաներ և Դիզայն --- */
+        .hero .hero-photo-reveal {
+            opacity: 0;
+            transform: scale(0.92) translateY(20px);
+            transition: opacity 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-    };
-
-    sliderHandle.addEventListener('touchstart', e => { isDragging = true; startX = e.touches[0].clientX; });
-    sliderHandle.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
-    sliderHandle.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; });
-    document.addEventListener('mousemove', e => onMove(e.clientX));
-    const endDrag = () => { if(isDragging){ isDragging = false; sliderHandle.style.transform = 'translateX(0)'; unlockScreen.style.opacity = 1; }};
-    document.addEventListener('mouseup', endDrag);
-    document.addEventListener('touchend', endDrag);
-
-    // 2. ԴԻՆԱՄԻԿ ԹԱՅՄԵՐ (Ուղղված տարբերակ)
-    function updateCountdown() {
-        const eventDateElem = document.getElementById('event-date');
-        if (!eventDateElem || !eventDateElem.dataset.date) return;
-
-        // Ստեղծում ենք ամսաթիվը (replace-ը օգնում է Safari-ին ճիշտ հասկանալ ISO-ն)
-        const dateStr = eventDateElem.dataset.date.replace(' ', 'T');
-        const eventDate = new Date(dateStr).getTime();
-        const now = new Date().getTime();
-        const distance = eventDate - now;
-
-        if (distance <= 0) {
-            document.getElementById('days').innerText = "00";
-            document.getElementById('hours').innerText = "00";
-            document.getElementById('minutes').innerText = "00";
-            document.getElementById('seconds').innerText = "00";
-            return;
+        .hero .hero-photo-reveal.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
         }
 
-        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((distance % (1000 * 60)) / 1000);
+        .hero .hero-text-reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+        }
+        .hero .hero-text-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-        document.getElementById('days').innerText = String(d).padStart(2, '0');
-        document.getElementById('hours').innerText = String(h).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+        .hero .badge {
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 20px;
+            margin-top: 40px; /* Տեղ ենք թողնում սահող տողի տակ */
+        }
+
+        .hero .photo-wrap {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            margin-bottom: 28px;
+        }
+        .hero .photo-wrap img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Անունների դիզայնը */
+        .hero .names {
+            /* Great Vibes-ը հենց այդ գեղեցիկ, ոլորուն տառատեսակն է */
+            font-family: 'Great Vibes', 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 12vw, 5rem); /* Մեծացրել եմ, որ Tigran & Arpi-ն լավ երևան */
+            color: var(--text);
+            line-height: 1.2;
+            font-weight: 400;
+        }
+        .hero .names span { display: block; }
+        .hero .names .amp { font-size: 0.6em; opacity: 0.85; }
+
+
+        /* Sections */
+        .section {
+            padding: 56px 24px;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+        .section.dark {
+            background: var(--dark);
+            color: #f0f0f0;
+            margin: 0;
+            max-width: none;
+        }
+        .section.dark .section-inner { max-width: 560px; margin: 0 auto; }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section p {
+            line-height: 1.75;
+            text-align: center;
+            color: var(--muted);
+        }
+        .section.dark p { color: rgba(255,255,255,0.9); }
+
+/* --- Ընդհանուր ֆոն --- */
+.wedding-journey-section {
+    background-color: #fff; /* Մաքուր սպիտակ */
+    padding: 60px 0 80px;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+    /* --- ՕՐԱՑՈՒՅՑ --- */
+.date-header-block { text-align: center; margin-bottom: 40px; }
+.main-date-title { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #000; margin: 0; }
+.year-subtitle { font-size: 1.2rem; letter-spacing: 4px; color: #555; margin-top: -5px; margin-bottom: 30px; }
+
+.mini-calendar-row { display: flex; justify-content: center; align-items: flex-end; gap: 8px; }
+
+.mini-day {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 38px; height: 48px;
+    color: #999;
+}
+.mini-day .d-name { font-size: 0.65rem; text-transform: uppercase; margin-bottom: 2px; }
+.mini-day .d-num { font-size: 1.1rem; font-weight: 500; }
+
+.mini-day.active-heart {
+    width: 65px; height: 65px;
+    position: relative;
+    color: #fff;
+    margin-bottom: 5px;
+}
+.heart-bg {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 60px; height: 60px; z-index: 1;
+}
+.heart-bg svg { width: 100%; height: 100%; fill: #bf212f; filter: drop-shadow(0 3px 5px rgba(191, 33, 47, 0.3)); }
+.active-heart .d-name, .active-heart .d-num { position: relative; z-index: 2; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+.active-heart .d-num { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+
+/* --- ՔԱՐՏԵԶ --- */
+.map-start-block { text-align: center; margin-bottom: 0px; position: relative; z-index: 2; }
+.save-date-msg { font-family: 'Great Vibes', cursive; font-size: 2rem; margin-bottom: 15px; color: #333; }
+
+.map-container { width: 90%; max-width: 350px; margin: 0 auto; opacity: 0.8; position: relative; }
+.map-img { width: 100%; height: auto; display: block; }
+.map-pin {
+    /* Մի քիչ վերև և ձախ */
+    position: absolute;
+    top: 40%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    color: #bf212f;
+    animation: pulse 2s infinite;
+}
+.pin-icon { font-size: 2rem; }
+.pin-text { font-size: 0.7rem; font-weight: bold; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 4px; color: #333; }
+
+/* --- TIMELINE --- */
+.timeline-journey-wrapper {
+    position: relative;
+    width: 100%;
+    height: 1300px; /* Մի փոքր ավելացրի, որ ԱՋ կողմի վերջին տեքստը լավ տեղավորվի */
+    max-width: 500px;
+    margin: 0 auto;
+}
+.path-svg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.path-svg-container svg { width: 100%; height: 100%; overflow: visible; }
+
+/* --- ԻՐԱԴԱՐՁՈՒԹՅՈՒՆՆԵՐ (Տեքստեր) --- */
+.event-text-block {
+    position: absolute;
+    width: 50%;
+    z-index: 5;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+}
+.event-text-block.visible { opacity: 1; transform: translateY(0); }
+
+/* --- TIMELINE (Մեծացված տառաչափեր) --- */
+.event-text-block .time-label {
+    font-size: 2.2rem; /* Ժամի չափսը */
+    margin-bottom: 8px;
+}
+
+.event-text-block h3 {
+    font-size: 1.6rem; /* Վերնագրի չափսը (Հարսի տուն...) */
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.event-text-block p {
+    font-size: 1.1rem; /* Մնացած տեքստը */
+    margin-bottom: 6px;
+}
+
+.event-text-block .sub-text {
+    font-size: 1rem; /* Փակագծերը */
+}
+
+
+/* ԱՋ կողմի դասավորություն */
+.pos-right {
+    right: 2%; /* Մի փոքր մոտիկ եզրին */
+    text-align: right;
+    padding-left: 5px;
+}
+
+/* ՁԱԽ կողմի դասավորություն */
+.pos-left {
+    left: 2%;
+    text-align: left;
+    padding-right: 5px;
+}
+
+/* շարժվող սրտիկը ֆիքսված չափի*/
+.heart-cursor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;  /* Ֆիքսված լայնություն */
+    height: 40px; /* Ֆիքսված բարձրություն */
+    z-index: 10;
+    pointer-events: none;
+    /* Որպեսզի կենտրոնով նստի գծի վրա */
+    margin-left: -20px;
+    margin-top: -20px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); /* Փոքր ստվեր */
+    transition: transform 0.1s linear; /* Սահունություն */
+}
+.heart-cursor svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.event-text-block .time-label {
+    font-size: 1.8rem; font-weight: 700; color: #bf212f; margin-bottom: 5px;
+    font-family: 'Great Vibes', cursive;
+}
+.event-text-block h3 { font-size: 1.2rem; margin: 0 0 5px; color: #000; font-weight: 600; }
+.event-text-block p { font-size: 0.9rem; color: #444; margin: 0 0 4px; font-weight: 400; }
+.event-text-block .sub-text { font-size: 0.85rem; color: #888; margin-bottom: 12px; }
+
+/* --- ԿԼՈՐԱՎՈՒՆ ԿՈՃԱԿԸ --- */
+.btn-map-circle {
+    display: inline-block;
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-top: 5px;
+}
+.btn-map-circle:hover {
+    background-color: #bf212f;
+    color: #fff;
+    border-color: #bf212f;
+    transform: translateY(-2px);
+}
+
+.final-note {
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: #bf212f;
+    /* Հին կոդում -50px էր, դարձնում ենք դրական, որ իջնի ներքև */
+    margin-top: 50px;
+    position: relative;
+    z-index: 5;
+    padding-bottom: 30px; /* Մի փոքր էլ ներքևից տեղ */
+}
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+
+/* --- TIMELINE WRAPPER --- */
+.timeline-journey-wrapper {
+    position: relative;
+    width: 100%;
+    height: 1200px;
+    overflow: hidden;
+    background-color: #ffffff; /* Ֆոնը՝ ՍՊԻՏԱԿ */
+}
+
+.path-svg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.path-svg-container svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Ավելացրու սա քո CSS-ում */
+
+/* Սա քարտեզի նկարի կամ նրա բլոկի համար է */
+.timeline-map-image { /* Եթե քարտեզդ ունի ուրիշ class, փոխարինիր անունը */
+    margin-top: -30px; /* Բարձրացնում է նկարը վերև */
+    margin-bottom: 20px; /* Ներքևից տեղ է բացում սրտիկի համար */
+    position: relative;
+    z-index: 5; /* Որպեսզի մնա տեքստերի տակ, բայց ֆոնից բարձր */
+}
+
+/* Եթե չգիտես քարտեզի class-ը, կարող ես style="..."-ով գրել հենց HTML-ի մեջ */
+/* Օրինակ՝ <img src="map.png" style="margin-top: -30px; margin-bottom: 20px;"> */
+
+/* --- ՇԱՐԺՎՈՂ ՍՐՏԻԿ --- */
+.heart-cursor {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 0;
+    left: 0;
+    /* Բարձրացրել եմ z-index-ը, որ ամեն ինչի վրայով գնա */
+    z-index: 1000;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+/* --- ՏԵՔՍՏԱՅԻՆ ԲԼՈԿՆԵՐ --- */
+.event-text-block {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Հիմնական լայնությունը համակարգչի համար */
+    width: 35%;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translateY(20px);
+}
+
+.event-text-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- ԴԻՐՔԵՐԸ (PC) --- */
+.pos-left { left: 8%; }
+.pos-right { right: 8%; }
+
+/* --- ԺԱՄԸ --- */
+.event-text-block .time-label {
+    font-family: 'Arial', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: -15px;
+    line-height: 1;
+    z-index: 0;
+}
+
+/* --- ՎԵՐՆԱԳԻՐ --- */
+.event-text-block h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+    margin: 10px 0 5px;
+    z-index: 1;
+    position: relative;
+    /* Ապահովագրություն երկար բառերի համար */
+    white-space: nowrap;
+}
+
+/* --- ՄԱՆՐԱՄԱՍՆԵՐ --- */
+.event-text-block p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 4px;
+    z-index: 1;
+    position: relative;
+}
+
+.event-text-block .sub-text {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+/* --- ԿՈՃԱԿ --- */
+.btn-map-rect {
+    display: inline-block;
+    background-color: #fff;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px 30px;
+    border-radius: 8px;
+    border: 1px solid #eee; /* Թեթև եզրագիծ, որ սպիտակ ֆոնին երևա */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    margin-top: 5px;
+    cursor: pointer;
+    z-index: 2;
+    position: relative;
+}
+
+.btn-map-rect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    color: #bf212f;
+    border-color: #fcebeb;
+}
+
+/* --- ADAPTIVE (MOBILE) - ԱՅՍ ՄԱՍՆ Է ԿԱՐԵՎՈՐ --- */
+@media screen and (max-width: 768px) {
+
+    /* Մոբայլի վրա բլոկները ավելի լայն ենք սարքում ու եզրերին մոտեցնում */
+    .event-text-block {
+        width: 46%; /* Լայնացնում ենք */
     }
 
-    // Աշխատեցնում ենք ամեն վայրկյան
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    .pos-left { left: 2%; }  /* Մոտեցնում ենք ձախ եզրին */
+    .pos-right { right: 2%; } /* Մոտեցնում ենք աջ եզրին */
 
-// 1. Հյուրերի քանակի դաշտի ցուցադրում/թաքցնում
-function toggleGuestCount(show) {
-    const wrapper = document.getElementById('guest-count-wrapper');
-    if (show) {
-        wrapper.style.display = 'block';
-    } else {
-        wrapper.style.display = 'none';
+    /* Փոքրացնում ենք ժամը */
+    .event-text-block .time-label {
+        font-size: 2.8rem;
+        margin-bottom: -10px;
+    }
+
+    /* Փոքրացնում ենք վերնագիրը, որ տեղավորվի (Պսակադրություն) */
+    .event-text-block h3 {
+        font-size: 1.1rem; /* Փոքրացված չափս */
+        white-space: normal; /* Թույլ տալ բառի անցում, եթե պետք լինի */
+    }
+
+    /* Փոքրացնում ենք մյուս տեքստերը */
+    .event-text-block p {
+        font-size: 0.9rem;
+    }
+
+    /* Կոճակը մի փոքր ավելի կոմպակտ */
+    .btn-map-rect {
+        padding: 8px 20px;
+        font-size: 0.8rem;
     }
 }
 
-    // 2. RSVP ուղարկելու ֆունկցիան
-    function sendRsvp() {
-        const name = document.getElementById('gName').value;
-        const btn = document.getElementById('rsvpBtn');
-        const btnText = document.getElementById('btnText');
-        const attendance = document.querySelector('input[name="attend"]:checked').value;
-        const guestCount = document.getElementById('gCount').value;
+/* --- ՎԵՐՋԻՆ ՆՇՈՒՄ --- */
+.final-note {
+    text-align: center;
+    font-family: cursive;
+    font-size: 2.5rem;
+    color: #bf212f;
+    margin-top: 50px;
+    position: relative;
+    z-index: 5;
+    padding-bottom: 30px;
+}
 
-        // Ստուգում ենք՝ արդյոք անունը լրացված է
-        if (!name.trim()) {
-            alert("Խնդրում ենք լրացնել Ձեր անունը 📝");
-            return;
+
+
+
+        /* Timeline */
+        .timeline-section { padding: 48px 24px 80px; max-width: 560px; margin: 0 auto; }
+        .timeline-vertical {
+            position: relative; display: flex; flex-direction: column; align-items: center;
+            padding: 20px 0; min-height: 400px;
+        }
+        .timeline-vertical::before {
+            content: ''; position: absolute; left: 50%; top: 0; width: 2px;
+            background: var(--text); transform: translateX(-50%); height: 0;
+            transition: height 2.5s ease-in-out;
+        }
+        .timeline-vertical.animate-line::before { height: 100%; }
+
+        .timeline-entry {
+            position: relative; text-align: center; margin-bottom: 50px; z-index: 1;
+            background: var(--light); padding: 10px 20px; opacity: 0;
+            transform: translateY(30px) scale(0.95); transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .timeline-entry.visible-item { opacity: 1; transform: translateY(0) scale(1); }
+        .timeline-entry:last-child { margin-bottom: 0; }
+        .timeline-entry .time {
+            font-size: clamp(1.8rem, 5vw, 2.4rem); font-weight: 700; color: var(--text);
+            margin-bottom: 4px; font-family: 'Cormorant Garamond', serif;
+        }
+        .timeline-entry .label { font-size: 1rem; color: var(--muted); }
+
+    /* Countdown */
+ .countdown-box {
+    /* Մուգ, հագեցած գինու գույն */
+    background: #720e1e;
+
+    color: #fff; /* Ոսկեգույն տեքստով էլ սիրուն կլինի՝ color: #d4af37; */
+    padding: 32px 24px;
+    border-radius: 20px;
+    text-align: center;
+    margin: 0 24px 40px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+        .countdown-box .numbers {
+            display: flex; justify-content: center; gap: 8px;
+            font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700; letter-spacing: 2px;
+        }
+        .countdown-box .units {
+            display: flex; justify-content: center; gap: 8px;
+            font-size: 0.7rem; margin-top: 6px; opacity: 0.85;
         }
 
-        // Վիզուալ փոփոխություն ուղարկելիս ⏳
-        btnText.innerText = "Ուղարկվում է...";
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
+        /* Gallery Slider */
+        .gallery-slider { width: 100%; margin-top: 10px; }
+        .gallery-track {
+            display: flex; gap: 15px; overflow-x: auto; padding: 10px 24px 30px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .gallery-track::-webkit-scrollbar { display: none; }
+        .gallery-item {
+            min-width: 85%; aspect-ratio: 3/4; border-radius: 12px;
+            overflow: hidden; scroll-snap-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15); position: relative;
+        }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        // Սիմուլյացիա (1.2 վայրկյան սպասում)
-        setTimeout(() => {
-            btnText.innerText = "Հաստատված է ✨";
-            btn.style.backgroundColor = "#8e918f"; // Փոխում ենք գույնը, որ հասկացվի՝ ուղարկված է
-            btn.style.cursor = "default";
-            btn.style.opacity = "1";
+/* --- RSVP SECTION STYLING --- */
 
-            // Անջատում ենք դաշտերը, որ կրկնակի չուղարկեն
-            document.getElementById('gName').disabled = true;
-            document.querySelectorAll('input[name="attend"]').forEach(el => el.disabled = true);
-            document.getElementById('gCount').disabled = true;
+/* --- RSVP SECTION STYLING (WINE RED EDITION) --- */
 
-            // Ցուցադրում ենք հաղորդագրություն (կարող ես նաև Modal բացել այստեղ)
-            alert(`Շնորհակալություն, ${name}: Ձեր պատասխանը գրանցված է: ✨`);
+.rsvp-section {
+    padding: 60px 20px 100px;
+    display: flex;
+    justify-content: center;
+}
 
-            console.log("Demo Mode Active: Տվյալները ստացված են.", {
-                name: name,
-                attending: attendance,
-                guests: attendance === 'yes' ? guestCount : 0
-            });
-        }, 1200);
+/* Քարտի դիզայնը */
+.rsvp-card {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    /* Վերևի գիծը՝ Մուգ Բորդո */
+    border-top: 4px solid #720e1e;
+    position: relative;
+    overflow: hidden;
+}
+
+.rsvp-subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    margin-top: -10px;
+}
+
+/* --- Input Fields --- */
+.form-group {
+    position: relative;
+    margin-bottom: 35px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1.1rem;
+    color: #222;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.3s;
+    font-family: inherit;
+}
+
+.form-group label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    font-size: 1rem;
+    color: #999;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+/* Label-ը և գիծը դառնում են Մուգ Բորդո (#720e1e) */
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label {
+    top: -14px;
+    font-size: 0.8rem;
+    color: #720e1e;
+    font-weight: 600;
+}
+
+.form-group input:focus {
+    border-bottom: 1px solid #720e1e;
+}
+
+.form-group .line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #720e1e; /* Մուգ Բորդո գիծ */
+    transition: width 0.3s ease;
+}
+.form-group input:focus ~ .line {
+    width: 100%;
+}
+
+/* --- Radio Buttons (Այո/Ոչ) --- */
+.attendance-wrapper {
+    margin-bottom: 30px;
+}
+.attendance-label {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.radio-group-styled {
+    display: flex;
+    gap: 15px;
+}
+
+.radio-card {
+    flex: 1;
+    cursor: pointer;
+    position: relative;
+}
+
+.radio-card input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-card .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    color: #555;
+}
+
+.radio-card .icon {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    transition: transform 0.3s;
+}
+
+/* --- ԱՅՍՏԵՂ Է ՓՈԽՎՈՒՄ ԸՆՏՐՎԱԾ ԳՈՒՅՆԸ --- */
+.radio-card input:checked + .card-content {
+    background: #720e1e; /* Մուգ Բորդո ֆոն */
+    border-color: #720e1e;
+    color: white;
+    box-shadow: 0 5px 15px rgba(114, 14, 30, 0.3);
+    transform: translateY(-2px);
+}
+.radio-card input:checked + .card-content .icon {
+    transform: scale(1.2);
+}
+
+/* --- Submit Button (Ուղարկել) --- */
+.btn-send-styled {
+    width: 100%;
+    padding: 18px;
+    /* Մուգ Բորդո Գրադիենտ */
+    background: linear-gradient(135deg, #720e1e 0%, #4a0913 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(114, 14, 30, 0.25);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-send-styled:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(114, 14, 30, 0.4);
+}
+.btn-send-styled:active {
+    transform: translateY(-1px);
+}
+
+/* --- Success Message (Adaptive/Mobile Friendly) --- */
+
+.success-wrapper {
+    display: none;
+    text-align: center;
+    width: 100%;
+}
+
+.success-wrapper.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInUp 0.8s ease forwards;
+
+    /* Կարևոր է։ Տալիս ենք բարձրություն, որպեսզի կենտրոնում սիրուն կանգնի */
+    min-height: 300px;
+    padding: 20px;
+}
+
+.success-msg {
+    font-family: 'Great Vibes', cursive;
+    color: #720e1e; /* Մուգ Բորդո */
+
+    /* ԱԴԱՊՏԻՎ ՏԱՌԱՉԱՓ.
+       Հեռախոսով՝ 2rem (մոտ 32px),
+       Մեծ էկրանով՝ մինչև 3.5rem (մոտ 56px)
+       clamp(min, preferred, max) */
+    font-size: clamp(2rem, 8vw, 3.5rem);
+
+    /* Տողերի միջև հեռավորություն, որ տառերը իրար չկպնեն */
+    line-height: 1.6;
+
+    margin: 0;
+    width: 100%;
+}
+
+/* Փոքր էկրանների համար հատուկ ճշգրտում (iPhone SE, Small Androids) */
+@media (max-width: 400px) {
+    .success-msg {
+        font-size: 1.8rem; /* Մի փոքր փոքրացնում ենք շատ նեղ էկրանների համար */
     }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    </style>
+</head>
+<body>
+
+    <div id="intro-container">
+        <div class="envelope-wrapper" id="envelope" onclick="openAndReveal()">
+            <div class="envelope">
+
+                <div class="card-intro">
+                    <h2>Tigran & Arpi</h2>
+                    <p>Հրավիրում ենք Ձեզ</p>
+                    <p>մեր հարսանիքին</p>
+
+                </div>
+
+                <div class="pocket-left"></div>
+                <div class="pocket-right"></div>
+                <div class="pocket-front"></div>
+                <div class="lid"></div>
+
+                <div class="seal">OPEN</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">
+        <div class="play-icon"></div>
+        <div class="pause-icon"></div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="{{ invitation.music_url }}" type="audio/mpeg">
+    </audio>
+
+    <div id="main-site">
+        <main class="main" id="main">
+            <section class="hero">
+
+                <div class="marquee-wrapper">
+                    <div class="marquee-track">
+                        <div class="marquee-content">
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                        </div>
+                        <div class="marquee-content">
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                            <div class="marquee-item">Հրավիրատոմս <span class="heart-icon">♡</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="names hero-text-reveal" id="heroNames">
+                    <span>Tigran</span>
+                    <span class="amp">&</span>
+                    <span>Arpi</span>
+                </h1>
+
+                <div class="photo-wrap hero-photo-reveal" id="heroPhoto">
+                    <img src="https://i.pinimg.com/736x/f4/31/4c/f4314c8e8eb8c89bb09e882eb6b8c091.jpg" alt="Tigran and Arpi">
+                </div>
+
+            </section>
+            <section class="section greeting reveal">
+                <h2 class="section-title">Հարգելի՛ հյուրեր</h2>
+                <p>Սիրով հրավիրում ենք Ձեզ ներկա գտնվելու մեր հարսանյաց արարողությանը։</p>
+                <p>Ծանոթացեք ծրագրին և հաստատեք Ձեր ներկայությունը մինչև <strong>նոյեմբերի 15-ը</strong>:</p>
+            </section>
+
+            <section class="wedding-journey-section">
+
+    <div class="date-header-block">
+        <h2 class="main-date-title">Նոյեմբեր</h2>
+        <p class="year-subtitle">2026</p>
+
+        <div class="mini-calendar-row">
+            <div class="mini-day"><span class="d-name">Ուրբ</span><span class="d-num">13</span></div>
+            <div class="mini-day"><span class="d-name">Շբթ</span><span class="d-num">14</span></div>
+
+            <div class="mini-day active-heart">
+                <div class="heart-bg">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+                <span class="d-name">Կիր</span>
+                <span class="d-num">15</span>
+            </div>
+
+            <div class="mini-day"><span class="d-name">Երկ</span><span class="d-num">16</span></div>
+            <div class="mini-day"><span class="d-name">Երք</span><span class="d-num">17</span></div>
+        </div>
+    </div>
+
+    <div class="map-start-block">
+        <p class="save-date-msg">Մեր օրվա ծրագիրը</p>
+
+        <div class="map-container">
+            <img src="https://i.pinimg.com/1200x/c4/da/70/c4da702e8ee4f341e418b84830b44b7c.jpg" alt="Map" class="map-img">
+            <div class="map-pin">
+                <div class="pin-icon">❤</div>
+                <div class="pin-text">Armenia</div>
+            </div>
+        </div>
+    </div>
+
+<div class="timeline-journey-wrapper">
+
+    <div class="path-svg-container">
+        <svg viewBox="0 0 100 1100" preserveAspectRatio="none">
+            <path id="journeyPath"
+                  d="M 50 50
+                     C 95 180 95 300 50 400
+                     C 5 500 5 640 50 740
+                     C 95 840 95 970 50 1000"
+                  fill="none" stroke="#e0caca" stroke-width="2" stroke-dasharray="6,6" />
+        </svg>
+    </div>
+
+    <div id="fixedHeart" class="heart-cursor">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#bf212f"/>
+        </svg>
+    </div>
+
+    <div class="event-text-block pos-left" style="top: 220px;">
+        <div class="time-label">12:00</div>
+        <h3>Հարսի տուն</h3>
+        <p>Մեկնարկը հարսի բնակարանից</p>
+        <a href="https://yandex.com/maps/-/CPU8uCo5" target="_blank" class="btn-map-rect">ԻՆՉՊԵՍ ՀԱՍՆԵԼ</a>
+    </div>
+
+    <div class="event-text-block pos-right" style="top: 570px;">
+        <div class="time-label">15:00</div>
+        <h3>Պսակադրություն</h3>
+        <p>ՀՈՎՀԱՆՆԱՎԱՆՔ</p>
+        <p class="sub-text">(գ. Օհանավան)</p>
+        <a href="https://yandex.com/maps/-/CPU8eCKw" target="_blank" class="btn-map-rect">ԻՆՉՊԵՍ ՀԱՍՆԵԼ</a>
+    </div>
+
+    <div class="event-text-block pos-left" style="top: 920px;">
+        <div class="time-label">17:30</div>
+        <h3>Խնջույք</h3>
+        <p>«Palladium Hall»</p>
+        <p class="sub-text">(Ջրվեժ)</p>
+        <a href="https://yandex.com/maps/-/CPU8qAlT" target="_blank" class="btn-map-rect">ԻՆՉՊԵՍ ՀԱՍՆԵԼ</a>
+    </div>
+
+</div>
+
+<div class="final-note">
+    <p>Սիրով սպասում ենք</p>
+</div>
+
+
+</section>
+
+            <div class="countdown-box reveal">
+                <p class="label">Մնացել է</p>
+                <div class="numbers">
+                    <span id="cd-days">00</span><span>:</span><span id="cd-hours">00</span><span>:</span><span id="cd-mins">00</span><span>:</span><span id="cd-secs">00</span>
+                </div>
+                <div class="units"><span>օր</span><span>ժամ</span><span>րոպե</span><span>վրկ</span></div>
+            </div>
+
+            <section class="section reveal">
+                <h2 class="section-title">Մենք</h2>
+                <div class="gallery-slider">
+                    <div class="gallery-track">
+                        <div class="gallery-item"><img src="https://i.pinimg.com/736x/6a/55/4b/6a554b7ab6c37277aa3d7b5d2fa578a3.jpg" alt="Զույգ 2"></div>
+                        <div class="gallery-item"><img src="https://i.pinimg.com/1200x/e3/18/09/e31809e3cc29c18fdff7cea93dcb3912.jpg" alt="Զույգ 3"></div>
+                        <div class="gallery-item"><img src="https://i.pinimg.com/736x/63/7d/7c/637d7c180f5ffc575ae45718d3c65c8f.jpg" alt="Զույգ 1"></div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="section details-text reveal">
+                <p>Խնդրում ենք հաստատել Ձեր ներկայությունը մինչև <strong>նոյեմբերի 15-ը</strong>:</p>
+                <p>Ձեզ հետ բերեք ՍԵՐ, ժպիտներ ու անսահման դրական էմոցիաներ։</p>
+                <p class="white-dress">Թույլ տանք, որ այդ օրը սպիտակ զգեստով լինի միայն հարսնացուն 🤍</p>
+            </section>
+
+            <section class="section rsvp-section reveal">
+
+                <div class="rsvp-card">
+                    <h2 class="section-title">Հաստատել ներկայությունը</h2>
+                    <p class="rsvp-subtitle">Խնդրում ենք լրացնել ներքևի դաշտերը</p>
+
+                    <form id="rsvpForm">
+
+                        <div class="form-group">
+                            <input type="text" name="guest_name" id="guest_name" placeholder=" " required>
+                            <label for="guest_name">Ձեր Անուն Ազգանունը</label>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" name="guest_count" id="guest_count" min="1" value="1" placeholder=" " required>
+                            <label for="guest_count">Հյուրերի քանակը</label>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="attendance-wrapper">
+                            <p class="attendance-label">Կկարողանա՞ք ներկա գտնվել</p>
+                            <div class="radio-group-styled">
+                                <label class="radio-card">
+                                    <input type="radio" name="attending" value="yes" checked>
+                                    <div class="card-content">
+                                        <span class="icon">🥂</span>
+                                        <span>Այո, կգամ</span>
+                                    </div>
+                                </label>
+
+                                <label class="radio-card">
+                                    <input type="radio" name="attending" value="no">
+                                    <div class="card-content">
+                                        <span class="icon">✖</span>
+                                        <span>Ցավոք, ոչ</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-send-styled">Ուղարկել հաստատումը</button>
+                    </form>
+
+                    <div class="success-wrapper" id="successWrapper">
+                        <p class="success-msg">Շնորհակալություն։<br>Ձեր պատասխանը ընդունված է։</p>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- ՄԱՍ 1: ԾՐԱՐԻ ԲԱՑՄԱՆ ԼՈԳԻԿԱ ---
+        function openAndReveal() {
+    const envelope = document.getElementById('envelope');
+    const introContainer = document.getElementById('intro-container');
+    const mainSite = document.getElementById('main-site');
+
+    // --- ՆՈՐԸ: Վերցնում ենք երաժշտության էլեմենտները ---
+    const musicBtn = document.getElementById('musicBtn');
+    const audio = document.getElementById('bgMusic');
+
+    // 1. Ծրարի բացման անիմացիա
+    envelope.classList.add('open');
+
+    // --- ՆՈՐԸ: Միացնում ենք երգը հենց քլիքի պահին (որ բրաուզերը չարգելափակի) ---
+    if (audio) {
+        audio.play().then(() => {
+            if (musicBtn) musicBtn.classList.add("playing");
+        }).catch(e => console.log("Աուդիոն չմիացավ:", e));
+    }
+
+    // 2. Սպասում ենք 2.5 վայրկյան (մինչև քարտը դուրս գա)
+    setTimeout(() => {
+
+        // 3. Ծրարը անհետանում է (fade out)
+        introContainer.style.opacity = '0';
+
+        // 4. Երբ անհետացավ, ջնջում ենք և ցույց տալիս հիմնական կայքը
+        setTimeout(() => {
+            introContainer.style.display = 'none';
+            mainSite.style.display = 'block';
+
+            // --- ՆՈՐԸ: Ցույց ենք տալիս երաժշտության կոճակը միայն հիմնական կայքում ---
+            if (musicBtn) {
+                musicBtn.style.display = 'flex';
+            }
+
+            // Թեթև ուշացում, որ opacity transition-ը աշխատի
+            setTimeout(() => {
+                mainSite.style.opacity = '1';
+
+                // 5. Գործարկում ենք HERO էֆեկտները (որոնք հին կոդում էին)
+                triggerHeroAnimations();
+            }, 50);
+
+        }, 1000);
+
+    }, 2500);
+}
+
+        // --- ՄԱՍ 2: ՀԻՄՆԱԿԱՆ ԿԱՅՔԻ ԼՈԳԻԿԱ ---
+
+        function triggerHeroAnimations() {
+            var heroPhoto = document.getElementById('heroPhoto');
+            var heroBadge = document.getElementById('heroBadge');
+            var heroNames = document.getElementById('heroNames');
+            if (heroPhoto) heroPhoto.classList.add('visible');
+            if (heroBadge) heroBadge.classList.add('visible');
+            if (heroNames) heroNames.classList.add('visible');
+        }
+
+        (function() {
+            // Countdown
+            var end = new Date('2026-11-15T00:00:00').getTime();
+            function pad(n) { return (n < 10 ? '0' : '') + n; }
+            function updateCountdown() {
+                var now = Date.now();
+                var d = Math.max(0, end - now);
+                var days = Math.floor(d / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var mins = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+                var secs = Math.floor((d % (1000 * 60)) / 1000);
+                var el = document.getElementById('cd-days'); if (el) el.textContent = pad(days);
+                el = document.getElementById('cd-hours'); if (el) el.textContent = pad(hours);
+                el = document.getElementById('cd-mins'); if (el) el.textContent = pad(mins);
+                el = document.getElementById('cd-secs'); if (el) el.textContent = pad(secs);
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Scroll Reveals
+            var revealEls = document.querySelectorAll('.reveal');
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { root: null, rootMargin: '0px 0px -60px 0px', threshold: 0.12 });
+            revealEls.forEach(function(el) { observer.observe(el); });
+
+            // Timeline Animation
+            var timelineContainer = document.querySelector('.timeline-section');
+            var timelineVert = document.getElementById('timelineVert');
+            var timelineItems = document.querySelectorAll('.timeline-entry');
+
+            var timelineObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        timelineVert.classList.add('animate-line');
+                        timelineItems.forEach(function(item, index) {
+                            setTimeout(function() {
+                                item.classList.add('visible-item');
+                            }, 500 + (index * 600));
+                        });
+                        timelineObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            if (timelineContainer) timelineObserver.observe(timelineContainer);
+
+            // RSVP Form
+            document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                this.style.display = 'none';
+                document.getElementById('successWrapper').classList.add('show');
+            });
+        })();
+    </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const wrapper = document.querySelector('.timeline-journey-wrapper');
+    const path = document.getElementById('journeyPath');
+    const fixedHeart = document.getElementById('fixedHeart'); // Նոր սրտիկը
+    const texts = document.querySelectorAll('.event-text-block');
+
+    const pathLength = path.getTotalLength();
+
+    function animateJourney() {
+        const rect = wrapper.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Հաշվարկում ենք, թե որքան ենք իջել
+        let startTrigger = windowHeight * 0.7;
+        let scrollY = windowHeight - rect.top - (windowHeight * 0.3);
+        let percentage = scrollY / (rect.height);
+
+        // Սահմանափակում 0-ից 1
+        percentage = Math.max(0, Math.min(1, percentage));
+
+        // Ստանում ենք կետը SVG-ի կոորդինատային համակարգում (0-100 լայնություն, 0-1100 բարձրություն)
+        const point = path.getPointAtLength(percentage * pathLength);
+
+        // --- ՓՈՓՈԽՈՒԹՅՈՒՆ ---
+        // Հիմա SVG-ի կոորդինատները (որոնք վիրտուալ են) պետք է դարձնենք իրական պիքսելների
+        // SVG-ի viewBox-ն է 0 0 100 1100
+        const svgViewBoxWidth = 100;
+        const svgViewBoxHeight = 1100;
+
+        // Հաշվում ենք իրական պիքսելը էկրանի վրա
+        const realX = (point.x / svgViewBoxWidth) * rect.width;
+        const realY = (point.y / svgViewBoxHeight) * rect.height;
+
+        // Տեղաշարժում ենք մեր ֆիքսված սրտիկը
+        fixedHeart.style.transform = `translate(${realX}px, ${realY}px)`;
+
+        // Տեքստերի հայտնվելը (Fade in)
+        texts.forEach(block => {
+            const blockTop = block.getBoundingClientRect().top;
+            if (blockTop < windowHeight * 0.8) {
+                block.classList.add('visible');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', animateJourney);
+    window.addEventListener('resize', animateJourney); // Resize-ի դեպքում էլ թարմացնի
+    animateJourney();
+});
+
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Չթողնել էջը թարմացվի
+
+    // 1. Թաքցնում ենք ֆորման
+    this.style.display = 'none';
+
+    // 2. Թաքցնում ենք վերևի ենթավերնագիրը (եթե կա)
+    var subtitle = document.querySelector('.rsvp-subtitle');
+    if(subtitle) subtitle.style.display = 'none';
+
+    // 3. Ցույց ենք տալիս միայն շնորհակալական տեքստը
+    document.getElementById('successWrapper').classList.add('show');
+});
+
+    // --- ԵՐԱԺՇՏՈՒԹՅԱՆ ԿԱՌԱՎԱՐՈՒՄ ---
+function toggleMusic() {
+    var audio = document.getElementById("bgMusic");
+    var btn = document.getElementById("musicBtn");
+
+    if (audio.paused) {
+        audio.play();
+        btn.classList.add("playing");
+    } else {
+        audio.pause();
+        btn.classList.remove("playing");
+    }
+}
+
+
 </script>
+
 </body>
 </html>

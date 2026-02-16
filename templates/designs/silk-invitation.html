@@ -269,6 +269,86 @@ body {
         .hero .names span { display: block; }
         .hero .names .amp { font-size: 0.6em; opacity: 0.85; }
 
+        /* =========================================
+           ԵՐԱԺՇՏՈՒԹՅԱՆ ԿՈՃԱԿԻ ՈՃԵՐԸ (Անունների տակ)
+           ========================================= */
+        .music-inline-control {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+
+            /* Կենտրոնացում և դիրքավորում */
+            display: flex;
+            margin: 30px auto 0; /* 30px իջեցնում է անուններից ներքև */
+
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .music-inline-control:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Play իկոն (Եռանկյունի) */
+        .music-inline-control::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-color: #1a1a1a; /* Մուգ գույն, որ սազի անունների հետ */
+            transition: all 0.3s ease;
+            clip-path: polygon(100% 50%, 0 0, 0 100%);
+            margin-left: 4px; /* Եռանկյունին վիզուալ կենտրոնացնելու համար */
+        }
+
+        /* Երբ միացված է՝ Պտտվում է */
+        .music-inline-control.playing {
+            animation: rotateDisk 4s linear infinite;
+            border-color: #1a1a1a;
+        }
+
+        /* Pause իկոն (Երկու գիծ) */
+        .music-inline-control.playing::before {
+            clip-path: polygon(0 0, 35% 0, 35% 100%, 0% 100%, 65% 100%, 65% 0, 100% 0, 100% 100%, 0 100%);
+            width: 14px;
+            height: 16px;
+            margin-left: 0;
+        }
+
+        /* =========================================
+           ՏԱՐԱԾՈՒԹՅԱՆ (ԿՈՄՊԱԿՏՈՒԹՅԱՆ) ԿԱՐԳԱՎՈՐՈՒՄ
+           ========================================= */
+
+        /* 1. Անունների տակի ավելորդ դատարկությունը հանում ենք */
+        #heroNames {
+            margin-bottom: 5px !important;
+            padding-bottom: 0 !important;
+        }
+
+        /* 2. Կոճակը մոտեցնում ենք անուններին (վերևից 15px) և թողնում փոքր տեղ ներքևից (30px) */
+        .music-inline-control {
+            margin-top: 15px !important;
+            margin-bottom: 30px !important;
+        }
+
+        /* 3. «Հարգելի հյուրեր» (հաջորդ սեկցիան) բարձրացնում ենք վերև */
+        .section {
+            padding-top: 20px !important; /* Սովորաբար այստեղ 60-80px է լինում, դրա համար ենք իջեցնում 20-ի */
+        }
+
+        /* 4. Եթե Ձեր գլխավոր էկրանը ունի ֆիքսված բարձրություն (օրինակ՝ 100vh), այս տողը այն կհարմարեցնի կոնտենտին */
+        .main, .hero, header {
+            min-height: auto !important;
+            padding-bottom: 20px !important;
+        }
+
+
         /* Sections */
         .section {
             padding: 56px 24px;
@@ -948,6 +1028,14 @@ body {
                 <span class="amp">և</span>
                 <span>Նարե</span>
             </h1>
+
+            <div class="music-inline-control hero-text-reveal" id="musicBtn" onclick="toggleMusic()">
+                <audio id="bgMusic" loop>
+                    <source src="{{ invitation.music_url }}" type="audio/mpeg">
+                </audio>
+            </div>
+
+
         </section>
 
         <section class="section greeting reveal">
@@ -1105,92 +1193,126 @@ body {
         </section>
     </main>
 
-    <script>
-        (function() {
-            var cover = document.getElementById('cover');
-            var openBtn = document.getElementById('openBtn');
+<script>
 
-            function openInvitation() {
-                cover.classList.add('opened');
-                document.body.style.overflow = '';
-                setTimeout(function() {
-                    var heroPhoto = document.getElementById('heroPhoto');
-                    var heroBadge = document.getElementById('heroBadge');
-                    var heroNames = document.getElementById('heroNames');
-                    if (heroPhoto) heroPhoto.classList.add('visible');
-                    if (heroBadge) heroBadge.classList.add('visible');
-                    if (heroNames) heroNames.classList.add('visible');
-                }, 120);
+    // --- ՆՈՐ ՖՈՒՆԿՑԻԱ՝ ԵՐԳԸ ՄԻԱՑՆԵԼՈՒ/ԱՆՋԱՏԵԼՈՒ ՀԱՄԱՐ ---
+    function toggleMusic() {
+        var audio = document.getElementById("bgMusic");
+        var btn = document.getElementById("musicBtn");
+        if (!audio) return;
+
+        if (audio.paused) {
+            audio.play();
+            btn.classList.add("playing");
+        } else {
+            audio.pause();
+            btn.classList.remove("playing");
+        }
+    }
+
+    (function() {
+        var cover = document.getElementById('cover');
+        var openBtn = document.getElementById('openBtn');
+
+        function openInvitation() {
+            var audio = document.getElementById("bgMusic");
+            var musicBtn = document.getElementById("musicBtn");
+
+            cover.classList.add('opened');
+            document.body.style.overflow = '';
+
+            // Միացնում ենք երգը հենց սեղմելու պահին
+            if (audio) {
+                audio.play().then(function() {
+                    if (musicBtn) musicBtn.classList.add("playing");
+                }).catch(function(e) {
+                    console.log("Աուդիոն ավտոմատ չմիացավ բրաուզերի կանոնների պատճառով:", e);
+                });
             }
 
-            openBtn.addEventListener('click', openInvitation);
+            setTimeout(function() {
+                var heroPhoto = document.getElementById('heroPhoto');
+                var heroBadge = document.getElementById('heroBadge');
+                var heroNames = document.getElementById('heroNames');
 
-            var startX = 0;
-            cover.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
-            cover.addEventListener('touchend', function(e) {
-                var endX = e.changedTouches[0].clientX;
-                if (endX - startX > 80) openInvitation();
-            }, { passive: true });
+                if (heroPhoto) heroPhoto.classList.add('visible');
+                if (heroBadge) heroBadge.classList.add('visible');
+                if (heroNames) heroNames.classList.add('visible');
 
-            // Countdown to 2026
-            var end = new Date('2026-11-15T00:00:00').getTime();
-            function pad(n) { return (n < 10 ? '0' : '') + n; }
-            function updateCountdown() {
-                var now = Date.now();
-                var d = Math.max(0, end - now);
-                var days = Math.floor(d / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var mins = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-                var secs = Math.floor((d % (1000 * 60)) / 1000);
-                var el = document.getElementById('cd-days'); if (el) el.textContent = pad(days);
-                el = document.getElementById('cd-hours'); if (el) el.textContent = pad(hours);
-                el = document.getElementById('cd-mins'); if (el) el.textContent = pad(mins);
-                el = document.getElementById('cd-secs'); if (el) el.textContent = pad(secs);
-            }
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
+                // Կոճակը հայտնվում է անունների հետ միասին
+                if (musicBtn) musicBtn.classList.add('visible');
+            }, 120);
+        }
 
-            var revealEls = document.querySelectorAll('.reveal');
-            var observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { root: null, rootMargin: '0px 0px -60px 0px', threshold: 0.12 });
-            revealEls.forEach(function(el) { observer.observe(el); });
+        openBtn.addEventListener('click', openInvitation);
 
-            var timelineContainer = document.querySelector('.timeline-section');
-            var timelineVert = document.getElementById('timelineVert');
-            var timelineItems = document.querySelectorAll('.timeline-entry');
+        var startX = 0;
+        cover.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+        cover.addEventListener('touchend', function(e) {
+            var endX = e.changedTouches[0].clientX;
+            if (endX - startX > 80) openInvitation();
+        }, { passive: true });
 
-            var timelineObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        timelineVert.classList.add('animate-line');
-                        timelineItems.forEach(function(item, index) {
-                            setTimeout(function() {
-                                item.classList.add('visible-item');
-                            }, 500 + (index * 600));
-                        });
-                        timelineObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.3 });
+        // Countdown to 2026
+        var end = new Date('2026-11-15T00:00:00').getTime();
+        function pad(n) { return (n < 10 ? '0' : '') + n; }
+        function updateCountdown() {
+            var now = Date.now();
+            var d = Math.max(0, end - now);
+            var days = Math.floor(d / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var mins = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+            var secs = Math.floor((d % (1000 * 60)) / 1000);
+            var el = document.getElementById('cd-days'); if (el) el.textContent = pad(days);
+            el = document.getElementById('cd-hours'); if (el) el.textContent = pad(hours);
+            el = document.getElementById('cd-mins'); if (el) el.textContent = pad(mins);
+            el = document.getElementById('cd-secs'); if (el) el.textContent = pad(secs);
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
-            if (timelineContainer) timelineObserver.observe(timelineContainer);
-
-            // ՓՈՓՈԽՎԱԾ ՄԱՍ՝ Ֆորման ուղարկելիս
-            document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                // Թաքցնում ենք ֆորման
-                this.style.display = 'none';
-                // Ցույց ենք տալիս հաջողության հաղորդագրությունը և նկարը
-                document.getElementById('successWrapper').classList.add('show');
-
-                // Կարելի է նաև տվյալները ուղարկել սերվեր այստեղ...
+        var revealEls = document.querySelectorAll('.reveal');
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
-        })();
-    </script>
+        }, { root: null, rootMargin: '0px 0px -60px 0px', threshold: 0.12 });
+        revealEls.forEach(function(el) { observer.observe(el); });
+
+        var timelineContainer = document.querySelector('.timeline-section');
+        var timelineVert = document.getElementById('timelineVert');
+        var timelineItems = document.querySelectorAll('.timeline-entry');
+
+        var timelineObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    timelineVert.classList.add('animate-line');
+                    timelineItems.forEach(function(item, index) {
+                        setTimeout(function() {
+                            item.classList.add('visible-item');
+                        }, 500 + (index * 600));
+                    });
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        if (timelineContainer) timelineObserver.observe(timelineContainer);
+
+        // ՓՈՓՈԽՎԱԾ ՄԱՍ՝ Ֆորման ուղարկելիս
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Թաքցնում ենք ֆորման
+            this.style.display = 'none';
+            // Ցույց ենք տալիս հաջողության հաղորդագրությունը և նկարը
+            document.getElementById('successWrapper').classList.add('show');
+
+            // Կարելի է նաև տվյալները ուղարկել սերվեր այստեղ...
+        });
+    })();
+</script>
+
 </body>
 </html>
